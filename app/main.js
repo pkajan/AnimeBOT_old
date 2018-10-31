@@ -2,11 +2,11 @@ const util = require('util');
 const CronJob = require('cron').CronJob;
 
 // Load up the discord.js library
-const Discord = require("discord.js");
+const Discord = require('discord.js');
 const client = new Discord.Client();
 
 // Here we load the config.json file that contains our token and our prefix values.
-var config = require("../config.json");
+var config = require('../config.json');
 
 /**************************************************************************/
 /* FUNCTIONS */
@@ -76,6 +76,7 @@ client.on("message", async message => {
             removeCallMsg(message);
             // And we get the bot to say the thing:
             message.channel.send(sayMessage);
+            Logging(trans("cmd_say", sayMessage));
         } else {
             removeCallMsg(message);
             message.channel.send(`${config.prefix} say something(${config.prefix}say something)`);
@@ -85,12 +86,11 @@ client.on("message", async message => {
     if (command === "spam") {
         removeCallMsg(message);
         for (i = args[0]; i > 0; i--) {
-            message.channel.send(trans("SPAM") + " " + i);
+            message.channel.send(trans("SPAM") + i);
         }
+        Logging(trans("cmd_spam", args[0]));
     }
 
 });
-
-
 
 client.login(config.credentials.token);
