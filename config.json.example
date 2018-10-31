@@ -1,0 +1,10 @@
+{
+    "prefix": "?",
+    "activityType": "LISTENING",
+    "activityName": "To GOD",
+    "status": "available",
+    "credentials": {
+        "token": "your_token_goes_here"
+    },
+    "translation": "en"
+}
