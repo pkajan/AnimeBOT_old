@@ -68,6 +68,15 @@ function dateDiffInDays(a, b) {
 client.on("ready", () => {
     // This event will run if the bot starts, and logs in, successfully
     Logging(trans("BOT_on_ready", client.users.size, client.channels.size, client.guilds.size));
+    
+    client.user.setPresence({
+      game: {
+        name: config.activityName,
+        type: config.activityType
+      }
+    }).then(presence => console.log(`Activity set to ${config.activityType + ": " + config.activityName}`))
+      .catch(console.error);
+      
 });
 /* Triggered when addeded/removed from server */
 client.on("guildCreate", guild => {
