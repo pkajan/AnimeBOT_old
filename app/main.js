@@ -121,7 +121,9 @@ client.on("message", async message => {
         var anime = require(anime_file);
         removeCallMsg(message);
         var obj = anime;
-        var one_dayHeader = "```fix\nOne Day:```\n";
+        var zero_dayHeader = "```fix\nToday:```\n";
+        var zero_day = "";        
+        var one_dayHeader = "\n```fix\nOne Day:```\n";
         var one_day = "";
         var two_daysHeader = "\n```fix\nTwo Days:```\n";
         var two_days = "";
@@ -155,6 +157,9 @@ client.on("message", async message => {
             countDownDate = dateFormat(new Date(countDownDate.valueOf()), "dddd, dS, HH:MM"); // Saturday, 9th, 16:46
 
             switch (difference) {
+				case 0:
+                    zero_day = zero_day + `**${item.name}**: ` + countDownDate + "\n";
+                    break;
                 case 1:
                     one_day = one_day + `**${item.name}**: ` + countDownDate + "\n";
                     break;
@@ -168,6 +173,9 @@ client.on("message", async message => {
             Logging(`**${item.name}**: ` + countDownDate);
         });
         
+        if(zero_day.length > 1){
+        zero_day = zero_dayHeader + zero_day;
+        }
         if(one_day.length > 1){
         one_day = one_dayHeader + one_day;
         }
@@ -175,7 +183,7 @@ client.on("message", async message => {
         two_days = two_daysHeader + two_days;
         }
 
-        message.channel.send(one_day + two_days + oth_days);
+        message.channel.send(zero_day + one_day + two_days + oth_days);
     }
 
     /*if (command === "test") {
