@@ -121,8 +121,10 @@ client.on("message", async message => {
         var anime = require(anime_file);
         removeCallMsg(message);
         var obj = anime;
-        var one_day = "```fix\nOne Day:```\n";
-        var two_days = "\n```fix\nTwo Days:```\n";
+        var one_dayHeader = "```fix\nOne Day:```\n";
+        var one_day = "";
+        var two_daysHeader = "\n```fix\nTwo Days:```\n";
+        var two_days = "";
         var oth_days = "\n```fix\nLater:```\n";
 
         var anime_in_array = [];
@@ -165,6 +167,13 @@ client.on("message", async message => {
 
             Logging(`**${item.name}**: ` + countDownDate);
         });
+        
+        if(one_day.length > 1){
+        one_day = one_dayHeader + one_day;
+        }
+        if(two_days.length > 1){
+        two_days = two_daysHeader + two_days;
+        }
 
         message.channel.send(one_day + two_days + oth_days);
     }
