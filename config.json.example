@@ -1,7 +1,7 @@
 {
     "prefix": "?",
-    "activityType": "LISTENING",
-    "activityName": "To GOD",
+    "activityType": "WATCHING",
+    "activityName": "Anime all day...",
     "status": "available",
     "credentials": {
         "token": "your_token_goes_here"
