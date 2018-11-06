@@ -6,7 +6,7 @@
     "BOT_serving": "Serving %d servers",
     "cmd_say": "Message send into chat. (%s)",
     "cmd_spam": "Channel SPAMmed %d times.",
-    "": "",
+    "BOT_send_all": "Message send into ALL guilds.",
     "": "",
     "": "",
     "": "",
