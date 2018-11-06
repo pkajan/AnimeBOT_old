@@ -15,22 +15,21 @@ var anime_file = '../anime.json';
 // Random vars that i will need later...or never
 var one_week = 7 * 24 * 60 * 60 * 1000;
 var todayArray;
-
+const logs = require('fs');
+const logFile = 'logs.txt';
 /**************************************************************************/
 /* FUNCTIONS */
 function Logging(message, /**/) {
-    var type = arguments[arguments.length - 1];// last argument is type
-    // create log console/file
-    switch (type) {
-        case "ERROR":
-            console.log(`[ERROR] ${message}`);
-            break;
-        case "INFO":
-            console.log(`[INFO] ${message}`);
-            break;
-        default:
-            console.log(`[ALL] ${message}`);
+    var now = dateFormat(new Date(), "HH:MM:ss"); // 16:46:00
+    if (arguments.length != 1) {
+        var type = arguments[arguments.length - 1];// last argument is type
+    } else {
+        var type = "ALL";
     }
+    // create log console/file
+    console.log(`${now} [${type}] ${message}`);
+    logs.appendFileSync(logFile, `${now} [${type}] ${message}\n`);
+
 }
 
 function removeCallMsg(message) {
@@ -99,7 +98,6 @@ function AnimeTimer(message = null, textoutput = false) {
         anime_in_array.push(valueToPush);
     }
 
-    console.log("-----------------------------------");
     anime_in_array.forEach(function (item) {
 
         var json_date = new Date(item.year, (item.month - 1), item.day, item.hour, item.minute, item.second, 0);
@@ -143,7 +141,7 @@ function AnimeTimer(message = null, textoutput = false) {
     }
 
     if (textoutput) {
-        message.channel.send(zero_day + one_day + two_days + oth_days);
+        selfDestructMSG(message, zero_day + one_day + two_days + oth_days, 30000);
     }
 }
 
@@ -168,8 +166,15 @@ function SendtoAllGuilds(text) {
         Logging(trans("BOT_send_all"));
     }
     catch (err) {
-        console.log("Could not send message to a (few) guild(s)!");
+        Logging(trans("BOT_could_not_send"));
     }
+}
+
+function selfDestructMSG(message, MSGText, time) {
+    message.channel.send(MSGText).then(sentMessage => {
+        sentMessage.delete(time);
+    });
+    Logging(trans("BOT_send_selfdestruct"));
 }
 
 /**************************************************************************/
@@ -183,9 +188,8 @@ client.on("ready", () => {
             name: config.activityName,
             type: config.activityType
         }
-    }).then(presence => console.log(`Activity set to ${config.activityType + ": " + config.activityName}`))
+    }).then(presence => Logging(trans("BOT_set_activity", config.activityType, config.activityName)))
         .catch(console.error);
-
     /* CRON */
     //every 30minutes check
     const job = new CronJob('*/30 * * * *', function () {
