@@ -6,7 +6,8 @@
   "dependencies": {
     "cron": "^1.4.1",
     "dateformat": "^3.0.3",
-    "discord.js": "^11.4.2"
+    "discord.js": "^11.4.2",
+    "nodemon": "^1.18.6"
   },
   "devDependencies": {},
   "scripts": {

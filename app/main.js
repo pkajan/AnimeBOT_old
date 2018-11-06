@@ -196,7 +196,7 @@ client.on("ready", () => {
             dt1 = new Date(2018, 10, 1, item[1].split(":")[0], item[1].split(":")[1], 0, 0);
             dt2 = new Date(2018, 10, 1, timeNOW.split(":")[0], timeNOW.split(":")[1], 0, 0);
             if (timeDiffInMinutes(dt1, dt2) < 59) { //if less than 59minutes announce to all channels
-                var message = "```fix\nSOON:```\n" + item[0] + " >> " + item[1];
+                var message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1];
                 SendtoAllGuilds(message);
             }
         });

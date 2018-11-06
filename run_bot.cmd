@@ -1,5 +1,5 @@
 taskkill /im node.exe /f
 
-npm start
+nodemon start --ignore package-lock.json --ignore .git/ --ignore logs.txt
 
 pause
