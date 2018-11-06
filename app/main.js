@@ -187,15 +187,15 @@ client.on("ready", () => {
         .catch(console.error);
 
     /* CRON */
-    //every 20minutes check
-    const job = new CronJob('*/20 * * * *', function () {
+    //every 30minutes check
+    const job = new CronJob('*/30 * * * *', function () {
         AnimeTimer(null, false);
         var timeNOW = dateFormat(new Date(), "HH:MM"); // 16:46
         todayArray.forEach(function (item) {
             // dummy date, I know its today so compare only hours/minutes
             dt1 = new Date(2018, 10, 1, item[1].split(":")[0], item[1].split(":")[1], 0, 0);
             dt2 = new Date(2018, 10, 1, timeNOW.split(":")[0], timeNOW.split(":")[1], 0, 0);
-            if (timeDiffInMinutes(dt1, dt2) < 60) {
+            if (timeDiffInMinutes(dt1, dt2) < 59) { //if less than 59minutes announce to all channels
                 var message = "```fix\nSOON:```\n" + item[0] + " >> " + item[1];
                 SendtoAllGuilds(message);
             }
