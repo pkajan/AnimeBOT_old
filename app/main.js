@@ -29,7 +29,6 @@ function Logging(message, /**/) {
     // create log console/file
     console.log(`${now} [${type}] ${message}`);
     logs.appendFileSync(logFile, `${now} [${type}] ${message}\n`);
-
 }
 
 function removeCallMsg(message) {
@@ -125,7 +124,7 @@ function AnimeTimer(message = null, textoutput = false) {
                 oth_days = oth_days + `**${item.name}**: ` + countDownDate + "\n";
         }
 
-        Logging(`**${item.name}**: ` + countDownDate);
+        //Logging(`**${item.name}**: ` + countDownDate);
     });
 
     todayArray = TMPtodayArray;
