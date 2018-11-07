@@ -261,11 +261,18 @@ client.on("message", async message => {
         AnimeTimer(message, true);
     }
 
-    /*if (command === "test") {
+    if (command === trans("cmd_update")) {
         removeCallMsg(message);
-        console.log(message);
-        SendtoAllGuilds("test");
-    }*/
+        const execSync = require('child_process').execSync;
+        var cmd = execSync('start cmd.exe @cmd /k "force_pull_from_repo.cmd"');
+        message.channel.send(trans("cmd_update_msg"));
+        Logging(trans("cmd_update_msg"));
+    }
+
+    if (command === "test") {
+        removeCallMsg(message);
+        //console.log(message);
+    }
 
 });
 
