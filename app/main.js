@@ -235,28 +235,28 @@ client.on("message", async message => {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
-    if (command === "say") {
+    if (command === trans("cmd_say")) {
         if (args.length > 0) {
             const sayMessage = args.join(" ");
             removeCallMsg(message);
             // And we get the bot to say the thing:
             message.channel.send(sayMessage);
-            Logging(trans("cmd_say", sayMessage));
+            Logging(trans("cmd_say_msg", sayMessage));
         } else {
             removeCallMsg(message);
             message.channel.send(`${config.prefix} say something(${config.prefix}say something)`);
         }
     }
 
-    if (command === "spam") {
+    if (command === trans("cmd_spam")) {
         removeCallMsg(message);
         for (i = args[0]; i > 0; i--) {
             message.channel.send(trans("SPAM") + i);
         }
-        Logging(trans("cmd_spam", args[0]));
+        Logging(trans("cmd_spam_msg", args[0]));
     }
 
-    if (command === "anime") {
+    if (command === trans("cmd_info")) {
         removeCallMsg(message);
         AnimeTimer(message, true);
     }
