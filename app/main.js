@@ -173,7 +173,7 @@ function selfDestructMSG(message, MSGText, time) {
     message.channel.send(MSGText).then(sentMessage => {
         sentMessage.delete(time);
     });
-    Logging(trans("BOT_send_selfdestruct"));
+    Logging(trans("BOT_send_selfdestruct",message.author.username.toString()));
 }
 
 /**************************************************************************/
@@ -198,7 +198,7 @@ client.on("ready", () => {
             // dummy date, I know its today so compare only hours/minutes
             dt1 = new Date(2018, 10, 1, item[1].split(":")[0], item[1].split(":")[1], 0, 0);
             dt2 = new Date(2018, 10, 1, timeNOW.split(":")[0], timeNOW.split(":")[1], 0, 0);
-            if (timeDiffInMinutes(dt1, dt2) < 59) { //if less than 59minutes announce to all channels
+            if (timeDiffInMinutes(dt1, dt2) < 30) { //if less than 30minutes announce to all channels
                 var message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1];
                 SendtoAllGuilds(message);
             }
@@ -241,10 +241,11 @@ client.on("message", async message => {
             removeCallMsg(message);
             // And we get the bot to say the thing:
             message.channel.send(sayMessage);
-            Logging(trans("cmd_say_msg", sayMessage));
+            Logging(trans("cmd_say_msg", sayMessage,message.author.username.toString()));
         } else {
             removeCallMsg(message);
-            message.channel.send(`${config.prefix} say something(${config.prefix}say something)`);
+            message.channel.send(trans("cmd_say_empty", config.prefix));
+            Logging(trans("cmd_say_msg_log", message.author.username.toString()));
         }
     }
 
@@ -253,7 +254,7 @@ client.on("message", async message => {
         for (i = args[0]; i > 0; i--) {
             message.channel.send(trans("SPAM") + i);
         }
-        Logging(trans("cmd_spam_msg", args[0]));
+        Logging(trans("cmd_spam_msg", args[0], message.author.username.toString()));
     }
 
     if (command === trans("cmd_info")) {
@@ -266,12 +267,12 @@ client.on("message", async message => {
         const execSync = require('child_process').execSync;
         var cmd = execSync('start cmd.exe @cmd /k "force_pull_from_repo.cmd"');
         message.channel.send(trans("cmd_update_msg"));
-        Logging(trans("cmd_update_msg"));
+        Logging(trans("cmd_update_msg"), message.author.username.toString());
     }
 
     if (command === "test") {
         removeCallMsg(message);
-        //console.log(message);
+        //console.log(message.author.username.toString());
     }
 
 });
