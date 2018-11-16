@@ -266,8 +266,8 @@ client.on("message", async message => {
         removeCallMsg(message);
         const execSync = require('child_process').execSync;
         var cmd = execSync('start cmd.exe @cmd /k "force_pull_from_repo.cmd"');
-        message.channel.send(trans("cmd_update_msg"));
-        Logging(trans("cmd_update_msg"), message.author.username.toString());
+        message.channel.send(trans("cmd_update_msg", message.author.username.toString()));
+        Logging(trans("cmd_update_msg", message.author.username.toString()));
     }
 
     if (command === "test") {
