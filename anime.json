@@ -1,5 +1,5 @@
 {
-    "Monday": "comment like line",
+    "Monday": "--- Monday ---",
     "Tensei Shitara Slime Datta Ken": {
         "year": "2018",
         "month": "10",
@@ -8,7 +8,7 @@
         "minute": "40",
         "second": "0"
     },
-    "Tuesday": "comment like line",
+    "Tuesday": "--- Tuesday ---",
     "Black Clover": {
         "year": "2018",
         "month": "10",
@@ -25,7 +25,7 @@
         "minute": "10",
         "second": "0"
     },
-    "Wednesday": "comment like line",
+    "Wednesday": "--- Wednesday ---",
     "Seishun Buta Yarou wa Bunny Girl-senpai no Yume wo Minai": {
         "year": "2018",
         "month": "10",
@@ -34,9 +34,9 @@
         "minute": "30",
         "second": "0"
     },
-    "Thursday": "comment like line",
-    "Friday": "comment like line",
-    "Saturday": "comment like line",
+    "Thursday": "--- Thursday ---",
+    "Friday": "--- Friday ---",
+    "Saturday": "--- Saturday ---",
     "Goblin Slayer": {
         "year": "2018",
         "month": "10",
@@ -45,7 +45,7 @@
         "minute": "45",
         "second": "0"
     },
-    "Sunday": "comment like line",
+    "Sunday": "--- Sunday ---",
     "Fairy Tail Final Season": {
         "year": "2018",
         "month": "10",

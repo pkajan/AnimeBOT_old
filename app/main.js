@@ -98,33 +98,33 @@ function AnimeTimer(message = null, textoutput = false) {
     }
 
     anime_in_array.forEach(function (item) {
+        if (item.year) {
+            var json_date = new Date(item.year, (item.month - 1), item.day, item.hour, item.minute, item.second, 0);
+            var weeks = weeks_needed(json_date);
+            var countDownDateR = new Date(json_date.getTime() + (one_week * weeks));
 
-        var json_date = new Date(item.year, (item.month - 1), item.day, item.hour, item.minute, item.second, 0);
-        var weeks = weeks_needed(json_date);
-        var countDownDateR = new Date(json_date.getTime() + (one_week * weeks));
+            const a = new Date(), b = new Date(`${countDownDateR.getUTCFullYear()}-${countDownDateR.getUTCMonth() + 1}-${countDownDateR.getUTCDate()}`),
+                difference = dateDiffInDays(a, b);
 
-        const a = new Date(), b = new Date(`${countDownDateR.getUTCFullYear()}-${countDownDateR.getUTCMonth() + 1}-${countDownDateR.getUTCDate()}`),
-            difference = dateDiffInDays(a, b);
+            countDownDate = dateFormat(new Date(countDownDateR.valueOf()), "dddd, dS, HH:MM"); // Saturday, 9th, 16:46
+            var onlyTimeForTodays = dateFormat(new Date(countDownDateR.valueOf()), "HH:MM"); // 16:46
 
-        countDownDate = dateFormat(new Date(countDownDateR.valueOf()), "dddd, dS, HH:MM"); // Saturday, 9th, 16:46
-        var onlyTimeForTodays = dateFormat(new Date(countDownDateR.valueOf()), "HH:MM"); // 16:46
-
-        switch (difference) {
-            case 0:
-                zero_day = zero_day + `**${item.name}**: ` + countDownDate + "\n";
-                TMPtodayArray.push([item.name, onlyTimeForTodays]);
-                break;
-            case 1:
-                one_day = one_day + `**${item.name}**: ` + countDownDate + "\n";
-                break;
-            case 2:
-                two_days = two_days + `**${item.name}**: ` + countDownDate + "\n";
-                break;
-            default:
-                oth_days = oth_days + `**${item.name}**: ` + countDownDate + "\n";
+            switch (difference) {
+                case 0:
+                    zero_day = zero_day + `**${item.name}**: ` + countDownDate + "\n";
+                    TMPtodayArray.push([item.name, onlyTimeForTodays]);
+                    break;
+                case 1:
+                    one_day = one_day + `**${item.name}**: ` + countDownDate + "\n";
+                    break;
+                case 2:
+                    two_days = two_days + `**${item.name}**: ` + countDownDate + "\n";
+                    break;
+                default:
+                    oth_days = oth_days + `**${item.name}**: ` + countDownDate + "\n";
+            }
+            //Logging(`**${item.name}**: ` + countDownDate);
         }
-
-        //Logging(`**${item.name}**: ` + countDownDate);
     });
 
     todayArray = TMPtodayArray;
@@ -143,6 +143,7 @@ function AnimeTimer(message = null, textoutput = false) {
         selfDestructMSG(message, zero_day + one_day + two_days + oth_days, 30000);
     }
 }
+
 
 function SendtoAllGuilds(text) {
     try {
@@ -251,10 +252,13 @@ client.on("message", async message => {
 
     if (command === trans("cmd_spam")) {
         removeCallMsg(message);
-        for (i = args[0]; i > 0; i--) {
-            message.channel.send(trans("SPAM") + i);
+        if (args[0]) {
+            for (i = args[0]; i > 0; i--) {
+                message.channel.send(trans("SPAM") + i);
+            }
+            Logging(trans("cmd_spam_msg", args[0], message.author.username.toString()));
         }
-        Logging(trans("cmd_spam_msg", args[0], message.author.username.toString()));
+        Logging(trans("cmd_spam_msg_empty", args[0], message.author.username.toString()));
     }
 
     if (command === trans("cmd_info")) {
