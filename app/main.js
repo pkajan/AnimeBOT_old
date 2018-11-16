@@ -1,5 +1,5 @@
 const util = require('util');
-var dateFormat = require('dateformat');
+const dateFormat = require('dateformat');
 const CronJob = require('cron').CronJob;
 
 // Load up the discord.js library
@@ -20,7 +20,7 @@ const logFile = 'logs.txt';
 /**************************************************************************/
 /* FUNCTIONS */
 function Logging(message, /**/) {
-    var now = dateFormat(new Date(), "HH:MM:ss"); // 16:46:00
+    var now = dateFormat(new Date(), "dd.mm HH:MM:ss"); // 23.03 16:46:00
     if (arguments.length != 1) {
         var type = arguments[arguments.length - 1];// last argument is type
     } else {
@@ -173,7 +173,7 @@ function selfDestructMSG(message, MSGText, time) {
     message.channel.send(MSGText).then(sentMessage => {
         sentMessage.delete(time);
     });
-    Logging(trans("BOT_send_selfdestruct",message.author.username.toString()));
+    Logging(trans("BOT_send_selfdestruct", message.author.username.toString()));
 }
 
 /**************************************************************************/
@@ -241,7 +241,7 @@ client.on("message", async message => {
             removeCallMsg(message);
             // And we get the bot to say the thing:
             message.channel.send(sayMessage);
-            Logging(trans("cmd_say_msg", sayMessage,message.author.username.toString()));
+            Logging(trans("cmd_say_msg", sayMessage, message.author.username.toString()));
         } else {
             removeCallMsg(message);
             message.channel.send(trans("cmd_say_empty", config.prefix));
@@ -265,9 +265,9 @@ client.on("message", async message => {
     if (command === trans("cmd_update")) {
         removeCallMsg(message);
         const execSync = require('child_process').execSync;
-        var cmd = execSync('start cmd.exe @cmd /k "force_pull_from_repo.cmd"');
-        message.channel.send(trans("cmd_update_msg", message.author.username.toString()));
-        Logging(trans("cmd_update_msg", message.author.username.toString()));
+        execSync('start cmd.exe @cmd /k "git reset --hard & git fetch --all & git pull & exit"');
+        message.channel.send(trans("cmd_update_msg"));
+        Logging(trans("cmd_update_msg_log", message.author.username.toString()));
     }
 
     if (command === "test") {

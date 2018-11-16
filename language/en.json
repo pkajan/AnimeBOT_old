@@ -17,6 +17,7 @@
     "cmd_spam_msg": "Channel SPAMmed %d times. [Invoked by %s]",
     "cmd_test": "test",
     "cmd_update": "update",
-    "cmd_update_msg": "Pull-ing new version from github repo. [Invoked by %s]",
+    "cmd_update_msg": "Pull-ing new version from github repo.",
+    "cmd_update_msg_log": "Pull-ing new version from github repo. [Invoked by %s]",
     "SPAM": "SPAM "
 }
