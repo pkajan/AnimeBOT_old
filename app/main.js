@@ -10,7 +10,7 @@ const client = new Discord.Client();
 var config = require('../config.json');
 
 // Here we load the anime.json file that contains release dates of our anime shows.
-var anime_file = '../anime.json';
+var data_file = '../anime.json';
 
 // Random vars that i will need later...or never
 var one_week = 7 * 24 * 60 * 60 * 1000;
@@ -73,7 +73,7 @@ function timeDiffInMinutes(dt2, dt1) {
 }
 
 function AnimeTimer(message = null, textoutput = false) {
-    var anime = require(anime_file);
+    var anime = require(data_file);
     var obj = anime;
     var zero_dayHeader = "```fix\nToday:```\n";
     var zero_day = "";
