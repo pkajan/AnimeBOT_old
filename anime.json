@@ -1,58 +1,65 @@
 {
-    "Goblin Slayer": {
-        "year": "2018",
-        "month": "10",
-        "day": "6",
-        "hour": "17",
-        "minute": "30",
-        "second": "0"
-    },
-    "Fairy Tail Final Season": {
-        "year": "2018",
-        "month": "10",
-        "day": "6",
-        "hour": "0",
-        "minute": "30",
-        "second": "0"
-    },
-    "One Piece": {
-        "year": "2018",
-        "month": "10",
-        "day": "28",
-        "hour": "4",
-        "minute": "5",
-        "second": "0"
-    },
+    "Monday": "comment like line",
     "Tensei Shitara Slime Datta Ken": {
         "year": "2018",
         "month": "10",
         "day": "1",
         "hour": "17",
-        "minute": "30",
+        "minute": "40",
+        "second": "0"
+    },
+    "Tuesday": "comment like line",
+    "Black Clover": {
+        "year": "2018",
+        "month": "10",
+        "day": "2",
+        "hour": "12",
+        "minute": "35",
         "second": "0"
     },
     "Tokyo Ghoul:re 2": {
         "year": "2018",
         "month": "10",
         "day": "9",
-        "hour": "14",
-        "minute": "0",
+        "hour": "17",
+        "minute": "10",
         "second": "0"
     },
+    "Wednesday": "comment like line",
     "Seishun Buta Yarou wa Bunny Girl-senpai no Yume wo Minai": {
         "year": "2018",
         "month": "10",
         "day": "3",
-        "hour": "17",
-        "minute": "15",
+        "hour": "20",
+        "minute": "30",
         "second": "0"
     },
-    "Black Clover": {
+    "Thursday": "comment like line",
+    "Friday": "comment like line",
+    "Saturday": "comment like line",
+    "Goblin Slayer": {
         "year": "2018",
         "month": "10",
-        "day": "2",
-        "hour": "9",
-        "minute": "25",
+        "day": "6",
+        "hour": "18",
+        "minute": "45",
         "second": "0"
-    }	
+    },
+    "Sunday": "comment like line",
+    "Fairy Tail Final Season": {
+        "year": "2018",
+        "month": "10",
+        "day": "7",
+        "hour": "12",
+        "minute": "45",
+        "second": "0"
+    },
+    "One Piece": {
+        "year": "2018",
+        "month": "10",
+        "day": "7",
+        "hour": "4",
+        "minute": "15",
+        "second": "0"
+    }
 }
