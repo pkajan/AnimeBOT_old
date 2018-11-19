@@ -94,6 +94,10 @@ function AnimeTimer(message = null, textoutput = false) {
         valueToPush.hour = obj[i]["hour"];
         valueToPush.minute = obj[i]["minute"];
         valueToPush.second = obj[i]["second"];
+        if (obj[i]["link"]) {
+            valueToPush.link = obj[i]["link"];
+            valueToPush.starting_episode = obj[i]["_starting_episode"];
+        }
         anime_in_array.push(valueToPush);
     }
 
@@ -112,7 +116,11 @@ function AnimeTimer(message = null, textoutput = false) {
             switch (difference) {
                 case 0:
                     zero_day = zero_day + `**${item.name}**: ` + countDownDate + "\n";
-                    TMPtodayArray.push([item.name, onlyTimeForTodays]);
+                    if (item.link) {
+                        TMPtodayArray.push([item.name, onlyTimeForTodays, item.link + `${parseInt(item.starting_episode) + parseInt(weeks)}`]);
+                    } else {
+                        TMPtodayArray.push([item.name, onlyTimeForTodays]);
+                    }
                     break;
                 case 1:
                     one_day = one_day + `**${item.name}**: ` + countDownDate + "\n";
@@ -200,7 +208,12 @@ client.on("ready", () => {
             dt1 = new Date(2018, 10, 1, item[1].split(":")[0], item[1].split(":")[1], 0, 0);
             dt2 = new Date(2018, 10, 1, timeNOW.split(":")[0], timeNOW.split(":")[1], 0, 0);
             if (timeDiffInMinutes(dt1, dt2) < 30) { //if less than 30minutes announce to all channels
-                var message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1];
+                if (item[2]) {
+                    var message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1] + ` (${item[2]})`;
+                } else {
+                    var message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1];
+                }
+
                 SendtoAllGuilds(message);
             }
         });

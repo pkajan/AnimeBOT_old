@@ -6,7 +6,9 @@
         "day": "1",
         "hour": "17",
         "minute": "40",
-        "second": "0"
+        "second": "0",
+        "link": "https://www.masterani.me/anime/watch/2984-tensei-shitara-slime-datta-ken/",
+        "_starting_episode": "1"
     },
     "Tuesday": "--- Tuesday ---",
     "Black Clover": {
@@ -15,7 +17,9 @@
         "day": "2",
         "hour": "12",
         "minute": "35",
-        "second": "0"
+        "second": "0",
+        "link": "https://www.masterani.me/anime/info/2661-black-clover-tv/",
+        "_starting_episode": "1"
     },
     "Tokyo Ghoul:re 2": {
         "year": "2018",
@@ -23,7 +27,9 @@
         "day": "9",
         "hour": "17",
         "minute": "10",
-        "second": "0"
+        "second": "0",
+        "link": "https://www.masterani.me/anime/info/2988-tokyo-ghoulre-2nd-season/",
+        "_starting_episode": "1"
     },
     "Wednesday": "--- Wednesday ---",
     "Seishun Buta Yarou wa Bunny Girl-senpai no Yume wo Minai": {
@@ -32,7 +38,9 @@
         "day": "3",
         "hour": "20",
         "minute": "30",
-        "second": "0"
+        "second": "0",
+        "link": "https://www.masterani.me/anime/info/2991-seishun-buta-yarou-wa-bunny-girl-senpai-no-yume-wo-minai/",
+        "_starting_episode": "1"
     },
     "Thursday": "--- Thursday ---",
     "Friday": "--- Friday ---",
@@ -43,7 +51,9 @@
         "day": "6",
         "hour": "18",
         "minute": "45",
-        "second": "0"
+        "second": "0",
+        "link": "https://www.masterani.me/anime/info/2989-goblin-slayer/",
+        "_starting_episode": "1"
     },
     "Sunday": "--- Sunday ---",
     "Fairy Tail Final Season": {
@@ -52,14 +62,18 @@
         "day": "7",
         "hour": "12",
         "minute": "45",
-        "second": "0"
+        "second": "0",
+        "link": "https://www.masterani.me/anime/info/2987-fairy-tail-final-series/",
+        "_starting_episode": "1"
     },
     "One Piece": {
         "year": "2018",
-        "month": "10",
-        "day": "7",
+        "month": "11",
+        "day": "18",
         "hour": "4",
         "minute": "15",
-        "second": "0"
+        "second": "0",
+        "link": "https://www.masterani.me/anime/info/64-one-piece/",
+        "_starting_episode": "862"
     }
 }
