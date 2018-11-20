@@ -18,8 +18,8 @@
         "hour": "12",
         "minute": "35",
         "second": "0",
-        "link": "https://www.masterani.me/anime/info/2661-black-clover-tv/",
-        "_starting_episode": "1"
+        "link": "https://www.masterani.me/anime/watch/2661-black-clover-tv/",
+        "_starting_episode": "0"
     },
     "Tokyo Ghoul:re 2": {
         "year": "2018",
@@ -28,7 +28,7 @@
         "hour": "17",
         "minute": "10",
         "second": "0",
-        "link": "https://www.masterani.me/anime/info/2988-tokyo-ghoulre-2nd-season/",
+        "link": "https://www.masterani.me/anime/watch/2988-tokyo-ghoulre-2nd-season/",
         "_starting_episode": "1"
     },
     "Wednesday": "--- Wednesday ---",
@@ -39,7 +39,7 @@
         "hour": "20",
         "minute": "30",
         "second": "0",
-        "link": "https://www.masterani.me/anime/info/2991-seishun-buta-yarou-wa-bunny-girl-senpai-no-yume-wo-minai/",
+        "link": "https://www.masterani.me/anime/watch/2991-seishun-buta-yarou-wa-bunny-girl-senpai-no-yume-wo-minai/",
         "_starting_episode": "1"
     },
     "Thursday": "--- Thursday ---",
@@ -52,7 +52,7 @@
         "hour": "18",
         "minute": "45",
         "second": "0",
-        "link": "https://www.masterani.me/anime/info/2989-goblin-slayer/",
+        "link": "https://www.masterani.me/anime/watch/2989-goblin-slayer/",
         "_starting_episode": "1"
     },
     "Sunday": "--- Sunday ---",
@@ -63,7 +63,7 @@
         "hour": "12",
         "minute": "45",
         "second": "0",
-        "link": "https://www.masterani.me/anime/info/2987-fairy-tail-final-series/",
+        "link": "https://www.masterani.me/anime/watch/2987-fairy-tail-final-series/",
         "_starting_episode": "1"
     },
     "One Piece": {
@@ -73,7 +73,7 @@
         "hour": "4",
         "minute": "15",
         "second": "0",
-        "link": "https://www.masterani.me/anime/info/64-one-piece/",
+        "link": "https://www.masterani.me/anime/watch/64-one-piece/",
         "_starting_episode": "862"
     }
 }

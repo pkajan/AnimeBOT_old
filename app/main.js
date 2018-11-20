@@ -1,6 +1,7 @@
 const util = require('util');
 const dateFormat = require('dateformat');
 const CronJob = require('cron').CronJob;
+const urlExists = require('url-exists-deep');
 
 // Load up the discord.js library
 const Discord = require('discord.js');
@@ -15,6 +16,7 @@ var data_file = '../anime.json';
 // Random vars that i will need later...or never
 var one_week = 7 * 24 * 60 * 60 * 1000;
 var todayArray;
+var soonArray;
 const logs = require('fs');
 const logFile = 'logs.txt';
 /**************************************************************************/
@@ -209,7 +211,12 @@ client.on("ready", () => {
             dt2 = new Date(2018, 10, 1, timeNOW.split(":")[0], timeNOW.split(":")[1], 0, 0);
             if (timeDiffInMinutes(dt1, dt2) < 30) { //if less than 30minutes announce to all channels
                 if (item[2]) {
-                    var message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1] + ` (${item[2]})`;
+                    var message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1];
+                    var valueToPush = {};
+                    valueToPush.name = item[0];
+                    valueToPush.time = item[1];
+                    valueToPush.url = item[2];
+                    soonArray.push(valueToPush);
                 } else {
                     var message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1];
                 }
@@ -218,8 +225,34 @@ client.on("ready", () => {
             }
         });
     });
-
     job.start();
+
+    /* CRON2*/
+    //every minute check if anime is there
+    const job2 = new CronJob('* * * * *', function () {
+        if (typeof soonArray != 'undefined') {
+            soonArray.forEach(function (item) {
+                if (item.url) {
+                    urlExists(item.url)
+                        .then(function (response) {
+                            if (response) {
+                                console.log("Url exists", response.href);
+                                var messages = "```fix\nITS HERE:```\n" + `**${item.name}**: ${item.time} (${item.url})`;
+                                var index = soonArray.indexOf(item);
+                                Logging(`Deleting ${soonArray[index]}`)
+                                delete soonArray[index];
+                                SendtoAllGuilds(messages);
+                            } else {
+                                Logging("Url does not exists!");
+                            }
+                        });
+                } else {
+                    console.log("soon");
+                }
+            });
+        }
+    });
+    job2.start();
     /************************/
 });
 /* Triggered when addeded/removed from server */
