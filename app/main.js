@@ -205,6 +205,7 @@ client.on("ready", () => {
     const job = new CronJob('*/30 * * * *', function () {
         AnimeTimer(null, false);
         var timeNOW = dateFormat(new Date(), "HH:MM"); // 16:46
+        var soonArrays = [];
         todayArray.forEach(function (item) {
             // dummy date, I know its today so compare only hours/minutes
             dt1 = new Date(2018, 10, 1, item[1].split(":")[0], item[1].split(":")[1], 0, 0);
@@ -216,11 +217,11 @@ client.on("ready", () => {
                     valueToPush.name = item[0];
                     valueToPush.time = item[1];
                     valueToPush.url = item[2];
-                    soonArray.push(valueToPush);
+                    soonArrays.push(valueToPush);
                 } else {
                     var message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1];
                 }
-
+				soonArray = soonArrays;
                 SendtoAllGuilds(message);
             }
         });
