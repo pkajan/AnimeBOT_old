@@ -16,7 +16,7 @@ var data_file = '../anime.json';
 // Random vars that i will need later...or never
 var one_week = 7 * 24 * 60 * 60 * 1000;
 var todayArray;
-var soonArray;
+var soonArray = new Array();
 const logs = require('fs');
 const logFile = 'logs.txt';
 /**************************************************************************/
@@ -133,7 +133,6 @@ function AnimeTimer(message = null, textoutput = false) {
                 default:
                     oth_days = oth_days + `**${item.name}**: ` + countDownDate + "\n";
             }
-            //Logging(`**${item.name}**: ` + countDownDate);
         }
     });
 
@@ -187,6 +186,44 @@ function selfDestructMSG(message, MSGText, time) {
     Logging(trans("BOT_send_selfdestruct", message.author.username.toString()));
 }
 
+function uniq(a, key) {
+    var seen = {};
+    return a.filter(function (item) {
+        var k = key(item);
+        return seen.hasOwnProperty(k) ? false : (seen[k] = true);
+    })
+}
+
+function timeCalcMessage() {
+    AnimeTimer(null, false);
+    var timeNOW = dateFormat(new Date(), "HH:MM"); // 16:46
+    var soonArrays = new Array();
+    var message;
+    todayArray.forEach(function (item) {
+        // dummy date, I know its today so compare only hours/minutes
+        dt1 = new Date(2018, 10, 1, item[1].split(":")[0], item[1].split(":")[1], 0, 0);
+        dt2 = new Date(2018, 10, 1, timeNOW.split(":")[0], timeNOW.split(":")[1], 0, 0);
+        if (timeDiffInMinutes(dt1, dt2) < 30) { //if less than 30minutes announce to all channels
+            if (item[2]) {
+                //message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1];
+                var valueToPush = {};
+                valueToPush.name = item[0];
+                valueToPush.time = item[1];
+                valueToPush.url = item[2];
+                soonArrays.push(valueToPush);
+                valueToPush = {};
+            } else {
+                //message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1];
+            }
+            soonArrays.forEach(function (itemz) {
+                soonArray.push(itemz);
+            })
+            soonArray = uniq(soonArray, JSON.stringify);
+        }
+    });
+    return message;
+}
+
 /**************************************************************************/
 /* STARTUP THINGS */
 client.on("ready", () => {
@@ -200,31 +237,14 @@ client.on("ready", () => {
         }
     }).then(presence => Logging(trans("BOT_set_activity", config.activityType, config.activityName)))
         .catch(console.error);
+    timeCalcMessage();
     /* CRON */
     //every 30minutes check
     const job = new CronJob('*/30 * * * *', function () {
-        AnimeTimer(null, false);
-        var timeNOW = dateFormat(new Date(), "HH:MM"); // 16:46
-        var soonArrays = [];
-        todayArray.forEach(function (item) {
-            // dummy date, I know its today so compare only hours/minutes
-            dt1 = new Date(2018, 10, 1, item[1].split(":")[0], item[1].split(":")[1], 0, 0);
-            dt2 = new Date(2018, 10, 1, timeNOW.split(":")[0], timeNOW.split(":")[1], 0, 0);
-            if (timeDiffInMinutes(dt1, dt2) < 30) { //if less than 30minutes announce to all channels
-                if (item[2]) {
-                    var message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1];
-                    var valueToPush = {};
-                    valueToPush.name = item[0];
-                    valueToPush.time = item[1];
-                    valueToPush.url = item[2];
-                    soonArrays.push(valueToPush);
-                } else {
-                    var message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1];
-                }
-				soonArray = soonArrays;
-                SendtoAllGuilds(message);
-            }
-        });
+        var message = timeCalcMessage();
+        if (typeof message !== 'undefined') {
+           // SendtoAllGuilds(message);
+        }
     });
     job.start();
 
@@ -237,18 +257,16 @@ client.on("ready", () => {
                     urlExists(item.url)
                         .then(function (response) {
                             if (response) {
-                                console.log("Url exists", response.href);
-                                var messages = "```fix\nITS HERE:```\n" + `**${item.name}**: ${item.time} (${item.url})`;
+                                Logging(trans("BOT_cron_link_yes", response.href));
+                                var messages = "```fix\n" + item.name + "```\n" + `${item.url}`;
                                 var index = soonArray.indexOf(item);
-                                Logging(`Deleting ${soonArray[index]}`)
+                                Logging(trans("BOT_deleting", JSON.stringify(soonArray[index])));
                                 delete soonArray[index];
                                 SendtoAllGuilds(messages);
                             } else {
-                                Logging("Url does not exists!");
+                                Logging(trans("BOT_cron_link_no"));
                             }
                         });
-                } else {
-                    console.log("soon");
                 }
             });
         }

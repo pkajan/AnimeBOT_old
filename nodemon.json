@@ -1,4 +1,14 @@
 {
-  "ignore": ["package-lock.json", ".git/", "logs.txt"],
-  "delay": "5000"
+  "verbose": true,
+  "restartable": "rs",
+  "ignore": [
+    "package-lock.json",
+    "logs.txt",
+    ".git",
+    "node_modules/**/node_modules"
+  ],
+  "delay": "5000",
+  "events": {
+    "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
+  }
 }
