@@ -6,5 +6,6 @@
     "credentials": {
         "token": "your_token_goes_here"
     },
-    "translation": "en"
+    "translation": "en",
+    "timeshift": "1"
 }

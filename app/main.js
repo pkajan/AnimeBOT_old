@@ -8,17 +8,18 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 // Here we load the config.json file that contains our token and our prefix values.
-var config = require('../config.json');
+const config = require('../config.json');
 
 // Here we load the anime.json file that contains release dates of our anime shows.
-var data_file = '../anime.json';
+const data_file = '../anime.json';
 
 // Random vars that i will need later...or never
-var one_week = 7 * 24 * 60 * 60 * 1000;
-var todayArray;
-var soonArray = new Array();
+const one_week = 7 * 24 * 60 * 60 * 1000;
 const logs = require('fs');
 const logFile = 'logs.txt';
+const timeShift = config.timeshift;
+var todayArray;
+var soonArray = new Array();
 /**************************************************************************/
 /* FUNCTIONS */
 function Logging(message, /**/) {
@@ -93,7 +94,7 @@ function AnimeTimer(message = null, textoutput = false) {
         valueToPush.year = obj[i]["year"];
         valueToPush.month = obj[i]["month"];
         valueToPush.day = obj[i]["day"];
-        valueToPush.hour = obj[i]["hour"];
+        valueToPush.hour = obj[i]["hour"] + timeShift;
         valueToPush.minute = obj[i]["minute"];
         valueToPush.second = obj[i]["second"];
         if (obj[i]["link"]) {
@@ -243,7 +244,7 @@ client.on("ready", () => {
     const job = new CronJob('*/30 * * * *', function () {
         var message = timeCalcMessage();
         if (typeof message !== 'undefined') {
-           // SendtoAllGuilds(message);
+            // SendtoAllGuilds(message);
         }
     });
     job.start();
