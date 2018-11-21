@@ -1,7 +1,6 @@
-
 node_modules/
-package-lock.json
 config.json
 run_bot_init.cmd
 invite_bot.url
 logs.txt
+package-lock.json
