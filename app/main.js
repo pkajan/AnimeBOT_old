@@ -94,7 +94,7 @@ function AnimeTimer(message = null, textoutput = false) {
         valueToPush.year = obj[i]["year"];
         valueToPush.month = obj[i]["month"];
         valueToPush.day = obj[i]["day"];
-        valueToPush.hour = obj[i]["hour"] + timeShift;
+        valueToPush.hour = Number(obj[i]["hour"]) + Number(timeShift);
         valueToPush.minute = obj[i]["minute"];
         valueToPush.second = obj[i]["second"];
         if (obj[i]["link"]) {
