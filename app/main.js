@@ -204,17 +204,14 @@ function timeCalcMessage() {
         // dummy date, I know its today so compare only hours/minutes
         dt1 = new Date(2018, 10, 1, item[1].split(":")[0], item[1].split(":")[1], 0, 0);
         dt2 = new Date(2018, 10, 1, timeNOW.split(":")[0], timeNOW.split(":")[1], 0, 0);
-        if (timeDiffInMinutes(dt1, dt2) < 30) { //if less than 30minutes announce to all channels
+        if (timeDiffInMinutes(dt1, dt2) <= 120) {
             if (item[2]) {
-                //message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1];
                 var valueToPush = {};
                 valueToPush.name = item[0];
                 valueToPush.time = item[1];
                 valueToPush.url = item[2];
                 soonArrays.push(valueToPush);
                 valueToPush = {};
-            } else {
-                //message = "```fix\nSOON:```\n**" + item[0] + "**: " + item[1];
             }
             soonArrays.forEach(function (itemz) {
                 soonArray.push(itemz);
@@ -240,8 +237,8 @@ client.on("ready", () => {
         .catch(console.error);
     timeCalcMessage();
     /* CRON */
-    //every 30minutes check
-    const job = new CronJob('*/30 * * * *', function () {
+    //every 2 hour check
+    const job = new CronJob('0 */2 * * *', function () {
         var message = timeCalcMessage();
         if (typeof message !== 'undefined') {
             // SendtoAllGuilds(message);
