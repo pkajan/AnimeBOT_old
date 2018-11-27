@@ -101,6 +101,9 @@ function AnimeTimer(message = null, textoutput = false) {
             valueToPush.link = obj[i]["link"];
             valueToPush.starting_episode = obj[i]["_starting_episode"];
         }
+        if (obj[i]["picture"]) {
+            valueToPush.picture = obj[i]["picture"];
+        }
         anime_in_array.push(valueToPush);
     }
 
@@ -120,7 +123,7 @@ function AnimeTimer(message = null, textoutput = false) {
                 case 0:
                     zero_day = zero_day + `**${item.name}**: ` + countDownDate + "\n";
                     if (item.link) {
-                        TMPtodayArray.push([item.name, onlyTimeForTodays, item.link + `${parseInt(item.starting_episode) + parseInt(weeks)}`]);
+                        TMPtodayArray.push([item.name, onlyTimeForTodays, item.link + `${parseInt(item.starting_episode) + parseInt(weeks)}`, item.picture]);
                     } else {
                         TMPtodayArray.push([item.name, onlyTimeForTodays]);
                     }
@@ -155,7 +158,7 @@ function AnimeTimer(message = null, textoutput = false) {
 }
 
 
-function SendtoAllGuilds(text) {
+function SendtoAllGuilds(text, picture = null) {
     try {
         let toSay = text;
         client.guilds.map((guild) => {
@@ -165,7 +168,15 @@ function SendtoAllGuilds(text) {
                     if (c.type === "text") {
                         if (c.permissionsFor(client.user).has("VIEW_CHANNEL") === true) {
                             if (c.permissionsFor(client.user).has("SEND_MESSAGES") === true) {
-                                c.send(toSay);
+                                if (picture) {
+                                    c.send(toSay, {
+                                        files: [
+                                            picture
+                                        ]
+                                    });
+                                } else {
+                                    c.send(toSay);
+                                }
                                 found = 1;
                             }
                         }
@@ -210,6 +221,7 @@ function timeCalcMessage() {
                 valueToPush.name = item[0];
                 valueToPush.time = item[1];
                 valueToPush.url = item[2];
+                valueToPush.picture = item[3];
                 soonArrays.push(valueToPush);
                 valueToPush = {};
             }
@@ -260,7 +272,11 @@ client.on("ready", () => {
                                 var index = soonArray.indexOf(item);
                                 Logging(trans("BOT_deleting", JSON.stringify(soonArray[index])));
                                 delete soonArray[index];
-                                SendtoAllGuilds(messages);
+                                if (item.picture) {
+                                    SendtoAllGuilds(messages, item.picture);
+                                } else {
+                                    SendtoAllGuilds(messages);
+                                }
                             } else {
                                 Logging(trans("BOT_cron_link_no"));
                             }
