@@ -21,5 +21,21 @@
     "nodejs"
   ],
   "author": "pKajan",
-  "license": "GPL-3.0-or-later"
+  "license": "GPL-3.0-or-later",
+  "nodemonConfig": {
+    "verbose": true,
+    "restartable": "rs",
+    "ignore": [
+      "package-lock.json",
+      "*.txt",
+      ".git",
+      "node_modules/*"
+    ],
+    "watch": [
+      "language/",
+      "app/"
+    ],
+    "ext": "js json",
+    "delay": "5000"
+  }
 }
