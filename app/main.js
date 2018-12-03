@@ -8,10 +8,10 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 // Here we load the config.json file that contains our token and our prefix values.
-const config = require('../config.json');
+const config = require('../data/config.json');
 
 // Here we load the anime.json file that contains release dates of our anime shows.
-const data_file = '../anime.json';
+const data_file = '../data/anime.json';
 
 // Random vars that i will need later...or never
 const one_week = 7 * 24 * 60 * 60 * 1000;

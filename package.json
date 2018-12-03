@@ -33,7 +33,8 @@
     ],
     "watch": [
       "language/",
-      "app/"
+      "app/",
+      "data/"
     ],
     "ext": "js json",
     "delay": "5000"
