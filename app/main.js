@@ -349,7 +349,7 @@ client.on("message", async message => {
         removeCallMsg(message);
         const execSync = require('child_process').execSync;
         execSync('start cmd.exe @cmd /k "git reset --hard & git fetch --all & git pull & exit"');
-        message.channel.send(trans("cmd_update_msg"));
+        selfDestructMSG(message, trans("cmd_update_msg", 4000));
         Logging(trans("cmd_update_msg_log", message.author.username.toString()));
     }
 
