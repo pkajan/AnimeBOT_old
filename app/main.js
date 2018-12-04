@@ -121,7 +121,7 @@ function AnimeTimer(message = null, textoutput = false) {
 
             switch (difference) {
                 case 0:
-                    zero_day = zero_day + `**${item.name}**: ` + countDownDate + ` [ep${parseInt(item.starting_episode) + parseInt(weeks)}]` + "\n";
+                    zero_day = zero_day + `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n";
                     if (item.link) {
                         TMPtodayArray.push([item.name, onlyTimeForTodays, item.link + `${parseInt(item.starting_episode) + parseInt(weeks)}`, item.picture]);
                     } else {
@@ -129,13 +129,13 @@ function AnimeTimer(message = null, textoutput = false) {
                     }
                     break;
                 case 1:
-                    one_day = one_day + `**${item.name}**: ` + countDownDate + ` [ep${parseInt(item.starting_episode) + parseInt(weeks)}]` + "\n";
+                    one_day = one_day + `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n";
                     break;
                 case 2:
-                    two_days = two_days + `**${item.name}**: ` + countDownDate + ` [ep${parseInt(item.starting_episode) + parseInt(weeks)}]` + "\n";
+                    two_days = two_days + `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n";
                     break;
                 default:
-                    oth_days = oth_days + `**${item.name}**: ` + countDownDate + ` [ep${parseInt(item.starting_episode) + parseInt(weeks)}]` + "\n";
+                    oth_days = oth_days + `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n";
             }
         }
     });
