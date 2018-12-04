@@ -9,11 +9,12 @@
         "second": "0",
         "link": "https://www.masterani.me/anime/watch/2984-tensei-shitara-slime-datta-ken/",
         "_starting_episode": "1",
+        "_skipped_episodes": "0",
         "picture": "https://nodejs.pkajan.eu/Tensei_Shitara_Slime_Datta_Ken.jpg"
     },
     "Tuesday": "--- Tuesday ---",
     "Black Clover": {
-        "year": "2018",
+        "year": "2017",
         "month": "10",
         "day": "2",
         "hour": "12",
@@ -21,6 +22,7 @@
         "second": "0",
         "link": "https://www.masterani.me/anime/watch/2661-black-clover-tv/",
         "_starting_episode": "1",
+        "_skipped_episodes": "1",
         "picture": "https://nodejs.pkajan.eu/Black_Clover.jpg"
     },
     "Tokyo Ghoul:re 2": {
@@ -32,6 +34,7 @@
         "second": "0",
         "link": "https://www.masterani.me/anime/watch/2988-tokyo-ghoulre-2nd-season/",
         "_starting_episode": "1",
+        "_skipped_episodes": "0",
         "picture": "https://nodejs.pkajan.eu/Tokyo_Ghoul_re_2nd_Season.jpg"
     },
     "Wednesday": "--- Wednesday ---",
@@ -44,6 +47,7 @@
         "second": "0",
         "link": "https://www.masterani.me/anime/watch/2991-seishun-buta-yarou-wa-bunny-girl-senpai-no-yume-wo-minai/",
         "_starting_episode": "1",
+        "_skipped_episodes": "0",
         "picture": "https://nodejs.pkajan.eu/Seishun_Buta_Yarou_wa_Bunny_Girl_Senpai_no_Yume_wo_Minai.jpg"
     },
     "Thursday": "--- Thursday ---",
@@ -58,6 +62,7 @@
         "second": "0",
         "link": "https://www.masterani.me/anime/watch/2989-goblin-slayer/",
         "_starting_episode": "1",
+        "_skipped_episodes": "0",
         "picture": "https://nodejs.pkajan.eu/Goblin_Slayer.jpg"
     },
     "Sunday": "--- Sunday ---",
@@ -70,6 +75,7 @@
         "second": "0",
         "link": "https://www.masterani.me/anime/watch/2987-fairy-tail-final-series/",
         "_starting_episode": "1",
+        "_skipped_episodes": "0",
         "picture": "https://nodejs.pkajan.eu/Fairy_Tail_Final_Series.jpg"
     },
     "One Piece": {
@@ -81,6 +87,7 @@
         "second": "0",
         "link": "https://www.masterani.me/anime/watch/64-one-piece/",
         "_starting_episode": "861",
+        "_skipped_episodes": "0",
         "picture": "https://nodejs.pkajan.eu/One_Piece.jpg"
     }
 }
