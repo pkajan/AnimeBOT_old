@@ -233,6 +233,9 @@ function timeCalcMessage() {
     });
     return message;
 }
+function sleep(millis) {
+    return new Promise(resolve => setTimeout(resolve, millis));
+}
 
 /**************************************************************************/
 /* STARTUP THINGS */
@@ -300,8 +303,13 @@ client.on("guildDelete", guild => {
     client.user.setActivity(trans("BOT_serving", client.guilds.size));
 });
 /**************************************************************************/
-
-
+/* Error handling (dull one) - wait and restart in X miliseconds - helps on network interupts */
+client.on("error", (e) => {
+    console.error(e);
+    sleep(5000);
+    const execSync = require('child_process').execSync;
+    execSync('start cmd.exe @cmd /k "run_bot.cmd"');
+});
 /**************************************************************************/
 /* Triggered when message is send into chat */
 client.on("message", async message => {
