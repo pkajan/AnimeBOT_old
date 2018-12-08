@@ -52,6 +52,18 @@
     },
     "Thursday": "--- Thursday ---",
     "Friday": "--- Friday ---",
+    "Uchi no Maid ga Uzasugiru!": {
+        "year": "2018",
+        "month": "10",
+        "day": "5",
+        "hour": "17",
+        "minute": "30",
+        "second": "0",
+        "link": "https://www.masterani.me/anime/watch/3005-uchi-no-maid-ga-uzasugiru/",
+        "_starting_episode": "1",
+        "_skipped_episodes": "0",
+        "picture": "https://nodejs.pkajan.eu/Uchi_no_Maid_ga_Uzasugiru.jpg"
+    },
     "Saturday": "--- Saturday ---",
     "Goblin Slayer": {
         "year": "2018",
