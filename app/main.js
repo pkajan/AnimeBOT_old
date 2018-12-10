@@ -96,7 +96,6 @@ function AnimeTimer(message = null, textoutput = false) {
         valueToPush.day = obj[i]["day"];
         valueToPush.hour = Number(obj[i]["hour"]) + Number(timeShift);
         valueToPush.minute = obj[i]["minute"];
-        valueToPush.second = obj[i]["second"];
         if (obj[i]["link"]) {
             valueToPush.link = obj[i]["link"];
             valueToPush.starting_episode = obj[i]["_starting_episode"] - obj[i]["_skipped_episodes"];
@@ -109,19 +108,19 @@ function AnimeTimer(message = null, textoutput = false) {
 
     anime_in_array.forEach(function (item) {
         if (item.year) {
-            var json_date = new Date(item.year, (item.month - 1), item.day, item.hour, item.minute, item.second, 0);
+            var json_date = new Date(item.year, (item.month - 1), item.day, item.hour, item.minute, 0, 0);
             var weeks = weeks_needed(json_date);
             var countDownDateR = new Date(json_date.getTime() + (one_week * weeks));
-
             const a = new Date(), b = new Date(`${countDownDateR.getUTCFullYear()}-${countDownDateR.getUTCMonth() + 1}-${countDownDateR.getUTCDate()}`),
                 difference = dateDiffInDays(a, b);
 
             countDownDate = dateFormat(new Date(countDownDateR.valueOf()), "dddd, dS, HH:MM"); // Saturday, 9th, 16:46
             var onlyTimeForTodays = dateFormat(new Date(countDownDateR.valueOf()), "HH:MM"); // 16:46
 
+            var cd_text = `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n"
             switch (difference) {
                 case 0:
-                    zero_day = zero_day + `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n";
+                    zero_day = zero_day + cd_text;
                     if (item.link) {
                         TMPtodayArray.push([item.name, onlyTimeForTodays, item.link + `${parseInt(item.starting_episode) + parseInt(weeks)}`, item.picture]);
                     } else {
@@ -129,13 +128,13 @@ function AnimeTimer(message = null, textoutput = false) {
                     }
                     break;
                 case 1:
-                    one_day = one_day + `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n";
+                    one_day = one_day + cd_text;
                     break;
                 case 2:
-                    two_days = two_days + `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n";
+                    two_days = two_days + cd_text;
                     break;
                 default:
-                    oth_days = oth_days + `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n";
+                    oth_days = oth_days + cd_text;
             }
         }
     });
