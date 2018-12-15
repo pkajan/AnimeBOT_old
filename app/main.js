@@ -24,7 +24,6 @@ var soonArray = new Array();
 /**************************************************************************/
 
 /* FUNCTIONS */
-    console.log(`${now} [${type}] ${message}`);
 
 /* Logging - will show logs in console and write them into file (for later debugging?) */
 function Log(any_string, /**/) {
