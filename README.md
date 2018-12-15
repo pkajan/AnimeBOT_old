@@ -1,1 +1,1 @@
-# AnimeBOT
+# AnimeBOT v3
