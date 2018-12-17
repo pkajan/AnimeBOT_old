@@ -83,6 +83,11 @@ const uniq = (a, key) => {
 function sleep(millis) {
     return new Promise(resolve => setTimeout(resolve, millis));
 }
+
+/* remove accents/diacritics */
+function deunicode(any_string) {
+    return any_string.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+}
 /**************************************************************************/
 
 /* Other functions */
@@ -323,9 +328,8 @@ client.on("message", async message => {
     if (message.author.bot) return; // ignore other bots and self
     if (message.content.indexOf(config.prefix) !== 0) {// ignore messages without OUR prefix, except... we must be polite right?
         if (config.polite) {
-            var message_string = message.content.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            var message_string = deunicode(message.content).toLowerCase();
             if (polite_array_day.includes(message_string)) { // good morning to you too good sir <moving monocle closer to the eye>
-
                 message.channel.send(translate("polite_hello", polite_array_hello.randomElement(), message.author.username.toString()));
                 Log(translate("polite_hello_log", message.author.username.toString()));
             }
