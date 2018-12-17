@@ -328,7 +328,7 @@ client.on("message", async message => {
     if (message.author.bot) return; // ignore other bots and self
     if (message.content.indexOf(config.prefix) !== 0) {// ignore messages without OUR prefix, except... we must be polite right?
         if (config.polite) {
-            var message_string = deunicode(message.content).toLowerCase();
+            var message_string = deunicode(message.content).toLowerCase().split(" ")[0];
             if (polite_array_day.includes(message_string)) { // good morning to you too good sir <moving monocle closer to the eye>
                 message.channel.send(translate("polite_hello", polite_array_hello.randomElement(), message.author.username.toString()));
                 Log(translate("polite_hello_log", message.author.username.toString()));
