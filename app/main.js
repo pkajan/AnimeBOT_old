@@ -20,6 +20,9 @@ const ms_per_day = Number(86400000); // miliseconds per day 1000 * 60 * 60 * 24;
 const timeShift = config.timeshift;
 var todayArray;
 var soonArray = new Array();
+var polite_array_day = config.messages_day.split(";");
+var polite_array_night = config.messages_night.split(";");
+var polite_array_hello = config.polite_hello.split(";");
 
 /**************************************************************************/
 
@@ -313,8 +316,26 @@ client.on("error", (e) => {
 
 /* Triggered when message is send into chat */
 client.on("message", async message => {
+    Array.prototype.randomElement = function () {
+        return this[Math.floor(Math.random() * this.length)]
+    }
+
     if (message.author.bot) return; // ignore other bots and self
-    if (message.content.indexOf(config.prefix) !== 0) return; // ignore messages without OUR prefix
+    if (message.content.indexOf(config.prefix) !== 0) {// ignore messages without OUR prefix, except... we must be polite right?
+        if (config.polite) {
+            if (polite_array_day.includes(message.content.toLowerCase())) { // good morning to you too good sir <moving monocle closer to the eye>
+
+                message.channel.send(translate("polite_hello", polite_array_hello.randomElement(), message.author.username.toString()));
+                Log(translate("polite_hello_log", message.author.username.toString()));
+            }
+            if (polite_array_night.includes(message.content.toLowerCase())) { //good night
+                message.channel.send(translate("polite_GN", message.author.username.toString()));
+                Log(translate("polite_GN_log", message.author.username.toString()));
+            }
+        } else {
+            return;
+        }
+    }
 
     // remove prefix and put statements into array
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
