@@ -88,6 +88,18 @@ function sleep(millis) {
 function deunicode(any_string) {
     return any_string.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
 }
+
+/* ASYNC!!! will return if part of given string is somewhere in array */
+async function isItPartOfString(any_array, any_string) {
+    var ImBoolean = false;
+    any_array.forEach(function (item) {
+        if ((any_string.match(item))) {
+            //console.log(any_string.match(item));
+            ImBoolean = true;
+        }
+    });
+    throw ImBoolean;
+}
 /**************************************************************************/
 
 /* Other functions */
@@ -329,14 +341,22 @@ client.on("message", async message => {
     if (message.content.indexOf(config.prefix) !== 0) {// ignore messages without OUR prefix, except... we must be polite right?
         if (config.polite) {
             var message_string = deunicode(message.content).toLowerCase().split(" ")[0];
-            if (polite_array_day.includes(message_string)) { // good morning to you too good sir <moving monocle closer to the eye>
-                message.channel.send(translate("polite_hello", polite_array_hello.randomElement(), message.author.username.toString()));
-                Log(translate("polite_hello_log", message.author.username.toString()));
-            }
-            if (polite_array_night.includes(message_string)) { //good night
-                message.channel.send(translate("polite_GN", message.author.username.toString()));
-                Log(translate("polite_GN_log", message.author.username.toString()));
-            }
+
+            // good morning to you too good sir <moving monocle closer to the eye>
+            isItPartOfString(polite_array_day, message_string).catch(function (item) {
+                if (item) {
+                    message.channel.send(translate("polite_hello", polite_array_hello.randomElement(), message.author.username.toString()));
+                    Log(translate("polite_hello_log", message.author.username.toString()));
+                }
+            });
+
+            // good night to you too good sir <putting monocle to pocket>
+            isItPartOfString(polite_array_night, message_string).catch(function (item) {
+                if (item) {
+                    message.channel.send(translate("polite_GN", message.author.username.toString()));
+                    Log(translate("polite_GN_log", message.author.username.toString()));
+                }
+            });
         } else {
             return;
         }
