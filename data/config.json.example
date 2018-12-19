@@ -6,6 +6,7 @@
     "credentials": {
         "token": "your_token_goes_here"
     },
+    "ownerID": "123456789",
     "translation": "en",
     "timeshift": "1",
     "polite": true,

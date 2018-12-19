@@ -16,6 +16,8 @@
     "cmd_say_msg": "Message send into chat. (%s) [Invoked by %s]",
     "cmd_say_msg_log": "Say message was empty. [Invoked by %s]",
     "cmd_say_empty": "Say something (%ssay something)",
+    "cmd_say_noOwner": "You are not my Lord! Die in agony!",
+    "cmd_say_noOwner_log": "Someone try to fool me [Invoked by %s]",
     "cmd_spam": "spam",
     "cmd_spam_msg": "Channel SPAMmed %d times. [Invoked by %s]",
     "cmd_spam_msg_empty": "Channel was not SPAMmed. >>%d<< instead of Number. [Invoked by %s]",

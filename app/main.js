@@ -100,6 +100,13 @@ async function isItPartOfString(any_array, any_string) {
     });
     throw ImBoolean;
 }
+
+function fromOwner(userID) {
+    if (userID == config.ownerID) {
+        return true;
+    }
+    return false;
+}
 /**************************************************************************/
 
 /* Other functions */
@@ -367,16 +374,20 @@ client.on("message", async message => {
     const command = args.shift().toLowerCase();
 
     if (command === translate("cmd_say")) {
-        if (args.length > 0) {
-            const sayMessage = args.join(" ");
+        if (fromOwner(message.author.id)) {
             removeCallMsg(message);
-            // And we get the bot to say the thing:
-            message.channel.send(sayMessage);
-            Log(translate("cmd_say_msg", sayMessage, message.author.username.toString()));
+            if (args.length > 0) {
+                const sayMessage = args.join(" ");
+                // And we get the bot to say the thing:
+                message.channel.send(sayMessage);
+                Log(translate("cmd_say_msg", sayMessage, message.author.username.toString()));
+            } else {
+                message.channel.send(translate("cmd_say_empty", config.prefix));
+                Log(translate("cmd_say_msg_log", message.author.username.toString()));
+            }
         } else {
-            removeCallMsg(message);
-            message.channel.send(translate("cmd_say_empty", config.prefix));
-            Log(translate("cmd_say_msg_log", message.author.username.toString()));
+            message.channel.send(translate("cmd_say_noOwner"));
+            Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
         }
     }
 
