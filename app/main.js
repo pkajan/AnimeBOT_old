@@ -23,6 +23,7 @@ var soonArray = new Array();
 var polite_array_day = config.messages_day.split(";");
 var polite_array_night = config.messages_night.split(";");
 var polite_array_hello = config.polite_hello.split(";");
+var polite_array_exceptions = config.exceptions.split(";");
 
 /**************************************************************************/
 
@@ -349,19 +350,23 @@ client.on("message", async message => {
         if (config.polite) {
             var message_string = deunicode(message.content).toLowerCase().split(" ")[0];
 
-            // good morning to you too good sir <moving monocle closer to the eye>
-            isItPartOfString(polite_array_day, message_string).catch(function (item) {
-                if (item) {
-                    message.channel.send(translate("polite_hello", polite_array_hello.randomElement(), message.author.username.toString()));
-                    Log(translate("polite_hello_log", message.author.username.toString()));
-                }
-            });
+            isItPartOfString(polite_array_exceptions, message_string).catch(function (exception) {
+                if (!exception) {
+                    // good morning to you too good sir <moving monocle closer to the eye>
+                    isItPartOfString(polite_array_day, message_string).catch(function (item) {
+                        if (item) {
+                            message.channel.send(translate("polite_hello", polite_array_hello.randomElement(), message.author.username.toString()));
+                            Log(translate("polite_hello_log", message.author.username.toString()));
+                        }
+                    });
 
-            // good night to you too good sir <putting monocle to pocket>
-            isItPartOfString(polite_array_night, message_string).catch(function (item) {
-                if (item) {
-                    message.channel.send(translate("polite_GN", message.author.username.toString()));
-                    Log(translate("polite_GN_log", message.author.username.toString()));
+                    // good night to you too good sir <putting monocle to pocket>
+                    isItPartOfString(polite_array_night, message_string).catch(function (item) {
+                        if (item) {
+                            message.channel.send(translate("polite_GN", message.author.username.toString()));
+                            Log(translate("polite_GN_log", message.author.username.toString()));
+                        }
+                    });
                 }
             });
         } else {
@@ -409,9 +414,9 @@ client.on("message", async message => {
 
     if (command === translate("cmd_update")) {
         removeCallMsg(message);
+        selfDestructMSG(message, translate("cmd_update_msg", 4000));
         const execSync = require('child_process').execSync;
         execSync('start cmd.exe @cmd /k "git reset --hard & git fetch --all & git pull & exit"');
-        selfDestructMSG(message, translate("cmd_update_msg", 4000));
         Log(translate("cmd_update_msg_log", message.author.username.toString()));
     }
 
