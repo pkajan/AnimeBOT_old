@@ -23,6 +23,7 @@ var soonArray = new Array();
 var polite_array_day = config.messages_day.split(";");
 var polite_array_night = config.messages_night.split(";");
 var polite_array_hello = config.polite_hello.split(";");
+var polite_array_bye = config.polite_night.split(";");
 var polite_array_exceptions = config.exceptions.split(";");
 
 /**************************************************************************/
@@ -363,7 +364,7 @@ client.on("message", async message => {
                     // good night to you too good sir <putting monocle to pocket>
                     isItPartOfString(polite_array_night, message_string).catch(function (item) {
                         if (item) {
-                            message.channel.send(translate("polite_GN", message.author.username.toString()));
+                            message.channel.send(translate("polite_GN", polite_array_bye.randomElement(), message.author.username.toString()));
                             Log(translate("polite_GN_log", message.author.username.toString()));
                         }
                     });

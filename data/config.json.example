@@ -13,5 +13,6 @@
     "messages_day": "hello;morning",
     "messages_night": "gn;gn&hf",
     "polite_hello": "Greetings;Hi;Howdy;Bonjour;Buenas noches;Buenos dias;Good day;Good morning;Hey;Hi-ya;How are you;How goes it;Howdy-do;Shalom;What's happening;What's up;Salutation;<*random high five*>;Peekaboo;What's up homegirl;yoo-hoo;What's new;<*smile of recognition*;Ahoy;Spitting on the floor while looking at",
+    "polite_night": "Good night to you too;GN",
     "exceptions": "http;bola"
 }

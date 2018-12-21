@@ -26,7 +26,7 @@
     "cmd_update_msg": "Pull-ing new version from github repo.",
     "cmd_update_msg_log": "Pull-ing new version from github repo. [Invoked by %s]",
     "SPAM": "SPAM ",
-    "polite_GN": "Good night to you too **%s**!",
+    "polite_GN": "%s **%s**!",
     "polite_hello": "%s **%s**",
     "polite_GN_log": "Polite GN [Invoked by %s]",
     "polite_hello_log": "Polite hello [Invoked by %s]"
