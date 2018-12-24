@@ -103,8 +103,8 @@ async function isItPartOfString(any_array, any_string) {
     throw ImBoolean;
 }
 
-function fromOwner(userID) {
-    if (userID == config.ownerID) {
+function hasRights(userID) {
+    if (userID == config.ownerID || userID == config.adminIDs) {
         return true;
     }
     return false;
@@ -380,7 +380,7 @@ client.on("message", async message => {
     const command = args.shift().toLowerCase();
 
     if (command === translate("cmd_say")) {
-        if (fromOwner(message.author.id)) {
+        if (hasRights(message.author.id)) {
             removeCallMsg(message);
             if (args.length > 0) {
                 const sayMessage = args.join(" ");
