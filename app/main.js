@@ -25,6 +25,7 @@ var polite_array_night = config.messages_night.split(";");
 var polite_array_hello = config.polite_hello.split(";");
 var polite_array_bye = config.polite_night.split(";");
 var polite_array_exceptions = config.exceptions.split(";");
+var LastPoliteMessage = 0;
 
 /**************************************************************************/
 
@@ -103,6 +104,7 @@ async function isItPartOfString(any_array, any_string) {
     throw ImBoolean;
 }
 
+/* Check if user has RIGHTs */
 function hasRights(userID) {
     if (userID == config.ownerID || userID == config.adminIDs) {
         return true;
@@ -332,7 +334,7 @@ client.on("guildDelete", guild => {
     client.user.setActivity(translate("BOT_serving", client.guilds.size));
 });
 
-/* Error handling (dull one) - wait Xsec and restart in X miliseconds - helps on network interupts */
+/* Error handling (dull one) - wait X miliseconds and restart - helps on network interupts */
 client.on("error", (e) => {
     console.error(e);
     sleep(5000);
@@ -349,27 +351,30 @@ client.on("message", async message => {
     if (message.author.bot) return; // ignore other bots and self
     if (message.content.indexOf(config.prefix) !== 0) {// ignore messages without OUR prefix, except... we must be polite right?
         if (config.polite) {
-            var message_string = deunicode(message.content).toLowerCase().split(" ")[0];
+            if (new Date().getTime() - LastPoliteMessage > 20000) { //prevent spamming channel with hello to hello to hello...HELL NO!!
+                LastPoliteMessage = new Date().getTime();
+                var message_string = deunicode(message.content).toLowerCase().split(" ")[0];
 
-            isItPartOfString(polite_array_exceptions, message_string).catch(function (exception) {
-                if (!exception) {
-                    // good morning to you too good sir <moving monocle closer to the eye>
-                    isItPartOfString(polite_array_day, message_string).catch(function (item) {
-                        if (item) {
-                            message.channel.send(translate("polite_hello", polite_array_hello.randomElement(), message.author.username.toString()));
-                            Log(translate("polite_hello_log", message.author.username.toString()));
-                        }
-                    });
+                isItPartOfString(polite_array_exceptions, message_string).catch(function (exception) {
+                    if (!exception) {
+                        // good morning to you too good sir <moving monocle closer to the eye>
+                        isItPartOfString(polite_array_day, message_string).catch(function (item) {
+                            if (item) {
+                                message.channel.send(translate("polite_hello", polite_array_hello.randomElement()));
+                                Log(translate("polite_hello_log", message.author.username.toString()));
+                            }
+                        });
 
-                    // good night to you too good sir <putting monocle to pocket>
-                    isItPartOfString(polite_array_night, message_string).catch(function (item) {
-                        if (item) {
-                            message.channel.send(translate("polite_GN", polite_array_bye.randomElement(), message.author.username.toString()));
-                            Log(translate("polite_GN_log", message.author.username.toString()));
-                        }
-                    });
-                }
-            });
+                        // good night to you too good sir <putting monocle to pocket>
+                        isItPartOfString(polite_array_night, message_string).catch(function (item) {
+                            if (item) {
+                                message.channel.send(translate("polite_GN", polite_array_bye.randomElement()));
+                                Log(translate("polite_GN_log", message.author.username.toString()));
+                            }
+                        });
+                    }
+                });
+            }
         } else {
             return;
         }
@@ -416,9 +421,9 @@ client.on("message", async message => {
     if (command === translate("cmd_update")) {
         removeCallMsg(message);
         selfDestructMSG(message, translate("cmd_update_msg", 4000));
+        Log(translate("cmd_update_msg_log", message.author.username.toString()));
         const execSync = require('child_process').execSync;
         execSync('start cmd.exe @cmd /k "git reset --hard & git fetch --all & git pull & exit"');
-        Log(translate("cmd_update_msg_log", message.author.username.toString()));
     }
 
     if (command === "test") {

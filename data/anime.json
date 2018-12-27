@@ -11,6 +11,17 @@
         "link": "https://www.masterani.me/anime/watch/2984-tensei-shitara-slime-datta-ken/",
         "picture": "https://nodejs.pkajan.eu/Tensei_Shitara_Slime_Datta_Ken.jpg"
     },
+    "Dororo": {
+        "year": "2019",
+        "month": "1",
+        "day": "7",
+        "hour": "14",
+        "minute": "0",
+        "_starting_episode": "1",
+        "_skipped_episodes": "0",
+        "link": "https://www.masterani.me/anime/watch/????-dororo/",
+        "picture": "https://nodejs.pkajan.eu/Dororo.jpg"
+    },
     "Tuesday": "--- Tuesday ---",
     "Black Clover": {
         "year": "2018",
