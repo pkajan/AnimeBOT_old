@@ -187,6 +187,7 @@ function AnimeTimer(message = null, textoutput = false) {
         if (obj[i]["link"]) {
             valueToPush.link = obj[i]["link"];
             valueToPush.starting_episode = obj[i]["_starting_episode"] - obj[i]["_skipped_episodes"];
+            valueToPush.last_episode = obj[i]["_last_episode"];
         }
         if (obj[i]["picture"]) {
             valueToPush.picture = obj[i]["picture"];
@@ -201,23 +202,24 @@ function AnimeTimer(message = null, textoutput = false) {
             var CDNext = new Date(json_date.getTime() + (one_week * weeks));
             const a = new Date(), b = CDNext, difference = dateDiffInDays(a, b);
             countDownDate = dateFormat(json_date.getTime() + (one_week * weeks), "dddd, dS, HH:MM"); /* Saturday, 9th, 16:46 */
-
-            var cd_text = `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n"
-            switch (difference) {
-                case 0:
-                    zero_day = zero_day + cd_text;
-                    if (item.link) {
-                        TMPtodayArray.push([item.name, CDNext.getTime(), item.link + `${parseInt(item.starting_episode) + parseInt(weeks)}`, item.picture]);
-                    }
-                    break;
-                case 1:
-                    one_day = one_day + cd_text;
-                    break;
-                case 2:
-                    two_days = two_days + cd_text;
-                    break;
-                default:
-                    oth_days = oth_days + cd_text;
+            if (parseInt(item.last_episode) >= (parseInt(item.starting_episode) + parseInt(weeks))) {
+                var cd_text = `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n"
+                switch (difference) {
+                    case 0:
+                        zero_day = zero_day + cd_text;
+                        if (item.link) {
+                            TMPtodayArray.push([item.name, CDNext.getTime(), item.link + `${parseInt(item.starting_episode) + parseInt(weeks)}`, item.picture]);
+                        }
+                        break;
+                    case 1:
+                        one_day = one_day + cd_text;
+                        break;
+                    case 2:
+                        two_days = two_days + cd_text;
+                        break;
+                    default:
+                        oth_days = oth_days + cd_text;
+                }
             }
         }
     });
@@ -349,36 +351,35 @@ client.on("message", async message => {
     }
 
     if (message.author.bot) return; // ignore other bots and self
-    if (message.content.indexOf(config.prefix) !== 0) {// ignore messages without OUR prefix, except... we must be polite right?
-        if (config.polite) {
-            if (new Date().getTime() - LastPoliteMessage > 20000) { //prevent spamming channel with hello to hello to hello...HELL NO!!
-                LastPoliteMessage = new Date().getTime();
-                var message_string = deunicode(message.content).toLowerCase().split(" ")[0];
+    if (config.polite) {
+        if (new Date().getTime() - LastPoliteMessage > 20000) { //prevent spamming channel with hello to hello to hello...HELL NO!!
+            LastPoliteMessage = new Date().getTime();
+            var message_string = deunicode(message.content).toLowerCase().split(" ")[0];
 
-                isItPartOfString(polite_array_exceptions, message_string).catch(function (exception) {
-                    if (!exception) {
-                        // good morning to you too good sir <moving monocle closer to the eye>
-                        isItPartOfString(polite_array_day, message_string).catch(function (item) {
-                            if (item) {
-                                message.channel.send(translate("polite_hello", polite_array_hello.randomElement()));
-                                Log(translate("polite_hello_log", message.author.username.toString()));
-                            }
-                        });
+            isItPartOfString(polite_array_exceptions, message_string).catch(function (exception) {
+                if (!exception) {
+                    // good morning to you too good sir <moving monocle closer to the eye>
+                    isItPartOfString(polite_array_day, message_string).catch(function (item) {
+                        if (item) {
+                            message.channel.send(translate("polite_hello", polite_array_hello.randomElement()));
+                            Log(translate("polite_hello_log", message.author.username.toString()));
+                        }
+                    });
 
-                        // good night to you too good sir <putting monocle to pocket>
-                        isItPartOfString(polite_array_night, message_string).catch(function (item) {
-                            if (item) {
-                                message.channel.send(translate("polite_GN", polite_array_bye.randomElement()));
-                                Log(translate("polite_GN_log", message.author.username.toString()));
-                            }
-                        });
-                    }
-                });
-            }
-        } else {
-            return;
+                    // good night to you too good sir <putting monocle to pocket>
+                    isItPartOfString(polite_array_night, message_string).catch(function (item) {
+                        if (item) {
+                            message.channel.send(translate("polite_GN", polite_array_bye.randomElement()));
+                            Log(translate("polite_GN_log", message.author.username.toString()));
+                        }
+                    });
+                }
+            });
         }
+    } else {
+        return;
     }
+    if (message.content.indexOf(config.prefix) !== 0) return; // ignore messages without OUR prefix, except... we must be polite right (up)?
 
     // remove prefix and put statements into array
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);

@@ -8,6 +8,7 @@
         "minute": "40",
         "_starting_episode": "1",
         "_skipped_episodes": "0",
+        "_last_episode": "24",
         "link": "https://www.masterani.me/anime/watch/2984-tensei-shitara-slime-datta-ken/",
         "picture": "https://nodejs.pkajan.eu/Tensei_Shitara_Slime_Datta_Ken.jpg"
     },
@@ -19,6 +20,7 @@
         "minute": "0",
         "_starting_episode": "1",
         "_skipped_episodes": "0",
+        "_last_episode": "9999",
         "link": "https://www.masterani.me/anime/watch/????-dororo/",
         "picture": "https://nodejs.pkajan.eu/Dororo.jpg"
     },
@@ -31,6 +33,7 @@
         "minute": "35",
         "_starting_episode": "61",
         "_skipped_episodes": "0",
+        "_last_episode": "9999",
         "link": "https://www.masterani.me/anime/watch/2661-black-clover-tv/",
         "picture": "https://nodejs.pkajan.eu/Black_Clover.jpg"
     },
@@ -46,6 +49,7 @@
         "minute": "45",
         "_starting_episode": "1",
         "_skipped_episodes": "1",
+        "_last_episode": "12",
         "link": "https://www.masterani.me/anime/watch/2989-goblin-slayer/",
         "picture": "https://nodejs.pkajan.eu/Goblin_Slayer.jpg"
     },
@@ -58,6 +62,7 @@
         "minute": "45",
         "_starting_episode": "1",
         "_skipped_episodes": "0",
+        "_last_episode": "9999",
         "link": "https://www.masterani.me/anime/watch/2987-fairy-tail-final-series/",
         "picture": "https://nodejs.pkajan.eu/Fairy_Tail_Final_Series.jpg"
     },
@@ -69,6 +74,7 @@
         "minute": "15",
         "_starting_episode": "861",
         "_skipped_episodes": "0",
+        "_last_episode": "9999",
         "link": "https://www.masterani.me/anime/watch/64-one-piece/",
         "picture": "https://nodejs.pkajan.eu/One_Piece.jpg"
     },
@@ -81,6 +87,7 @@
         "minute": "0",
         "_starting_episode": "1",
         "_skipped_episodes": "0",
+        "_last_episode": "9999",
         "link": "https://www.masterani.me/anime/watch/?????-one-punch-man-2/",
         "picture": "https://nodejs.pkajan.eu/One-Punch_Man_2.jpg"
     }
