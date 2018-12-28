@@ -352,7 +352,7 @@ client.on("message", async message => {
 
     if (message.author.bot) return; // ignore other bots and self
     if (config.polite) {
-        if (new Date().getTime() - LastPoliteMessage > 20000) { //prevent spamming channel with hello to hello to hello...HELL NO!!
+        if ((parseInt(new Date().getTime()) - parseInt(LastPoliteMessage)) > 20000) { //prevent spamming channel with hello to hello to hello...HELL NO!!
             LastPoliteMessage = new Date().getTime();
             var message_string = deunicode(message.content).toLowerCase().split(" ")[0];
 
