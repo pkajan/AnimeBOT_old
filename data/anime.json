@@ -71,5 +71,17 @@
         "_skipped_episodes": "0",
         "link": "https://www.masterani.me/anime/watch/64-one-piece/",
         "picture": "https://nodejs.pkajan.eu/One_Piece.jpg"
+    },
+    "UPCOMING": "--- UPCOMING ---",
+    "One-Punch Man 2": {
+        "year": "2019",
+        "month": "4",
+        "day": "30",
+        "hour": "0",
+        "minute": "0",
+        "_starting_episode": "1",
+        "_skipped_episodes": "0",
+        "link": "https://www.masterani.me/anime/watch/?????-one-punch-man-2/",
+        "picture": "https://nodejs.pkajan.eu/One-Punch_Man_2.jpg"
     }
 }
