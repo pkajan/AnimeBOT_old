@@ -61,7 +61,7 @@
         "hour": "0",
         "minute": "45",
         "_starting_episode": "1",
-        "_skipped_episodes": "0",
+        "_skipped_episodes": "1",
         "_last_episode": "9999",
         "link": "https://www.masterani.me/anime/watch/2987-fairy-tail-final-series/",
         "picture": "https://nodejs.pkajan.eu/Fairy_Tail_Final_Series.jpg"
@@ -73,7 +73,7 @@
         "hour": "4",
         "minute": "15",
         "_starting_episode": "861",
-        "_skipped_episodes": "0",
+        "_skipped_episodes": "1",
         "_last_episode": "9999",
         "link": "https://www.masterani.me/anime/watch/64-one-piece/",
         "picture": "https://nodejs.pkajan.eu/One_Piece.jpg"
