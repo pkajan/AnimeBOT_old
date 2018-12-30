@@ -102,5 +102,17 @@
         "_last_episode": "9999",
         "link": "https://www.masterani.me/anime/watch/?????-domestic-girlfriend/",
         "picture": "https://nodejs.pkajan.eu/Domestic_Girlfriend.jpg"
+    },
+        "7 Seeds": {
+        "year": "2019",
+        "month": "4",
+        "day": "30",
+        "hour": "0",
+        "minute": "0",
+        "_starting_episode": "1",
+        "_skipped_episodes": "0",
+        "_last_episode": "9999",
+        "link": "https://www.masterani.me/anime/watch/?????-7-seeds/",
+        "picture": "https://nodejs.pkajan.eu/7_Seeds.jpg"
     }
 }
