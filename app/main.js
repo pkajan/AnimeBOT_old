@@ -300,8 +300,8 @@ client.on("ready", () => {
     job.start();
 
     /* CRON2 ***********************************************************/
-    // check every minute if anime is there
-    const job2 = new CronJob('* * * * *', function () {
+    // check every 5 minutes if anime is there
+    const job2 = new CronJob('*/5 * * * *', function () {
         if (typeof soonArray != 'undefined') {
             soonArray.forEach(function (item) {
                 if (item.url) {
@@ -424,7 +424,7 @@ client.on("message", async message => {
 
     if (command === translate("cmd_update")) {
         removeCallMsg(message);
-        selfDestructMSG(message, translate("cmd_update_msg", 5000));
+        selfDestructMSG(message, translate("cmd_update_msg"), 5000);
         Log(translate("cmd_update_msg_log", message.author.username.toString()));
         const { exec } = require('child_process');
         exec(updCMD, (err, stdout, stderr) => {
