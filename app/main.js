@@ -18,6 +18,7 @@ const logFile = 'logs.txt';
 const one_week = Number(604800000); // 7days in miliseconds (7 * 24 * 60 * 60 * 1000)
 const ms_per_day = Number(86400000); // miliseconds per day 1000 * 60 * 60 * 24;
 const timeShift = config.timeshift;
+const updCMD = 'start cmd.exe @cmd /k "git reset --hard & git fetch --all & git pull & exit';
 var todayArray;
 var soonArray = new Array();
 var polite_array_day = config.messages_day.split(";");
@@ -202,8 +203,10 @@ function AnimeTimer(message = null, textoutput = false) {
             var CDNext = new Date(json_date.getTime() + (one_week * weeks));
             const a = new Date(), b = CDNext, difference = dateDiffInDays(a, b);
             countDownDate = dateFormat(json_date.getTime() + (one_week * weeks), "dddd, dS, HH:MM"); /* Saturday, 9th, 16:46 */
+            countDownDate_oth = dateFormat(json_date.getTime() + (one_week * weeks), "dddd, dS mmmm, HH:MM"); /* Saturday, 9th April, 16:46 */
             if (parseInt(item.last_episode) >= (parseInt(item.starting_episode) + parseInt(weeks))) {
-                var cd_text = `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n"
+                var cd_text = `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n";
+                var cd_text_oth = `**${item.name}**: ` + countDownDate_oth + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n";
                 switch (difference) {
                     case 0:
                         zero_day = zero_day + cd_text;
@@ -218,7 +221,7 @@ function AnimeTimer(message = null, textoutput = false) {
                         two_days = two_days + cd_text;
                         break;
                     default:
-                        oth_days = oth_days + cd_text;
+                        oth_days = oth_days + cd_text_oth;
                 }
             }
         }
@@ -421,10 +424,16 @@ client.on("message", async message => {
 
     if (command === translate("cmd_update")) {
         removeCallMsg(message);
-        selfDestructMSG(message, translate("cmd_update_msg", 4000));
+        selfDestructMSG(message, translate("cmd_update_msg", 5000));
         Log(translate("cmd_update_msg_log", message.author.username.toString()));
-        const execSync = require('child_process').execSync;
-        execSync('start cmd.exe @cmd /k "git reset --hard & git fetch --all & git pull & exit"');
+        const { exec } = require('child_process');
+        exec(updCMD, (err, stdout, stderr) => {
+            if (err) {
+                Log(err);
+                return;
+            }
+            Log(stdout);
+        });
     }
 
     if (command === "test") {
