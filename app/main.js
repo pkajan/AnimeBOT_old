@@ -389,8 +389,8 @@ client.on("message", async message => {
     const command = args.shift().toLowerCase();
 
     if (command === translate("cmd_say")) {
+        removeCallMsg(message);
         if (hasRights(message.author.id)) {
-            removeCallMsg(message);
             if (args.length > 0) {
                 const sayMessage = args.join(" ");
                 // And we get the bot to say the thing:
@@ -408,13 +408,21 @@ client.on("message", async message => {
 
     if (command === translate("cmd_spam")) {
         removeCallMsg(message);
-        if (args[0]) {
-            for (i = args[0]; i > 0; i--) {
-                message.channel.send(translate("SPAM") + i);
+        if (hasRights(message.author.id)) {
+            if (args[0]) {
+                for (i = args[0]; i > 0; i--) {
+                    message.channel.send(translate("SPAM") + i);
+                }
+                Log(translate("cmd_spam_msg", args[0], message.author.username.toString()));
             }
-            Log(translate("cmd_spam_msg", args[0], message.author.username.toString()));
+            Log(translate("cmd_spam_msg_empty", args[0], message.author.username.toString()));
+        } else {
+            message.channel.send(translate("cmd_say_noOwner"));
+            Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
         }
-        Log(translate("cmd_spam_msg_empty", args[0], message.author.username.toString()));
+
+
+
     }
 
     if (command === translate("cmd_info")) {
@@ -436,7 +444,27 @@ client.on("message", async message => {
         });
     }
 
-    if (command === "test") {
+    if (command === translate("cmd_status")) {
+        removeCallMsg(message);
+        var status_type = args[0];
+        args.splice(0, 1);
+        var status_name = args.join(" ");
+
+        if (hasRights(message.author.id)) {
+            client.user.setPresence({
+                game: {
+                    name: status_name,
+                    type: status_type
+                }
+            }).then(presence => Log(translate("BOT_set_activity", status_type, status_name)))
+                .catch(console.error);
+        } else {
+            message.channel.send(translate("cmd_say_noOwner"));
+            Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
+        }
+    }
+
+    if (command === translate("test")) {
         removeCallMsg(message);
         //console.log(message.author.username.toString());
     }

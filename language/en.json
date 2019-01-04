@@ -21,6 +21,7 @@
     "cmd_spam": "spam",
     "cmd_spam_msg": "Channel SPAMmed %d times. [Invoked by %s]",
     "cmd_spam_msg_empty": "Channel was not SPAMmed. >>%d<< instead of Number. [Invoked by %s]",
+    "cmd_status": "status",
     "cmd_test": "test",
     "cmd_update": "update",
     "cmd_update_msg": "Pull-ing new version from github repo.",
