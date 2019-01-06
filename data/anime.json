@@ -38,6 +38,18 @@
         "picture": "https://nodejs.pkajan.eu/Black_Clover.jpg"
     },
     "Wednesday": "--- Wednesday ---",
+    "Tate no Yuusha no Nariagari": {
+        "year": "2019",
+        "month": "1",
+        "day": "9",
+        "hour": "5",
+        "minute": "0",
+        "_starting_episode": "1",
+        "_skipped_episodes": "0",
+        "_last_episode": "24",
+        "link": "https://www.masterani.me/anime/watch/3042-tate-no-yuusha-no-nariagari/",
+        "picture": "Tate_no_Yuusha_no_Nariagari.jpg"
+    },
     "Thursday": "--- Thursday ---",
     "Friday": "--- Friday ---",
     "Saturday": "--- Saturday ---",
