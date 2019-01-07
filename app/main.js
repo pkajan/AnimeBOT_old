@@ -107,7 +107,8 @@ async function isItPartOfString(any_array, any_string) {
 
 /* Check if user has RIGHTs */
 function hasRights(userID) {
-    if (userID == config.ownerID || userID == config.adminIDs) {
+    var admins = config.adminIDs.split(";");
+    if (userID == config.ownerID || admins.includes(userID)) {
         return true;
     }
     return false;
@@ -420,9 +421,6 @@ client.on("message", async message => {
             message.channel.send(translate("cmd_say_noOwner"));
             Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
         }
-
-
-
     }
 
     if (command === translate("cmd_info")) {
@@ -431,17 +429,19 @@ client.on("message", async message => {
     }
 
     if (command === translate("cmd_update")) {
-        removeCallMsg(message);
-        selfDestructMSG(message, translate("cmd_update_msg"), 5000);
-        Log(translate("cmd_update_msg_log", message.author.username.toString()));
-        const { exec } = require('child_process');
-        exec(updCMD, (err, stdout, stderr) => {
-            if (err) {
-                Log(err);
-                return;
-            }
-            Log(stdout);
-        });
+        if (hasRights(message.author.id)) {
+            removeCallMsg(message);
+            selfDestructMSG(message, translate("cmd_update_msg"), 5000);
+            Log(translate("cmd_update_msg_log", message.author.username.toString()));
+            const { exec } = require('child_process');
+            exec(updCMD, (err, stdout, stderr) => {
+                if (err) {
+                    Log(err);
+                    return;
+                }
+                Log(stdout);
+            });
+        }
     }
 
     if (command === translate("cmd_status")) {
