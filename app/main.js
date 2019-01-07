@@ -464,7 +464,7 @@ client.on("message", async message => {
         }
     }
 
-    if (command === translate("test")) {
+    if (command === translate("cmd_test")) {
         removeCallMsg(message);
         //console.log(message.author.username.toString());
     }
