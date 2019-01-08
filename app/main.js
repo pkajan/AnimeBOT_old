@@ -174,6 +174,8 @@ function AnimeTimer(message = null, textoutput = false) {
     var one_day = "";
     var two_daysHeader = "\n```fix\nTwo Days:```\n";
     var two_days = "";
+    var less_than_weekHeader = "\n```fix\nLess than week:```\n";
+    var less_than_week = "";
     var oth_days = "\n```fix\nLater:```\n";
 
     var anime_in_array = [];
@@ -208,18 +210,21 @@ function AnimeTimer(message = null, textoutput = false) {
             if (parseInt(item.last_episode) >= (parseInt(item.starting_episode) + parseInt(weeks))) {
                 var cd_text = `**${item.name}**: ` + countDownDate + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n";
                 var cd_text_oth = `**${item.name}**: ` + countDownDate_oth + " [`ep" + `${parseInt(item.starting_episode) + parseInt(weeks)}` + "`]\n";
-                switch (difference) {
-                    case 0:
+                switch (true) {
+                    case (difference == 0):
                         zero_day = zero_day + cd_text;
                         if (item.link) {
                             TMPtodayArray.push([item.name, CDNext.getTime(), item.link + `${parseInt(item.starting_episode) + parseInt(weeks)}`, item.picture]);
                         }
                         break;
-                    case 1:
+                    case (difference == 1):
                         one_day = one_day + cd_text;
                         break;
-                    case 2:
+                    case (difference == 2):
                         two_days = two_days + cd_text;
+                        break;
+                    case (difference >= 3 && difference <= 7):
+                        less_than_week = less_than_week + cd_text;
                         break;
                     default:
                         oth_days = oth_days + cd_text_oth;
@@ -227,7 +232,6 @@ function AnimeTimer(message = null, textoutput = false) {
             }
         }
     });
-
     todayArray = TMPtodayArray;
 
     if (zero_day.length > 1) {
@@ -239,9 +243,12 @@ function AnimeTimer(message = null, textoutput = false) {
     if (two_days.length > 1) {
         two_days = two_daysHeader + two_days;
     }
+    if (less_than_week.length > 1) {
+        less_than_week = less_than_weekHeader + less_than_week;
+    }
 
     if (textoutput) {
-        selfDestructMSG(message, zero_day + one_day + two_days + oth_days, 30000);
+        selfDestructMSG(message, zero_day + one_day + two_days + less_than_week + oth_days, 30000);
     }
 }
 
