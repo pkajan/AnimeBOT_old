@@ -474,15 +474,20 @@ client.on("message", async message => {
     if (command === translate("cmd_screem")) {
         if (hasRights(message.author.id)) {
             removeCallMsg(message);
-            var voiceChannel = message.member.voiceChannel;
+            var voiceChannel = null;
+            if (args.length > 0) {
+                voiceChannel = message.guild.channels.find(channel => channel.name === args.join(" "));
+            }
+            if (voiceChannel == null) {
+                voiceChannel = message.member.voiceChannel;
+            }
             voiceChannel.join().then(connection => {
                 const dispatcher = connection.playFile('./audio/screem.mp3');
                 dispatcher.on("end", end => {
                     voiceChannel.leave();
                 });
             }).catch(err => console.log(err));
-            isReady = true;
-            //console.log(message.author.username.toString());
+            Log(translate("cmd_screem_log", message.author.username.toString()));
         }
     }
 
