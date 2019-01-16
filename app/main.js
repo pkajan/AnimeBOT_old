@@ -471,6 +471,21 @@ client.on("message", async message => {
         }
     }
 
+    if (command === translate("cmd_screem")) {
+        if (hasRights(message.author.id)) {
+            removeCallMsg(message);
+            var voiceChannel = message.member.voiceChannel;
+            voiceChannel.join().then(connection => {
+                const dispatcher = connection.playFile('./audio/screem.mp3');
+                dispatcher.on("end", end => {
+                    voiceChannel.leave();
+                });
+            }).catch(err => console.log(err));
+            isReady = true;
+            //console.log(message.author.username.toString());
+        }
+    }
+
     if (command === translate("cmd_test")) {
         removeCallMsg(message);
         //console.log(message.author.username.toString());
