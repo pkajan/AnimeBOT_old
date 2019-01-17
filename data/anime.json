@@ -138,5 +138,17 @@
         "_last_episode": "9999",
         "link": "https://www.masterani.me/anime/watch/?????-kyochuu-rettou/",
         "picture": "https://nodejs.pkajan.eu/Kyochuu_Rettou.jpg"
+    },
+        "Gotoubun no Hanayome": {
+        "year": "2019",
+        "month": "1",
+        "day": "10",
+        "hour": "23",
+        "minute": "45",
+        "_starting_episode": "1",
+        "_skipped_episodes": "0",
+        "_last_episode": "12",
+        "link": "https://www.masterani.me/anime/watch/3052-gotoubun-no-hanayome/",
+        "picture": "https://nodejs.pkajan.eu/Gotoubun_no_Hanayome.jpg"
     }
 }
