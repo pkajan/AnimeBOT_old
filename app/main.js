@@ -349,7 +349,7 @@ client.on("guildDelete", guild => {
 
 /* Error handling (dull one) - wait X miliseconds and restart - helps on network interupts */
 client.on("error", (e) => {
-    console.error(e);
+    Log(e);
     sleep(5000);
     const execSync = require('child_process').execSync;
     execSync('start cmd.exe @cmd /k "run_bot.cmd"');
