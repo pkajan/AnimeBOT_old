@@ -7,6 +7,19 @@ const Discord = require('discord.js'); // Load up the discord.js library
 const client = new Discord.Client();
 /**************************************************************************/
 
+/* Check for necessary files */
+const fs = require('fs');
+const obj = JSON.parse('{"ffmpeg":"./3rd_party/ffmpeg.exe"}');
+Object.keys(obj).forEach(function (key) {
+    fs.access(obj[key], fs.F_OK, (err) => {
+        if (err) {
+            Log(key + " cannot be found.");
+            Log(err);
+            process.exit(1);
+        }
+    })
+});
+
 /* Loading files */
 const config = require('../data/config.json'); //file with config
 const data_file = '../data/anime.json'; //file with names and times
