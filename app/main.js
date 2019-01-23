@@ -5,26 +5,25 @@ const CronJob = require('cron').CronJob;
 const urlExists = require('url-exists-deep');
 const Discord = require('discord.js'); // Load up the discord.js library
 const client = new Discord.Client();
+const logs = require('fs');
+const logFile = 'logs.txt';
 /**************************************************************************/
 
 /* Check for necessary files */
 const fs = require('fs');
-const obj = JSON.parse('{"ffmpeg":"./3rd_party/ffmpeg.exe"}');
+const obj = require('../data/check.json');
 Object.keys(obj).forEach(function (key) {
-    fs.access(obj[key], fs.F_OK, (err) => {
-        if (err) {
-            Log(key + " cannot be found.");
-            Log(err);
-            process.exit(1);
-        }
-    })
+    if (fs.existsSync(obj[key])) {
+        Log(key + " OK.");
+    } else {
+        Log(key + " cannot be found.");
+        process.exit(1);
+    }
 });
 
 /* Loading files */
 const config = require('../data/config.json'); //file with config
 const data_file = '../data/anime.json'; //file with names and times
-const logs = require('fs');
-const logFile = 'logs.txt';
 /**************************************************************************/
 
 /* CONSTs & VARs (Random vars that i will need later...or never) */
@@ -40,6 +39,11 @@ var polite_array_hello = config.polite_hello.split(";");
 var polite_array_bye = config.polite_night.split(";");
 var polite_array_exceptions = config.exceptions.split(";");
 var LastPoliteMessage = 0;
+var LastVoiceChannelMessageJ = 0;
+var LastVoiceChannelMessageL = 0;
+var voice_join = config.voice_join_msg.split(";");
+var voice_leave = config.voice_leave_msg.split(";");
+var defaultTextChannel = config.defaultTextChannel;
 
 /**************************************************************************/
 
@@ -176,6 +180,10 @@ function SendtoAllGuilds(text, picture = null) {
         Log(translate("BOT_could_not_send"));
     }
 }
+/* implement "random" into array and return rng value from given array = array.randomElement */
+Array.prototype.randomElement = function () {
+    return this[Math.floor(Math.random() * this.length)]
+}
 
 /* WALL OF CODE */
 function AnimeTimer(message = null, textoutput = false) {
@@ -290,7 +298,6 @@ function timeCalcMessage() {
     });
 }
 
-
 /**************************************************************************/
 
 /* STARTUP THINGS */
@@ -368,12 +375,32 @@ client.on("error", (e) => {
     execSync('start cmd.exe @cmd /k "run_bot.cmd"');
 });
 
-/* Triggered when message is send into chat */
-client.on("message", async message => {
-    Array.prototype.randomElement = function () {
-        return this[Math.floor(Math.random() * this.length)]
+/* Triggered when user join/leave voice channel */
+client.on('voiceStateUpdate', (oldMember, newMember) => {
+    let newUserChannel = newMember.voiceChannel;
+    let oldUserChannel = oldMember.voiceChannel;
+
+    if (oldUserChannel === undefined && newUserChannel !== undefined) {
+        // User Joins a voice channel
+        if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageJ)) > 60000) { //prevent spamming on join/leave!!
+            LastVoiceChannelMessageJ = new Date().getTime();
+            client.channels.get(defaultTextChannel).send(translate("voice_join", voice_join.randomElement()));
+        }
+        Log(translate("voice_join_log", newMember.user.username.toString()));
+    } else if (newUserChannel === undefined) {
+        // User leaves a voice channel
+        if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageL)) > 60000) { //prevent spamming on join/leave!!
+            LastVoiceChannelMessageL = new Date().getTime();
+            client.channels.get(defaultTextChannel).send(translate("voice_leave", voice_leave.randomElement()));
+        }
+        Log(translate("voice_leave_log", oldMember.user.username.toString()));
     }
 
+})
+
+
+/* Triggered when message is send into chat */
+client.on("message", async message => {
     if (message.author.bot) return; // ignore other bots and self
     if (config.polite) {
         if ((parseInt(new Date().getTime()) - parseInt(LastPoliteMessage)) > 20000) { //prevent spamming channel with hello to hello to hello...HELL NO!!

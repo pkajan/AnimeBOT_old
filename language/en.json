@@ -32,5 +32,9 @@
     "polite_GN": "%s",
     "polite_hello": "%s",
     "polite_GN_log": "Polite GN [Invoked by %s]",
-    "polite_hello_log": "Polite hello [Invoked by %s]"
+    "polite_hello_log": "Polite hello [Invoked by %s]",
+    "voice_join": "%s",
+    "voice_leave": "%s",
+    "voice_join_log": "Voice JOIN [%s]",
+    "voice_leave_log": "Voice LEAVE [%s]"
 }

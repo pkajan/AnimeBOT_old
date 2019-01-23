@@ -8,6 +8,7 @@
     },
     "ownerID": "123456789",
     "adminIDs": "987654321",
+    "defaultTextChannel": "123456789",
     "translation": "en",
     "timeshift": "1",
     "polite": true,
@@ -15,5 +16,7 @@
     "messages_night": "gn;gn&hf",
     "polite_hello": "Greetings;Hi;Howdy;Bonjour;Buenas noches;Buenos dias;Good day;Good morning;Hey;Hi-ya;How are you;How goes it;Howdy-do;Shalom;What's happening;What's up;Salutation;<*random high five*>;Peekaboo;What's up homegirl;yoo-hoo;What's new;<*smile of recognition*;Ahoy;Spitting on the floor while looking at",
     "polite_night": "Good night to you too;GN",
-    "exceptions": "http;bola"
+    "exceptions": "http;bola;yehime",
+    "voice_join_msg": "Look whos wanna talk;You know i cant talk to you right now? So whats you are doing in that <swearing> channel?!?",
+    "voice_leave_msg": "Already leaving?;The rest will have better conversation without you."
 }
