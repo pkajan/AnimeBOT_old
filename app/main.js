@@ -405,7 +405,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         // User leaves a voice channel
         if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageL)) > 60000) { //prevent spamming on join/leave!!
             LastVoiceChannelMessageL = new Date().getTime();
-            selfDestructMSGID(defaultTextChannel, translate("voice_leave", voice_join.randomElement()), 20000);//send message and remove if after X seconds
+            selfDestructMSGID(defaultTextChannel, translate("voice_leave", voice_leave.randomElement()), 20000);//send message and remove if after X seconds
         }
         Log(translate("voice_leave_log", oldMember.user.username.toString()));
     }
