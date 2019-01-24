@@ -139,12 +139,26 @@ function removeCallMsg(message) {
     message.delete().catch(O_o => { });
 }
 
-/* Remove message in X seconds */
+/* Send and remove message in X seconds */
 function selfDestructMSG(message, MSGText, time) {
     message.channel.send(MSGText).then(sentMessage => {
         sentMessage.delete(time);
     });
     Log(translate("BOT_send_selfdestruct", message.author.username.toString()));
+}
+
+/* Send and remove message in X seconds (from given channel)*/
+function selfDestructMSGID(channelID, MSGText, time) {
+    client.channels.get(channelID).send(MSGText).then(sentMessage => {
+        sentMessage.delete(time);
+    });
+    Log(translate("BOT_send_selfdestruct"));
+}
+
+/* Send message into given channel */
+function sendMSGID(channelID, MSGText) {
+    client.channels.get(channelID).send(MSGText);
+    Log(translate("BOT_send_specific"));
 }
 
 /* Send message to all servers (guilds) bot is in */
@@ -384,14 +398,14 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         // User Joins a voice channel
         if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageJ)) > 60000) { //prevent spamming on join/leave!!
             LastVoiceChannelMessageJ = new Date().getTime();
-            client.channels.get(defaultTextChannel).send(translate("voice_join", voice_join.randomElement()));
+            selfDestructMSGID(defaultTextChannel, translate("voice_join", voice_join.randomElement()), 20000);//send message and remove if after X seconds
         }
         Log(translate("voice_join_log", newMember.user.username.toString()));
     } else if (newUserChannel === undefined) {
         // User leaves a voice channel
         if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageL)) > 60000) { //prevent spamming on join/leave!!
             LastVoiceChannelMessageL = new Date().getTime();
-            client.channels.get(defaultTextChannel).send(translate("voice_leave", voice_leave.randomElement()));
+            selfDestructMSGID(defaultTextChannel, translate("voice_leave", voice_join.randomElement()), 20000);//send message and remove if after X seconds
         }
         Log(translate("voice_leave_log", oldMember.user.username.toString()));
     }
