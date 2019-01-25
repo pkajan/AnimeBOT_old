@@ -492,7 +492,7 @@ client.on("message", async message => {
     if (command === translate("cmd_update")) {
         if (hasRights(message.author.id)) {
             removeCallMsg(message);
-            selfDestructMSG(message, translate("cmd_update_msg"), 5000);
+            selfDestructMSG(message, translate("cmd_update_msg"), 4000);
             Log(translate("cmd_update_msg_log", message.author.username.toString()));
             const { exec } = require('child_process');
             exec(updCMD, (err, stdout, stderr) => {
@@ -542,6 +542,18 @@ client.on("message", async message => {
                 });
             }).catch(err => console.log(err));
             Log(translate("cmd_screem_log", message.author.username.toString()));
+        }
+    }
+
+    if (command === translate("cmd_log")) {
+        removeCallMsg(message);
+        if (hasRights(message.author.id)) {
+            message.channel.send(translate("cmd_log_msg"), {
+                files: [
+                    "./logs.txt"
+                ]
+            });
+            Log(translate("cmd_log_log", message.author.username.toString()));
         }
     }
 
