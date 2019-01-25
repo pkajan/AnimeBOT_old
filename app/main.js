@@ -136,13 +136,13 @@ function hasRights(userID) {
 
 /* Remove invoking message */
 function removeCallMsg(message) {
-    message.delete().catch(O_o => { });
+    message.delete().catch(error => Log(error));
 }
 
 /* Send and remove message in X seconds */
 function selfDestructMSG(message, MSGText, time) {
     message.channel.send(MSGText).then(sentMessage => {
-        sentMessage.delete(time);
+        sentMessage.delete(time).catch(error => Log(error));
     });
     Log(translate("BOT_send_selfdestruct", message.author.username.toString()));
 }
@@ -150,7 +150,7 @@ function selfDestructMSG(message, MSGText, time) {
 /* Send and remove message in X seconds (from given channel)*/
 function selfDestructMSGID(channelID, MSGText, time) {
     client.channels.get(channelID).send(MSGText).then(sentMessage => {
-        sentMessage.delete(time);
+        sentMessage.delete(time).catch(error => Log(error));
     });
     Log(translate("BOT_send_selfdestruct"));
 }
