@@ -148,11 +148,11 @@ function selfDestructMSG(message, MSGText, time) {
 }
 
 /* Send and remove message in X seconds (from given channel)*/
-function selfDestructMSGID(channelID, MSGText, time) {
+function selfDestructMSGID(channelID, MSGText, time, user = null) {
     client.channels.get(channelID).send(MSGText).then(sentMessage => {
         sentMessage.delete(time).catch(error => Log(error));
     });
-    Log(translate("BOT_send_selfdestruct"));
+    Log(translate("BOT_send_selfdestructid", user));
 }
 
 /* Send message into given channel */
@@ -398,14 +398,14 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
         // User Joins a voice channel
         if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageJ)) > 60000) { //prevent spamming on join/leave!!
             LastVoiceChannelMessageJ = new Date().getTime();
-            selfDestructMSGID(defaultTextChannel, translate("voice_join", voice_join.randomElement()), 20000);//send message and remove if after X seconds
+            selfDestructMSGID(defaultTextChannel, translate("voice_join", voice_join.randomElement()), 20000, newMember.user.username.toString());//send message and remove if after X seconds
         }
         Log(translate("voice_join_log", newMember.user.username.toString()));
     } else if (newUserChannel === undefined) {
         // User leaves a voice channel
         if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageL)) > 60000) { //prevent spamming on join/leave!!
             LastVoiceChannelMessageL = new Date().getTime();
-            selfDestructMSGID(defaultTextChannel, translate("voice_leave", voice_leave.randomElement()), 20000);//send message and remove if after X seconds
+            selfDestructMSGID(defaultTextChannel, translate("voice_leave", voice_leave.randomElement()), 20000, oldMember.user.username.toString());//send message and remove if after X seconds
         }
         Log(translate("voice_leave_log", oldMember.user.username.toString()));
     }

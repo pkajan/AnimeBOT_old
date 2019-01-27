@@ -7,6 +7,7 @@
     "BOT_send_all": "Message send into ALL guilds.",
     "BOT_send_specific": "Message send into specific channel.",
     "BOT_send_selfdestruct": "Selfdestruct sessage send. [Invoked by %s]",
+    "BOT_send_selfdestructid": "Selfdestruct sessage send. [Invoked for %s]",
     "BOT_serving": "Serving %d servers",
     "BOT_set_activity": "Activity set to %s: %s.",
     "BOT_cron_link_yes": "Url exists: %s",
