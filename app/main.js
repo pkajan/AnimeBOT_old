@@ -131,6 +131,10 @@ function hasRights(userID) {
     }
     return false;
 }
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
 /**************************************************************************/
 
 /* Other functions */
@@ -397,14 +401,14 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
 
     if (oldUserChannel === undefined && newUserChannel !== undefined) {
         // User Joins a voice channel
-        if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageJ)) > 60000) { //prevent spamming on join/leave!!
+        if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageJ)) > 60000 & getRandomInt(2)) { //prevent spamming on join/leave!!
             LastVoiceChannelMessageJ = new Date().getTime();
             selfDestructMSGID(defaultTextChannel, translate("voice_join", voice_join.randomElement()), 20000, newMember.user.username.toString());//send message and remove if after X seconds
         }
         Log(translate("voice_join_log", newMember.user.username.toString()));
     } else if (newUserChannel === undefined) {
         // User leaves a voice channel
-        if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageL)) > 60000) { //prevent spamming on join/leave!!
+        if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageL)) > 60000 & getRandomInt(2)) { //prevent spamming on join/leave!!
             LastVoiceChannelMessageL = new Date().getTime();
             selfDestructMSGID(defaultTextChannel, translate("voice_leave", voice_leave.randomElement()), 20000, oldMember.user.username.toString());//send message and remove if after X seconds
         }
@@ -412,7 +416,6 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
     }
 
 })
-
 
 /* Triggered when message is send into chat */
 client.on("message", async message => {
