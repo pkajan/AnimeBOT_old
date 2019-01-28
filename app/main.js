@@ -452,7 +452,7 @@ client.on("message", async message => {
     }
 
     /* Called by name */
-    if (message.content.toLowerCase().indexOf(client.user.username) !== 0) {
+    if (message.content.toLowerCase().indexOf(client.user.username.toLowerCase()) === 0) {
         message.channel.send(translate("bot_name", bot_name.randomElement()));
         Log(translate("bot_name_log", message.author.username.toString()));
     }
