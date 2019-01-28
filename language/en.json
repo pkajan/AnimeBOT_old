@@ -41,5 +41,7 @@
     "voice_join": "%s",
     "voice_leave": "%s",
     "voice_join_log": "Voice JOIN [%s]",
-    "voice_leave_log": "Voice LEAVE [%s]"
+    "voice_leave_log": "Voice LEAVE [%s]",
+    "bot_name": "%s",
+    "bot_name_log": "I was called by name [by %s]"
 }

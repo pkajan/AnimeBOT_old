@@ -43,6 +43,7 @@ var LastVoiceChannelMessageJ = 0;
 var LastVoiceChannelMessageL = 0;
 var voice_join = config.voice_join_msg.split(";");
 var voice_leave = config.voice_leave_msg.split(";");
+var bot_name = config.bot_name_msg.split(";");
 var defaultTextChannel = config.defaultTextChannel;
 
 /**************************************************************************/
@@ -416,6 +417,8 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
 /* Triggered when message is send into chat */
 client.on("message", async message => {
     if (message.author.bot) return; // ignore other bots and self
+
+    /* Polite hello/bye */
     if (config.polite) {
         if ((parseInt(new Date().getTime()) - parseInt(LastPoliteMessage)) > 20000) { //prevent spamming channel with hello to hello to hello...HELL NO!!
             LastPoliteMessage = new Date().getTime();
@@ -444,6 +447,13 @@ client.on("message", async message => {
     } else {
         return;
     }
+
+    /* Called by name */
+    if (message.content.toLowerCase().indexOf(client.user.username) !== 0) {
+        message.channel.send(translate("bot_name", bot_name.randomElement()));
+        Log(translate("bot_name_log", message.author.username.toString()));
+    }
+
     if (message.content.indexOf(config.prefix) !== 0) return; // ignore messages without OUR prefix, except... we must be polite right (up)?
 
     // remove prefix and put statements into array

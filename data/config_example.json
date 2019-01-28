@@ -18,5 +18,6 @@
     "polite_night": "Good night to you too;GN",
     "exceptions": "http;bola;yehime",
     "voice_join_msg": "Look whos wanna talk;You know i cant talk to you right now? So whats you are doing in that <swearing> channel?!?",
-    "voice_leave_msg": "Already leaving?;The rest will have better conversation without you."
+    "voice_leave_msg": "Already leaving?;The rest will have better conversation without you.",
+    "bot_name_msg": "Did you call me by name right now, or it was my imagination?"
 }
