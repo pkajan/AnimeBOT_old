@@ -399,22 +399,23 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
     let newUserChannel = newMember.voiceChannel;
     let oldUserChannel = oldMember.voiceChannel;
 
-    if (oldUserChannel === undefined && newUserChannel !== undefined) {
-        // User Joins a voice channel
-        if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageJ)) > 60000 && Boolean(getRandomInt(2)) == true) { //prevent spamming on join/leave!!
-            LastVoiceChannelMessageJ = new Date().getTime();
-            selfDestructMSGID(defaultTextChannel, translate("voice_join", voice_join.randomElement()), 20000, newMember.user.username.toString());//send message and remove if after X seconds
+    if (!newMember.user.bot || !oldMember.user.bot) { // bot protection
+        if (oldUserChannel === undefined && newUserChannel !== undefined) {
+            // User Joins a voice channel
+            if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageJ)) > 60000 && Boolean(getRandomInt(2)) == true) { //prevent spamming on join/leave!!
+                LastVoiceChannelMessageJ = new Date().getTime();
+                selfDestructMSGID(defaultTextChannel, translate("voice_join", voice_join.randomElement()), 20000, newMember.user.username.toString());//send message and remove if after X seconds
+            }
+            Log(translate("voice_join_log", newMember.user.username.toString()));
+        } else if (newUserChannel === undefined) {
+            // User leaves a voice channel
+            if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageL)) > 60000 && Boolean(getRandomInt(2)) == true) { //prevent spamming on join/leave!!
+                LastVoiceChannelMessageL = new Date().getTime();
+                selfDestructMSGID(defaultTextChannel, translate("voice_leave", voice_leave.randomElement()), 20000, oldMember.user.username.toString());//send message and remove if after X seconds
+            }
+            Log(translate("voice_leave_log", oldMember.user.username.toString()));
         }
-        Log(translate("voice_join_log", newMember.user.username.toString()));
-    } else if (newUserChannel === undefined) {
-        // User leaves a voice channel
-        if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageL)) > 60000 && Boolean(getRandomInt(2)) == true) { //prevent spamming on join/leave!!
-            LastVoiceChannelMessageL = new Date().getTime();
-            selfDestructMSGID(defaultTextChannel, translate("voice_leave", voice_leave.randomElement()), 20000, oldMember.user.username.toString());//send message and remove if after X seconds
-        }
-        Log(translate("voice_leave_log", oldMember.user.username.toString()));
     }
-
 })
 
 /* Triggered when message is send into chat */
@@ -452,7 +453,7 @@ client.on("message", async message => {
     }
 
     /* Called by name */
-    if (message.content.toLowerCase().indexOf(client.user.username.toLowerCase()) === 0) {
+    if (message.content.toLowerCase().indexOf(client.user.username.toLowerCase()) > -1) {
         message.channel.send(translate("bot_name", bot_name.randomElement()));
         Log(translate("bot_name_log", message.author.username.toString()));
     }
