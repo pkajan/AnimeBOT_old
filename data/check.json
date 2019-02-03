@@ -1,5 +1,6 @@
 {
     "ffmpeg.exe": "./3rd_party/ffmpeg.exe",
     "config.json": "./data/config.json",
-    "anime.json": "./data/anime.json"
+    "anime.json": "./data/anime.json",
+    "replies.json": "./data/replies.json"
 }

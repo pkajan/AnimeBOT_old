@@ -1,0 +1,11 @@
+{
+    "messages_day": "hello;morning",
+    "messages_night": "gn;gn&hf",
+    "exceptions": "http;bola;yehime",
+    "text_replies": "Did you call me by name right now, or it was my imagination?;No!",
+    "image_replies": "Spread the salt! https://i.ytimg.com/vi/7KXSA-TvKKQ/maxresdefault.jpg;Begone demon! https://i.ytimg.com/vi/7KXSA-TvKKQ/maxresdefault.jpg",
+    "polite_hello": "Greetings;Hi;Howdy;Bonjour;Buenas noches;Buenos dias;Good day;Good morning;Hey;Hi-ya;How are you;How goes it;Howdy-do;Shalom;What's happening;What's up;Salutation;<*random high five*>;Peekaboo;What's up homegirl;yoo-hoo;What's new;<*smile of recognition*;Ahoy;Spitting on the floor while looking at",
+    "polite_night": "Good night to you too;GN",
+    "voice_join_msg": "Look whos wanna talk;You know i cant talk to you right now? So whats you are doing in that <swearing> channel?!?",
+    "voice_leave_msg": "Already leaving?;The rest will have better conversation without you."
+}

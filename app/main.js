@@ -23,7 +23,8 @@ Object.keys(obj).forEach(function (key) {
 
 /* Loading files */
 const config = require('../data/config.json'); //file with config
-const data_file = '../data/anime.json'; //file with names and times
+const data_file = require('../data/anime.json'); //file with names and times
+const reply = require('../data/replies.json'); //bot replies
 /**************************************************************************/
 
 /* CONSTs & VARs (Random vars that i will need later...or never) */
@@ -33,19 +34,19 @@ const timeShift = config.timeshift;
 const updCMD = 'start cmd.exe @cmd /k "git reset --hard & git fetch --all & git pull & exit';
 var todayArray;
 var soonArray = new Array();
-var polite_array_day = config.messages_day.split(";");
-var polite_array_night = config.messages_night.split(";");
-var polite_array_hello = config.polite_hello.split(";");
-var polite_array_bye = config.polite_night.split(";");
-var polite_array_exceptions = config.exceptions.split(";");
+var polite_array_day = reply.messages_day.split(";");
+var polite_array_night = reply.messages_night.split(";");
+var polite_array_hello = reply.polite_hello.split(";");
+var polite_array_bye = reply.polite_night.split(";");
+var polite_array_exceptions = reply.exceptions.split(";");
 var LastPoliteMessage = 0;
 var LastVoiceChannelMessageJ = 0;
 var LastVoiceChannelMessageL = 0;
-var voice_join = config.voice_join_msg.split(";");
-var voice_leave = config.voice_leave_msg.split(";");
-var bot_name = config.bot_name_msg.split(";");
+var voice_join = reply.voice_join_msg.split(";");
+var voice_leave = reply.voice_leave_msg.split(";");
+var bot_name_txt = reply.text_replies.split(";");
+var bot_name_img = reply.image_replies.split(";");
 var defaultTextChannel = config.defaultTextChannel;
-
 /**************************************************************************/
 
 /* FUNCTIONS */
@@ -135,6 +136,7 @@ function hasRights(userID) {
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
+
 /**************************************************************************/
 
 /* Other functions */
@@ -206,7 +208,7 @@ Array.prototype.randomElement = function () {
 
 /* WALL OF CODE */
 function AnimeTimer(message = null, textoutput = false) {
-    var anime = require(data_file);
+    var anime = data_file;
     var obj = anime;
     var zero_dayHeader = "```fix\nToday:```\n";
     var zero_day = "";
@@ -453,8 +455,13 @@ client.on("message", async message => {
     }
 
     /* Called by name */
-    if (message.content.toLowerCase().indexOf(client.user.username.slice(0, -1).toLowerCase()) > -1) {
-        message.channel.send(translate("bot_name", bot_name.randomElement()));
+    if (message.content.toLowerCase().indexOf(client.user.username.slice(0, -1).toLowerCase()) > -1) { //slice to allow bot name "mutations"
+
+        if (Boolean(getRandomInt(10)) == true) {
+            message.channel.send(translate("bot_name", bot_name_txt.randomElement()));
+        } else {
+            message.channel.send(translate("bot_name", bot_name_img.randomElement()));
+        }
         Log(translate("bot_name_log", message.author.username.toString()));
     }
 
