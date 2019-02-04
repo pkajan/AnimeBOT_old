@@ -460,7 +460,10 @@ client.on("message", async message => {
         if (Boolean(getRandomInt(10)) == true) {
             message.channel.send(translate("bot_name", bot_name_txt.randomElement()));
         } else {
-            message.channel.send(translate("bot_name", bot_name_img.randomElement()));
+            var rngimg = bot_name_img.randomElement().split("==");
+            message.channel.send(`${rngimg[0]}`, {
+                file: `${rngimg[1]}`
+            });
         }
         Log(translate("bot_name_log", message.author.username.toString()));
     }
