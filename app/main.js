@@ -457,7 +457,7 @@ client.on("message", async message => {
     /* Called by name */
     if (message.content.toLowerCase().indexOf(client.user.username.slice(0, -1).toLowerCase()) > -1) { //slice to allow bot name "mutations"
 
-        if (Boolean(getRandomInt(10)) == true) {
+        if (Boolean(getRandomInt(5)) == true) {
             message.channel.send(translate("bot_name", bot_name_txt.randomElement()));
         } else {
             var rngimg = bot_name_img.randomElement().split("==");
