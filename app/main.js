@@ -42,6 +42,7 @@ var polite_array_exceptions = reply.exceptions.split(";");
 var LastPoliteMessage = 0;
 var LastVoiceChannelMessageJ = 0;
 var LastVoiceChannelMessageL = 0;
+var slice_by_chars = config.slice_name_by_chars;
 var voice_join = reply.voice_join_msg.split(";");
 var voice_leave = reply.voice_leave_msg.split(";");
 var bot_name_txt = reply.text_replies.split(";");
@@ -455,7 +456,7 @@ client.on("message", async message => {
     }
 
     /* Called by name */
-    if (message.content.toLowerCase().indexOf(client.user.username.slice(0, -1).toLowerCase()) > -1) { //slice to allow bot name "mutations"
+    if (message.content.toLowerCase().indexOf(client.user.username.slice(0, -slice_by_chars).toLowerCase()) > -1) { //slice to allow bot name "mutations"
 
         if (Boolean(getRandomInt(5)) == true) {
             message.channel.send(translate("bot_name", bot_name_txt.randomElement()));
