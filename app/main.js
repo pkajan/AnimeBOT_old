@@ -456,7 +456,7 @@ client.on("message", async message => {
     }
 
     /* Called by name */
-    if (message.content.toLowerCase().indexOf(client.user.username.slice(0, -slice_by_chars).toLowerCase()) > -1) { //slice to allow bot name "mutations"
+    if (deunicode(message.content.toLowerCase()).indexOf(deunicode(client.user.username.slice(0, -slice_by_chars).toLowerCase())) > -1) { //slice to allow bot name "mutations"
 
         if (Boolean(getRandomInt(5)) == true) {
             message.channel.send(translate("bot_name", bot_name_txt.randomElement()));
