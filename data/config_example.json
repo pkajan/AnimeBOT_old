@@ -11,5 +11,7 @@
     "defaultTextChannel": "123456789",
     "translation": "en",
     "timeshift": "1",
-    "polite": true
+    "polite": true,
+    "slice_name_by_chars": "2",
+    "bot_img_chance": "5"
 }

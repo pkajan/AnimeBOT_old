@@ -48,6 +48,7 @@ var voice_leave = reply.voice_leave_msg.split(";");
 var bot_name_txt = reply.text_replies.split(";");
 var bot_name_img = reply.image_replies.split(";");
 var defaultTextChannel = config.defaultTextChannel;
+var bot_name_img_chance = parseInt(config.bot_img_chance);
 /**************************************************************************/
 
 /* FUNCTIONS */
@@ -463,7 +464,7 @@ client.on("message", async message => {
     /* Called by name */
     if (deunicode(message.content.toLowerCase()).indexOf(deunicode(client.user.username.slice(0, -slice_by_chars).toLowerCase())) > -1) { //slice to allow bot name "mutations"
 
-        if (Boolean(getRandomInt(5)) == true) {
+        if (Boolean(getRandomInt(bot_name_img_chance)) == true) {
             message.channel.send(translate("bot_name", bot_name_txt.randomElement()));
         } else {
             var rngimg = bot_name_img.randomElement().split("==");
