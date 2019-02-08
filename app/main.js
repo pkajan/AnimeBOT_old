@@ -56,12 +56,7 @@ var bot_name_img_chance = parseInt(config.bot_img_chance);
 /* Logging - will show logs in console and write them into file (for later debugging?) */
 function Log(any_string, /**/) {
     var now = dateFormat(new Date(), "dd.mm HH:MM:ss"); // 23.03 16:46:00
-    if (typeof any_string === "Object") {
-        var text = `${now} [LOG](obj) ${JSON.stringify(any_string)}`;
-    } else {
-        var text = `${now} [LOG] ${any_string}`;
-    }
-
+    var text = `${now} [LOG] ${util.inspect(any_string)}`;
     console.log(text); // show log in console
     logs.appendFileSync(logFile, text + "\n");// write log into file
 }
@@ -349,9 +344,6 @@ client.on("ready", () => {
     //every 2 hour check
     const job = new CronJob('0 */2 * * *', function () {
         var message = timeCalcMessage();
-        if (typeof message !== 'undefined') {
-            // SendtoAllGuilds(message);
-        }
     });
     job.start();
 
