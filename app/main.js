@@ -552,11 +552,19 @@ client.on("message", async message => {
         if (hasRights(message.author.id)) {
             removeCallMsg(message);
             var voiceChannel = null;
+            //if argument is name of channel find ID and set it
             if (args.length > 0) {
                 voiceChannel = message.guild.channels.find(channel => channel.name === args.join(" "));
             }
+            //if channel is not set, join invoker channel
             if (voiceChannel == null) {
                 voiceChannel = message.member.voiceChannel;
+            }
+            //if invoker is not on voice channel just throw error
+            if (voiceChannel == null) {
+                selfDestructMSG(message, translate("cmd_screem_no"), 4000);
+                Log(translate("cmd_screem_log_no", message.author.username.toString()));
+                return;
             }
             voiceChannel.join().then(connection => {
                 const dispatcher = connection.playFile('./audio/screem.mp3');
