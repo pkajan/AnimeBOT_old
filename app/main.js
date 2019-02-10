@@ -458,14 +458,15 @@ client.on("message", async message => {
 
         if (Boolean(getRandomInt(bot_name_img_chance)) == true) {
             message.channel.send(translate("bot_name", bot_name_txt.randomElement()));
+            Log(translate("bot_name_log", message.author.username.toString()));
         } else {
             var rngimg = bot_name_img.randomElement().split("==");
-            Log(rngimg[0], rngimg[1]);
             message.channel.send(`${rngimg[0]}`, {
                 file: `${rngimg[1]}`
             });
+            Log(translate("bot_name_log_img", message.author.username.toString(), rngimg[0], rngimg[1]));
         }
-        Log(translate("bot_name_log", message.author.username.toString()));
+
     }
 
     if (message.content.indexOf(config.prefix) !== 0) return; // ignore messages without OUR prefix, except... we must be polite right (up)?
