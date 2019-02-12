@@ -367,7 +367,7 @@ client.on("ready", () => {
                                     SendtoAllGuilds(messages);
                                 }
                             } else {
-                                Log(translate("BOT_cron_link_no", item.name));
+                                Log(translate("BOT_cron_link_no", item.name, item.url));
                             }
                         });
                 }

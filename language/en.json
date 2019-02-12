@@ -11,7 +11,7 @@
     "BOT_serving": "Serving %d servers",
     "BOT_set_activity": "Activity set to %s: %s.",
     "BOT_cron_link_yes": "Url exists: %s",
-    "BOT_cron_link_no": "WAITING: Url does not exists! [%s]",
+    "BOT_cron_link_no": "WAITING: Url does not exists! [%s][url:%s]",
     "BOT_deleting": "Deleting (%s)",
     "cmd_info": "anime",
     "cmd_say": "say",
