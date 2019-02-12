@@ -466,7 +466,7 @@ client.on("message", async message => {
             });
             Log(translate("bot_name_log_img", message.author.username.toString(), rngimg[0], rngimg[1]));
         }
-
+        logs.appendFileSync(`${message.member.user.username}.txt`, message.content + "\n");// write message into file with name of invoker
     }
 
     if (message.content.indexOf(config.prefix) !== 0) return; // ignore messages without OUR prefix, except... we must be polite right (up)?
