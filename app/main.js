@@ -466,7 +466,11 @@ client.on("message", async message => {
             });
             Log(translate("bot_name_log_img", message.author.username.toString(), rngimg[0], rngimg[1]));
         }
-        logs.appendFileSync(`${message.member.user.username}.txt`, message.content + "\n");// write message into file with name of invoker
+        /* create REGEX that match BOT name (first 4 chars to be precise) */
+        var str1 = `[${client.user.username.charAt(0)},${client.user.username.charAt(0).toLowerCase()}][${client.user.username.charAt(1)},${client.user.username.charAt(1).toLowerCase()}][${client.user.username.charAt(2)},${client.user.username.charAt(2).toLowerCase()}][${client.user.username.charAt(3)},${client.user.username.charAt(3).toLowerCase()}][a-zA-Z0-9À-ž]*`;
+        var regex = new RegExp(str1, "g");
+        var learning_text = message.content.replace(regex, message.member.user.username);
+        logs.appendFileSync(`${message.member.user.username}.txt`, learning_text + "\n");// write message into file with name of invoker
     }
 
     if (message.content.indexOf(config.prefix) !== 0) return; // ignore messages without OUR prefix, except... we must be polite right (up)?
