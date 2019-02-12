@@ -103,7 +103,16 @@ const uniq = (a, key) => {
         return seen.hasOwnProperty(k) ? false : (seen[k] = true);
     })
 }
-
+/* return array with only uniq values */
+function uniqArr(array) {
+    var unique = [];
+    for (var i in array) {
+        if (unique.indexOf(array[i]) === -1) {
+            unique.push(array[i]);
+        }
+    }
+    return unique;
+}
 /* "waiting" function */
 function sleep(millis) {
     return new Promise(resolve => setTimeout(resolve, millis));
@@ -460,11 +469,19 @@ client.on("message", async message => {
             message.channel.send(translate("bot_name", bot_name_txt.randomElement()));
             Log(translate("bot_name_log", message.author.username.toString()));
         } else {
-            var rngimg = bot_name_img.randomElement().split("==");
-            message.channel.send(`${rngimg[0]}`, {
-                file: `${rngimg[1]}`
-            });
-            Log(translate("bot_name_log_img", message.author.username.toString(), rngimg[0], rngimg[1]));
+            if (Boolean(getRandomInt(2)) == true || !fs.existsSync(`${message.member.user.username}.txt`)) {
+                var rngimg = bot_name_img.randomElement().split("==");
+                message.channel.send(`${rngimg[0]}`, {
+                    file: `${rngimg[1]}`
+                });
+                Log(translate("bot_name_log_img", message.author.username.toString(), rngimg[0], rngimg[1]));
+            } else {
+                fs.readFile(`${message.member.user.username}.txt`, function (err, data) {
+                    if (err) throw err;
+                    var array = uniqArr(data.toString().split("\n"));
+                    message.channel.send(translate("bot_name", array.randomElement()));
+                });
+            }
         }
         /* create REGEX that match BOT name (first 4 chars to be precise) */
         var str1 = `[${client.user.username.charAt(0)},${client.user.username.charAt(0).toLowerCase()}][${client.user.username.charAt(1)},${client.user.username.charAt(1).toLowerCase()}][${client.user.username.charAt(2)},${client.user.username.charAt(2).toLowerCase()}][${client.user.username.charAt(3)},${client.user.username.charAt(3).toLowerCase()}][a-zA-Z0-9À-ž]*`;
