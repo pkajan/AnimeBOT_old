@@ -143,7 +143,7 @@ function hasRights(userID) {
     }
     return false;
 }
-
+/* return random numbers from 0 (zero) to MAX */
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
