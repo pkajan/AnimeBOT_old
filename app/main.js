@@ -469,14 +469,14 @@ client.on("message", async message => {
             message.channel.send(translate("bot_name", bot_name_txt.randomElement()));
             Log(translate("bot_name_log", message.author.username.toString()));
         } else {
-            if (Boolean(getRandomInt(2)) == true || !fs.existsSync(`${message.member.user.username}.txt`)) {
+            if (Boolean(getRandomInt(2)) == true || !fs.existsSync(`_${message.member.user.username}.txt`)) {
                 var rngimg = bot_name_img.randomElement().split("==");
                 message.channel.send(`${rngimg[0]}`, {
                     file: `${rngimg[1]}`
                 });
                 Log(translate("bot_name_log_img", message.author.username.toString(), rngimg[0], rngimg[1]));
             } else {
-                fs.readFile(`${message.member.user.username}.txt`, function (err, data) {
+                fs.readFile(`_${message.member.user.username}.txt`, function (err, data) {
                     if (err) throw err;
                     var array = uniqArr(data.toString().split("\n"));
                     message.channel.send(translate("bot_name", array.randomElement()));
@@ -487,7 +487,7 @@ client.on("message", async message => {
         var str1 = `[${client.user.username.charAt(0)},${client.user.username.charAt(0).toLowerCase()}][${client.user.username.charAt(1)},${client.user.username.charAt(1).toLowerCase()}][${client.user.username.charAt(2)},${client.user.username.charAt(2).toLowerCase()}][${client.user.username.charAt(3)},${client.user.username.charAt(3).toLowerCase()}][a-zA-Z0-9À-ž]*`;
         var regex = new RegExp(str1, "g");
         var learning_text = message.content.replace(regex, message.member.user.username);
-        logs.appendFileSync(`${message.member.user.username}.txt`, learning_text + "\n");// write message into file with name of invoker
+        logs.appendFileSync(`_${message.member.user.username}.txt`, learning_text + "\n");// write message into file with name of invoker
     }
 
     if (message.content.indexOf(config.prefix) !== 0) return; // ignore messages without OUR prefix, except... we must be polite right (up)?
