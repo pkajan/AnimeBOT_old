@@ -168,10 +168,8 @@ function getRandomInt(max) {
 }
 
 /* parse strings with %s */
-function parse(str) {
-    var args = [].slice.call(arguments, 1),
-        i = 0;
-    return str.replace(/%s/g, () => args[i++]);
+function parse(str, arg) {
+    return str.replace(/%s/gi, arg);
 }
 /**************************************************************************/
 
