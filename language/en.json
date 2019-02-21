@@ -40,6 +40,7 @@
     "polite_hello": "%s",
     "polite_GN_log": "Polite GN [Invoked by %s]",
     "polite_hello_log": "Polite hello [Invoked by %s]",
+    "polite_log_timer": "Polite invoked during cooldown [by %s]",
     "voice_join": "%s",
     "voice_leave": "%s",
     "voice_join_log": "Voice JOIN [%s]",

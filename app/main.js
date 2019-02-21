@@ -482,6 +482,7 @@ client.on("message", async message => {
             });
         }
     } else {
+        Log(translate("polite_log_timer", message.author.username.toString()));
         return;
     }
 
