@@ -8,6 +8,7 @@ const client = new Discord.Client();
 const logs = require('fs');
 const logFile = 'logs.txt';
 const common_learning = 'common_learning.txt';
+const start_time = Date.now();
 /**************************************************************************/
 
 /* Check for necessary files */
@@ -635,6 +636,13 @@ client.on("message", async message => {
             });
             Log(translate("cmd_log_log", message.author.username.toString()));
         }
+    }
+
+    if (command === translate("cmd_uptime")) {
+        removeCallMsg(message);
+        var uptime_till_now = ((Date.now() - start_time) / 1000 / 60).toFixed(2); //convert time to minutes
+        message.channel.send(translate("cmd_uptime_msg", uptime_till_now));
+        Log(translate("cmd_uptime_log", uptime_till_now, message.author.username.toString()));
     }
 
     if (command === translate("cmd_test")) {
