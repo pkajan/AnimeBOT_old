@@ -182,19 +182,19 @@ function removeCallMsg(message) {
 }
 
 /* Send and remove message in X seconds */
-function selfDestructMSG(message, MSGText, time) {
+function selfDestructMSG(message, MSGText, time, cmd_name) {
     message.channel.send(MSGText).then(sentMessage => {
         sentMessage.delete(time).catch(error => Log(error));
     });
-    Log(translate("BOT_send_selfdestruct", message.author.username.toString()));
+    Log(translate("BOT_send_selfdestruct", message.author.username.toString(), cmd_name));
 }
 
 /* Send and remove message in X seconds (from given channel)*/
-function selfDestructMSGID(channelID, MSGText, time, user = null) {
+function selfDestructMSGID(channelID, MSGText, time, user = null, cmd_name) {
     client.channels.get(channelID).send(MSGText).then(sentMessage => {
         sentMessage.delete(time).catch(error => Log(error));
     });
-    Log(translate("BOT_send_selfdestructid", user));
+    Log(translate("BOT_send_selfdestructid", user, cmd_name));
 }
 
 /* Send message into given channel */
@@ -325,7 +325,7 @@ function AnimeTimer(message = null, textoutput = false) {
     }
 
     if (textoutput) {
-        selfDestructMSG(message, zero_day + one_day + two_days + less_than_week + oth_days, 30000);
+        selfDestructMSG(message, zero_day + one_day + two_days + less_than_week + oth_days, 30000, 'AnimeTable');
     }
 }
 
@@ -438,14 +438,14 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             // User Joins a voice channel
             if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageJ)) > 60000 && Boolean(getRandomInt(2)) == true) { //prevent spamming on join/leave!!
                 LastVoiceChannelMessageJ = new Date().getTime();
-                selfDestructMSGID(defaultTextChannel, translate("voice_join", voice_join.randomElement()), 20000, newMember.user.username.toString());//send message and remove if after X seconds
+                selfDestructMSGID(defaultTextChannel, translate("voice_join", voice_join.randomElement()), 20000, newMember.user.username.toString(), 'userJoinVoice');//send message and remove if after X seconds
             }
             Log(translate("voice_join_log", newMember.user.username.toString()));
         } else if (newUserChannel === undefined) {
             // User leaves a voice channel
             if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageL)) > 60000 && Boolean(getRandomInt(2)) == true) { //prevent spamming on join/leave!!
                 LastVoiceChannelMessageL = new Date().getTime();
-                selfDestructMSGID(defaultTextChannel, translate("voice_leave", voice_leave.randomElement()), 20000, oldMember.user.username.toString());//send message and remove if after X seconds
+                selfDestructMSGID(defaultTextChannel, translate("voice_leave", voice_leave.randomElement()), 20000, oldMember.user.username.toString(), 'userLeaveVoice');//send message and remove if after X seconds
             }
             Log(translate("voice_leave_log", oldMember.user.username.toString()));
         }
@@ -565,7 +565,7 @@ client.on("message", async message => {
     if (command === translate("cmd_update")) {
         if (hasRights(message.author.id)) {
             removeCallMsg(message);
-            selfDestructMSG(message, translate("cmd_update_msg"), 4000);
+            selfDestructMSG(message, translate("cmd_update_msg"), 4000), translate("cmd_update");
             Log(translate("cmd_update_msg_log", message.author.username.toString()));
             const { exec } = require('child_process');
             exec(updCMD, (err, stdout, stderr) => {
@@ -613,7 +613,7 @@ client.on("message", async message => {
             //if invoker is not on voice channel just throw error
             if (voiceChannel == null) {
                 selfDestructMSG(message, translate("cmd_screem_no"), 4000);
-                Log(translate("cmd_screem_log_no", message.author.username.toString()));
+                Log(translate("cmd_screem_log_no", message.author.username.toString(), translate("cmd_screem")));
                 return;
             }
             voiceChannel.join().then(connection => {
@@ -622,7 +622,7 @@ client.on("message", async message => {
                     voiceChannel.leave();
                 });
             }).catch(err => console.log(err));
-            Log(translate("cmd_screem_log", message.author.username.toString()));
+            Log(translate("cmd_screem_log", message.author.username.toString(), translate("cmd_screem")));
         }
     }
 
