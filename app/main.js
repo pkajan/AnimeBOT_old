@@ -105,16 +105,7 @@ const uniq = (a, key) => {
         return seen.hasOwnProperty(k) ? false : (seen[k] = true);
     })
 }
-/* return array with only uniq values */
-/*function uniqArr(array) {
-    var unique = [];
-    for (var i in array) {
-        if (unique.indexOf(array[i]) === -1) {
-            unique.push(array[i]);
-        }
-    }
-    return unique;
-}*/
+
 /* return array that contain only nonempty strings */
 function onlyStringArr(array) {
     return array.filter(e => typeof e === 'string' && e !== '');
@@ -172,6 +163,7 @@ function getRandomInt(max) {
 function parse(str, arg) {
     return str.replace(/%s/gi, arg);
 }
+
 /**************************************************************************/
 
 /* Other functions */
@@ -291,7 +283,8 @@ function AnimeTimer(message = null, textoutput = false) {
                     case (difference == 0):
                         zero_day = zero_day + cd_text;
                         if (item.link) {
-                            TMPtodayArray.push([item.name, CDNext.getTime(), item.link + `${parseInt(item.starting_episode) + parseInt(weeks)}`, item.picture]);
+                            TMPtodayArray.push([item.name, CDNext.getTime(), parse(item.link, parseInt(item.starting_episode) + parseInt(weeks)), item.picture]);
+                            console.log(parse(item.link, parseInt(item.starting_episode) + parseInt(weeks)));
                         }
                         break;
                     case (difference == 1):
@@ -379,6 +372,7 @@ client.on("ready", () => {
         var message = timeCalcMessage();
     });
     job.start();
+    Log(translate("cron_started"));
 
     /* CRON2 ***********************************************************/
     // check every 5 minutes if anime is there
@@ -408,6 +402,7 @@ client.on("ready", () => {
         }
     });
     job2.start();
+    Log(translate("cron_started"));
 });
 
 /* Triggered when addeded/removed from server */

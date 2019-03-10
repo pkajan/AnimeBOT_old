@@ -9,7 +9,7 @@
         "_starting_episode": "1",
         "_skipped_episodes": "1",
         "_last_episode": "24",
-        "link": "https://www.masterani.me/anime/watch/2984-tensei-shitara-slime-datta-ken/",
+        "link": "http://www.animexd.me/watch/tensei-shitara-slime-datta-ken_episode-%s-online",
         "picture": "https://nodejs.pkajan.eu/Tensei_Shitara_Slime_Datta_Ken.jpg"
     },
     "Dororo": {
@@ -21,7 +21,7 @@
         "_starting_episode": "1",
         "_skipped_episodes": "0",
         "_last_episode": "9999",
-        "link": "https://www.masterani.me/anime/watch/3048-dororo/",
+        "link": "http://www.animexd.me/watch/dororo_episode-%s-online",
         "picture": "https://nodejs.pkajan.eu/Dororo.jpg"
     },
     "Tuesday": "--- Tuesday ---",
@@ -34,7 +34,7 @@
         "_starting_episode": "61",
         "_skipped_episodes": "1",
         "_last_episode": "9999",
-        "link": "https://www.masterani.me/anime/watch/2661-black-clover-tv/",
+        "link": "http://www.animexd.me/watch/black-clover-tv_episode-%s-online",
         "picture": "https://nodejs.pkajan.eu/Black_Clover.jpg"
     },
     "Wednesday": "--- Wednesday ---",
@@ -47,24 +47,12 @@
         "_starting_episode": "1",
         "_skipped_episodes": "0",
         "_last_episode": "24",
-        "link": "https://www.masterani.me/anime/watch/3042-tate-no-yuusha-no-nariagari/",
+        "link": "http://www.animexd.me/watch/tate-no-yuusha-no-nariagari_episode-%s-online",
         "picture": "https://nodejs.pkajan.eu/Tate_no_Yuusha_no_Nariagari.jpg"
     },
     "Thursday": "--- Thursday ---",
     "Friday": "--- Friday ---",
     "Saturday": "--- Saturday ---",
-    "Goblin Slayer": {
-        "year": "2018",
-        "month": "10",
-        "day": "6",
-        "hour": "18",
-        "minute": "45",
-        "_starting_episode": "1",
-        "_skipped_episodes": "1",
-        "_last_episode": "12",
-        "link": "https://www.masterani.me/anime/watch/2989-goblin-slayer/",
-        "picture": "https://nodejs.pkajan.eu/Goblin_Slayer.jpg"
-    },
     "Sunday": "--- Sunday ---",
     "Fairy Tail Final Season": {
         "year": "2018",
@@ -75,7 +63,7 @@
         "_starting_episode": "1",
         "_skipped_episodes": "1",
         "_last_episode": "9999",
-        "link": "https://www.masterani.me/anime/watch/2987-fairy-tail-final-series/",
+        "link": "http://www.animexd.me/watch/fairy-tail-final-series_episode-%s-online",
         "picture": "https://nodejs.pkajan.eu/Fairy_Tail_Final_Series.jpg"
     },
     "One Piece": {
@@ -85,10 +73,34 @@
         "hour": "4",
         "minute": "15",
         "_starting_episode": "861",
-        "_skipped_episodes": "1",
+        "_skipped_episodes": "2",
         "_last_episode": "9999",
-        "link": "https://www.masterani.me/anime/watch/64-one-piece/",
+        "link": "http://www.animexd.me/watch/one-piece_episode-%s-online",
         "picture": "https://nodejs.pkajan.eu/One_Piece.jpg"
+    },
+    "Domestic Girlfriend": {
+        "year": "2019",
+        "month": "1",
+        "day": "11",
+        "hour": "17",
+        "minute": "0",
+        "_starting_episode": "1",
+        "_skipped_episodes": "0",
+        "_last_episode": "9999",
+        "link": "http://www.animexd.me/watch/domestic-na-kanojo_episode-%s-online",
+        "picture": "https://nodejs.pkajan.eu/Domestic_Girlfriend.jpg"
+    },
+    "Gotoubun no Hanayome": {
+        "year": "2019",
+        "month": "1",
+        "day": "10",
+        "hour": "23",
+        "minute": "45",
+        "_starting_episode": "1",
+        "_skipped_episodes": "0",
+        "_last_episode": "12",
+        "link": "http://www.animexd.me/watch/gotoubun-no-hanayome_episode-%s-online",
+        "picture": "https://nodejs.pkajan.eu/Gotoubun_no_Hanayome.jpg"
     },
     "UPCOMING": "--- UPCOMING ---",
     "One-Punch Man 2": {
@@ -102,18 +114,6 @@
         "_last_episode": "9999",
         "link": "https://www.masterani.me/anime/watch/?????-one-punch-man-2/",
         "picture": "https://nodejs.pkajan.eu/One-Punch_Man_2.jpg"
-    },
-    "Domestic Girlfriend": {
-        "year": "2019",
-        "month": "1",
-        "day": "11",
-        "hour": "17",
-        "minute": "0",
-        "_starting_episode": "1",
-        "_skipped_episodes": "0",
-        "_last_episode": "9999",
-        "link": "https://www.masterani.me/anime/watch/3049-domestic-na-kanojo/",
-        "picture": "https://nodejs.pkajan.eu/Domestic_Girlfriend.jpg"
     },
     "7 Seeds": {
         "year": "2019",
@@ -138,17 +138,5 @@
         "_last_episode": "9999",
         "link": "https://www.masterani.me/anime/watch/?????-kyochuu-rettou/",
         "picture": "https://nodejs.pkajan.eu/Kyochuu_Rettou.jpg"
-    },
-        "Gotoubun no Hanayome": {
-        "year": "2019",
-        "month": "1",
-        "day": "10",
-        "hour": "23",
-        "minute": "45",
-        "_starting_episode": "1",
-        "_skipped_episodes": "0",
-        "_last_episode": "12",
-        "link": "https://www.masterani.me/anime/watch/3052-gotoubun-no-hanayome/",
-        "picture": "https://nodejs.pkajan.eu/Gotoubun_no_Hanayome.jpg"
     }
 }
