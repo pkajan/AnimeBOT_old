@@ -4,10 +4,10 @@
   "description": "-",
   "main": "index.js",
   "dependencies": {
-    "cron": "^1.6.0",
+    "cron": "^1.7.0",
     "dateformat": "^3.0.3",
     "discord.js": "^11.4.2",
-    "nodemon": "^1.18.9",
+    "nodemon": "^1.18.10",
     "opusscript": "0.0.6",
     "url-exists-deep": "^1.1.1"
   },
