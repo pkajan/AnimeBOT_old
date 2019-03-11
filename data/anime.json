@@ -102,6 +102,18 @@
         "link": "http://www.animexd.me/watch/gotoubun-no-hanayome_episode-%s-online",
         "picture": "https://nodejs.pkajan.eu/Gotoubun_no_Hanayome.jpg"
     },
+    "Kaguya-sama: Love Is War": {
+        "year": "2019",
+        "month": "1",
+        "day": "12",
+        "hour": "15",
+        "minute": "30",
+        "_starting_episode": "1",
+        "_skipped_episodes": "0",
+        "_last_episode": "12",
+        "link": "http://www.animexd.me/watch/kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen_episode-%s-online",
+        "picture": "https://nodejs.pkajan.eu/Kaguya-sama.jpg"
+    },
     "UPCOMING": "--- UPCOMING ---",
     "One-Punch Man 2": {
         "year": "2019",
