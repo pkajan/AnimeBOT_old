@@ -9,6 +9,8 @@ const logs = require('fs');
 const logFile = 'logs.txt';
 const common_learning = 'common_learning.txt';
 const start_time = Date.now();
+const https = require('https');
+const http = require('http');
 /**************************************************************************/
 
 /* Check for necessary files */
@@ -163,6 +165,8 @@ function getRandomInt(max) {
 function parse(str, arg) {
     return str.replace(/%s/gi, arg);
 }
+
+
 
 /**************************************************************************/
 
@@ -380,10 +384,10 @@ client.on("ready", () => {
         if (typeof soonArray != 'undefined') {
             soonArray.forEach(function (item) {
                 if (item.url) {
-                    urlExists(item.url)
-                        .then(function (response) {
-                            if (response) {
-                                Log(translate("BOT_cron_link_yes", response.href));
+                    if (item.url.substring(0, 5) == 'https') {
+                        https.get(item.url, (res) => {
+                            if (res.statusCode == 200) { // 200 means page exist
+                                Log(translate("BOT_cron_link_yes", item.url));
                                 var messages = "```fix\n" + item.name + "```\n" + `${item.url}`;
                                 var index = soonArray.indexOf(item);
                                 Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
@@ -396,7 +400,29 @@ client.on("ready", () => {
                             } else {
                                 Log(translate("BOT_cron_link_no", item.name, item.url));
                             }
+                        }).on('error', (e) => {
+                            console.error(e);
                         });
+                    } else {
+                        http.get(item.url, (res) => {
+                            if (res.statusCode == 200) { // 200 means page exist
+                                Log(translate("BOT_cron_link_yes", item.url));
+                                var messages = "```fix\n" + item.name + "```\n" + `${item.url}`;
+                                var index = soonArray.indexOf(item);
+                                Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
+                                delete soonArray[index];
+                                if (item.picture) {
+                                    SendtoAllGuilds(messages, item.picture);
+                                } else {
+                                    SendtoAllGuilds(messages);
+                                }
+                            } else {
+                                Log(translate("BOT_cron_link_no", item.name, item.url));
+                            }
+                        }).on('error', (e) => {
+                            Log(e);
+                        });
+                    }
                 }
             });
         }
