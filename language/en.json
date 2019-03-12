@@ -52,5 +52,6 @@
     "bot_name_log": "I was called by name [by %s]",
     "bot_name_learning_log": "I was called by name, replied with learned text to [%s]",
     "bot_name_log_img": "I was called by name [by %s] (text:'%s', url:'%s')",
-    "cron_started": "Cron started"
+    "cron_started": "Cron started",
+    "upcoming_check": "Today Anime link: %s"
 }
