@@ -288,7 +288,7 @@ function AnimeTimer(message = null, textoutput = false) {
                         zero_day = zero_day + cd_text;
                         if (item.link) {
                             TMPtodayArray.push([item.name, CDNext.getTime(), parse(item.link, parseInt(item.starting_episode) + parseInt(weeks)), item.picture]);
-                            Log(translate("upcoming_check", parse(item.link, parseInt(item.starting_episode) + parseInt(weeks))));
+                            Log(translate("upcoming_check", item.name, parse(item.link, parseInt(item.starting_episode) + parseInt(weeks))));
                         }
                         break;
                     case (difference == 1):
