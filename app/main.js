@@ -371,8 +371,8 @@ client.on("ready", () => {
     //recalculate timers    
     timeCalcMessage();
     /* CRON1 ***********************************************************/
-    //every 2 hour check
-    const job = new CronJob('0 */2 * * *', function () {
+    //every day, 15 minutes after midnight
+    const job = new CronJob('15 0 * * *', function () {
         var message = timeCalcMessage();
     });
     job.start();
