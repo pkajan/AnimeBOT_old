@@ -370,15 +370,8 @@ client.on("ready", () => {
 
     //recalculate timers    
     timeCalcMessage();
-    /* CRON1 ***********************************************************/
-    //every day, 15 minutes after midnight
-    const job = new CronJob('15 0 * * *', function () {
-        var message = timeCalcMessage();
-    });
-    job.start();
-    Log(translate("cron_started"));
 
-    /* CRON2 ***********************************************************/
+    /* CRON1 ***********************************************************/
     // check every 5 minutes if anime is there
     const job2 = new CronJob('*/5 * * * *', function () {
         if (typeof soonArray != 'undefined') {

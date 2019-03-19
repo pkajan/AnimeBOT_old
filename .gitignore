@@ -1,5 +1,4 @@
 node_modules/
-logs.txt
 package-lock.json
 3rd_party/ffmpeg.exe
 data/config.json
