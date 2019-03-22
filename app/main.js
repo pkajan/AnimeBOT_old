@@ -383,8 +383,7 @@ client.on("ready", () => {
 
     /* CRON1 ***********************************************************/
     // check every 5 minutes if anime is there
-    const job1 = new CronJob('*/1 * * * *', function () {
-        Log(soonArray);
+    const job1 = new CronJob('*/5 * * * *', function () {
         if (typeof soonArray != 'undefined') {
             soonArray.forEach(function (item) {
                 if (item.url) {
