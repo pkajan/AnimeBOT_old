@@ -446,7 +446,12 @@ client.on("ready", () => {
         }
     });
     job1.start();
-    Log(translate("cron_started"));
+    Log(translate("cron_started", 1));
+    const job2 = new CronJob('1 0 * * *', function () {
+        timeCalcMessage();
+    });
+    job2.start();
+    Log(translate("cron_started", 2));
 });
 
 
