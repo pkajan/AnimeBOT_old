@@ -2,19 +2,19 @@
 const util = require('util');
 const dateFormat = require('dateformat');
 const CronJob = require('cron').CronJob;
-const urlExists = require('url-exists-deep');
 const Discord = require('discord.js'); // Load up the discord.js library
 const client = new Discord.Client();
-const logs = require('fs');
-const logFile = 'logs.txt';
-const common_learning = 'common_learning.txt';
-const start_time = Date.now();
 const https = require('https');
 const http = require('http');
+const fs = require('fs');
+const logFile = 'logs.txt';
+const announceFile = 'announce.json';
+const common_learning = 'common_learning.txt';
+const start_time = Date.now();
+
 /**************************************************************************/
 
 /* Check for necessary files */
-const fs = require('fs');
 const obj = require('../data/check.json');
 Object.keys(obj).forEach(function (key) {
     if (fs.existsSync(obj[key])) {
@@ -38,6 +38,7 @@ const timeShift = config.timeshift;
 const updCMD = 'start cmd.exe @cmd /k "git reset --hard & git fetch --all & git pull & exit';
 var todayArray;
 var soonArray = new Array();
+var soonArrays = new Array();
 var polite_array_day = reply.messages_day.split(";");
 var polite_array_night = reply.messages_night.split(";");
 var polite_array_hello = reply.polite_hello.split(";");
@@ -55,6 +56,7 @@ var defaultTextChannel = config.defaultTextChannel;
 var bot_name_img_chance = parseInt(config.bot_img_chance);
 /**************************************************************************/
 
+
 /* FUNCTIONS */
 
 /* Logging - will show logs in console and write them into file (for later debugging?) */
@@ -62,7 +64,7 @@ function Log(any_string, /**/) {
     var now = dateFormat(new Date(), "dd.mm HH:MM:ss"); // 23.03 16:46:00
     var text = `${now} [LOG] ${util.inspect(any_string)}`;
     console.log(text); // show log in console
-    logs.appendFileSync(logFile, text + "\n");// write log into file
+    fs.appendFileSync(logFile, text + "\n");// write log into file
 }
 
 /* Translate - load translated string from json */
@@ -166,11 +168,14 @@ function parse(str, arg) {
     return str.replace(/%s/gi, arg);
 }
 
-
+/* implement "random" into array and return rng value from given array = array.randomElement */
+Array.prototype.randomElement = function () {
+    return this[Math.floor(Math.random() * this.length)]
+}
 
 /**************************************************************************/
 
-/* Other functions */
+/* Discord.js based functions */
 
 /* Remove invoking message */
 function removeCallMsg(message) {
@@ -231,10 +236,6 @@ function SendtoAllGuilds(text, picture = null) {
     catch (err) {
         Log(translate("BOT_could_not_send"));
     }
-}
-/* implement "random" into array and return rng value from given array = array.randomElement */
-Array.prototype.randomElement = function () {
-    return this[Math.floor(Math.random() * this.length)]
 }
 
 /* WALL OF CODE */
@@ -321,16 +322,24 @@ function AnimeTimer(message = null, textoutput = false) {
         less_than_week = less_than_weekHeader + less_than_week;
     }
 
+    /* write data into file for later use */
+    data = todayArray.join(";");
+    fs.writeFileSync(announceFile, data);
+
     if (textoutput) {
         selfDestructMSG(message, zero_day + one_day + two_days + less_than_week + oth_days, 30000, 'AnimeTable');
     }
+
 }
 
 /* Put "today" animes into array for later use */
 function timeCalcMessage() {
     AnimeTimer(null, false);
-    var soonArrays = new Array();
-    todayArray.forEach(function (item) {
+    var todayArrayFromFile = fs.readFileSync(announceFile); // read from file
+    todayArrayFromFile = todayArrayFromFile.toString().split(";"); //make array again
+
+    todayArrayFromFile.forEach(function (item) {
+        item = item.split(",");
         dt1 = new Date(item[1]);
         dt2 = new Date();
         if (timeDiffInMinutes(dt1, dt2) <= 120) {
@@ -373,7 +382,8 @@ client.on("ready", () => {
 
     /* CRON1 ***********************************************************/
     // check every 5 minutes if anime is there
-    const job2 = new CronJob('*/5 * * * *', function () {
+    const job1 = new CronJob('*/5 * * * *', function () {
+        Log(soonArray);
         if (typeof soonArray != 'undefined') {
             soonArray.forEach(function (item) {
                 if (item.url) {
@@ -420,9 +430,11 @@ client.on("ready", () => {
             });
         }
     });
-    job2.start();
+    job1.start();
     Log(translate("cron_started"));
 });
+
+
 
 /* Triggered when addeded/removed from server */
 client.on("guildCreate", guild => {
@@ -528,7 +540,7 @@ client.on("message", async message => {
         var str1 = `[${client.user.username.charAt(0)},${client.user.username.charAt(0).toLowerCase()}][${client.user.username.charAt(1)},${client.user.username.charAt(1).toLowerCase()}][${client.user.username.charAt(2)},${client.user.username.charAt(2).toLowerCase()}][${client.user.username.charAt(3)},${client.user.username.charAt(3).toLowerCase()}][a-zA-Z0-9À-ž]*`;
         var regex = new RegExp(str1, "g");
         var learning_text_generalize = message.content.replace(regex, "%s");
-        logs.appendFileSync(common_learning, learning_text_generalize + "\n");// write message into file with name of invoker
+        fs.appendFileSync(common_learning, learning_text_generalize + "\n");// write message into file with name of invoker
     }
 
     if (message.content.indexOf(config.prefix) !== 0) return; // ignore messages without OUR prefix, except... we must be polite right (up)?
@@ -645,7 +657,7 @@ client.on("message", async message => {
         if (hasRights(message.author.id)) {
             message.channel.send(translate("cmd_log_msg"), {
                 files: [
-                    "./logs.txt"
+                    `./${logFile}`
                 ]
             });
             Log(translate("cmd_log_log", message.author.username.toString()));
@@ -663,7 +675,6 @@ client.on("message", async message => {
         removeCallMsg(message);
         //console.log(message.author.username.toString());
     }
-
 });
 
 client.login(config.credentials.token);

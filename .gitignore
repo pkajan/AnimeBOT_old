@@ -5,3 +5,4 @@ data/config.json
 data/replies.json
 data/anime.json
 *.txt
+announce.json
