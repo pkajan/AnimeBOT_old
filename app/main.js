@@ -322,12 +322,12 @@ function AnimeTimer(message = null, textoutput = false) {
         less_than_week = less_than_weekHeader + less_than_week;
     }
 
-    /* write data into file for later use */
-    data = todayArray.join(";");
-    fs.writeFileSync(announceFile, data);
-
     if (textoutput) {
         selfDestructMSG(message, zero_day + one_day + two_days + less_than_week + oth_days, 30000, 'AnimeTable');
+    } else {
+        /* write data into file for later use */
+        data = todayArray.join(";\n");
+        fs.writeFileSync(announceFile, data);
     }
 
 }
@@ -342,21 +342,22 @@ function timeCalcMessage() {
         item = item.split(",");
         dt1 = new Date(item[1]);
         dt2 = new Date();
-        if (timeDiffInMinutes(dt1, dt2) <= 120) {
-            if (item[2]) {
-                var valueToPush = {};
-                valueToPush.name = item[0];
-                valueToPush.time = item[1];
-                valueToPush.url = item[2];
-                valueToPush.picture = item[3];
-                soonArrays.push(valueToPush);
-                valueToPush = {};
-            }
-            soonArrays.forEach(function (itemz) {
-                soonArray.push(itemz);
-            })
-            soonArray = uniq(soonArray, JSON.stringify);
+        //if (timeDiffInMinutes(dt1, dt2) <= 120) {
+        if (item[2]) {
+            var valueToPush = {};
+            valueToPush.name = item[0];
+            valueToPush.time = item[1];
+            valueToPush.url = item[2];
+            valueToPush.picture = item[3];
+            soonArrays.push(valueToPush);
+            valueToPush = {};
         }
+        soonArrays.forEach(function (itemz) {
+            soonArray.push(itemz);
+        })
+        soonArray = uniq(soonArray, JSON.stringify);
+
+        //}
     });
 }
 
@@ -382,7 +383,7 @@ client.on("ready", () => {
 
     /* CRON1 ***********************************************************/
     // check every 5 minutes if anime is there
-    const job1 = new CronJob('*/5 * * * *', function () {
+    const job1 = new CronJob('*/1 * * * *', function () {
         Log(soonArray);
         if (typeof soonArray != 'undefined') {
             soonArray.forEach(function (item) {
@@ -395,6 +396,13 @@ client.on("ready", () => {
                                 var index = soonArray.indexOf(item);
                                 Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
                                 delete soonArray[index];
+                                ///////////////////////////////////////////////////
+                                var str_name = `^(` + item.name + `).*\n`;
+                                var regexx = new RegExp(str_name, "g");
+                                var data = fs.readFileSync(announceFile).toString();
+                                var newvalue = data.replace(regexx, "");
+                                fs.writeFileSync(announceFile, newvalue);
+                                ////////////////////////////////////////////////////
                                 if (item.picture) {
                                     SendtoAllGuilds(messages, item.picture);
                                 } else {
@@ -414,6 +422,13 @@ client.on("ready", () => {
                                 var index = soonArray.indexOf(item);
                                 Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
                                 delete soonArray[index];
+                                ///////////////////////////////////////////////////
+                                var str_name = `^(` + item.name + `).*\n`;
+                                var regexx = new RegExp(str_name, "g");
+                                var data = fs.readFileSync(announceFile).toString();
+                                var newvalue = data.replace(regexx, "");
+                                fs.writeFileSync(announceFile, newvalue);
+                                ////////////////////////////////////////////////////
                                 if (item.picture) {
                                     SendtoAllGuilds(messages, item.picture);
                                 } else {
