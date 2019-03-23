@@ -327,9 +327,12 @@ function AnimeTimer(message = null, textoutput = false) {
     } else {
         /* write data into file for later use */
         data = todayArray.join(";\n");
-        fs.writeFileSync(announceFile, data);
+        if (fs.readFileSync(announceFile) != "") {
+            fs.appendFileSync(announceFile, ";\n" + data); // if file is not empty add semicolon at end
+        } else {
+            fs.appendFileSync(announceFile, data);
+        }
     }
-
 }
 
 /* Put "today" animes into array for later use */
@@ -643,7 +646,7 @@ client.on("message", async message => {
         }
     }
 
-    if (command === translate("cmd_screem")) {
+    if (command === translate("cmd_scream")) {
         if (hasRights(message.author.id)) {
             removeCallMsg(message);
             var voiceChannel = null;
@@ -657,17 +660,17 @@ client.on("message", async message => {
             }
             //if invoker is not on voice channel just throw error
             if (voiceChannel == null) {
-                selfDestructMSG(message, translate("cmd_screem_no"), 4000);
-                Log(translate("cmd_screem_log_no", message.author.username.toString(), translate("cmd_screem")));
+                selfDestructMSG(message, translate("cmd_scream_no"), 4000);
+                Log(translate("cmd_scream_log_no", message.author.username.toString(), translate("cmd_scream")));
                 return;
             }
             voiceChannel.join().then(connection => {
-                const dispatcher = connection.playFile('./audio/screem.mp3');
+                const dispatcher = connection.playFile('./audio/scream.mp3');
                 dispatcher.on("end", end => {
                     voiceChannel.leave();
                 });
             }).catch(err => console.log(err));
-            Log(translate("cmd_screem_log", message.author.username.toString(), translate("cmd_screem")));
+            Log(translate("cmd_scream_log", message.author.username.toString(), translate("cmd_scream")));
         }
     }
 
