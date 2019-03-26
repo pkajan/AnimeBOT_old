@@ -615,8 +615,8 @@ client.on("message", async message => {
     if (command === translate("cmd_update")) {
         if (hasRights(message.author.id)) {
             removeCallMsg(message);
-            selfDestructMSG(message, translate("cmd_update_msg"), 4000);
-            Log(translate("cmd_update_msg_log", message.author.username.toString(), translate("cmd_update")));
+            selfDestructMSG(message, translate("cmd_update_msg", translate("cmd_update")), 4000);
+            Log(translate("cmd_update_msg_log", message.author.username.toString()));
             const { exec } = require('child_process');
             exec(updCMD, (err, stdout, stderr) => {
                 if (err) {
