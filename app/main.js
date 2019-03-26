@@ -402,7 +402,7 @@ client.on("ready", () => {
                                 delete soonArray[index];
                                 ///////////////////////////////////////////////////
                                 var str_name = `^(` + item.name + `).*\n`;
-                                var regexx = new RegExp(str_name, "g");
+                                var regexx = new RegExp(str_name, "gm");
                                 var data = fs.readFileSync(announceFile).toString();
                                 var newvalue = data.replace(regexx, "");
                                 fs.writeFileSync(announceFile, newvalue);
