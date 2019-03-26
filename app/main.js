@@ -339,7 +339,7 @@ function AnimeTimer(message = null, textoutput = false) {
 function timeCalcMessage() {
     AnimeTimer(null, false);
     var todayArrayFromFile = fs.readFileSync(announceFile); // read from file
-    todayArrayFromFile = todayArrayFromFile.toString().split(";"); //make array again
+    todayArrayFromFile = todayArrayFromFile.toString().split(";\n"); //make array again
 
     todayArrayFromFile.forEach(function (item) {
         item = item.split(",");
