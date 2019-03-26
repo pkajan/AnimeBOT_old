@@ -328,7 +328,9 @@ function AnimeTimer(message = null, textoutput = false) {
         /* write data into file for later use */
         data = todayArray.join(";\n");
         if (fs.readFileSync(announceFile) != "") {
-            fs.appendFileSync(announceFile, ";\n" + data); // if file is not empty add semicolon at end
+            if (!fs.readFileSync(announceFile).toString().includes(data)) {
+                fs.appendFileSync(announceFile, ";\n" + data); // if file is not empty add semicolon at end
+            }
         } else {
             fs.appendFileSync(announceFile, data);
         }
@@ -613,8 +615,8 @@ client.on("message", async message => {
     if (command === translate("cmd_update")) {
         if (hasRights(message.author.id)) {
             removeCallMsg(message);
-            selfDestructMSG(message, translate("cmd_update_msg"), 4000), translate("cmd_update");
-            Log(translate("cmd_update_msg_log", message.author.username.toString()));
+            selfDestructMSG(message, translate("cmd_update_msg"), 4000);
+            Log(translate("cmd_update_msg_log", message.author.username.toString(), translate("cmd_update")));
             const { exec } = require('child_process');
             exec(updCMD, (err, stdout, stderr) => {
                 if (err) {
