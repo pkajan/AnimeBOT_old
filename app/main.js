@@ -563,11 +563,7 @@ client.on("message", async message => {
         /* create REGEX that match BOT name (first 4 chars to be precise) */
         var str1 = `[${client.user.username.charAt(0)},${client.user.username.charAt(0).toLowerCase()}][${client.user.username.charAt(1)},${client.user.username.charAt(1).toLowerCase()}][${client.user.username.charAt(2)},${client.user.username.charAt(2).toLowerCase()}][${client.user.username.charAt(3)},${client.user.username.charAt(3).toLowerCase()}][a-zA-Z0-9À-ž]*`;
         var regex = new RegExp(str1, "g");
-        var regex_emoji_fix_str = `:[1,2,3,4,5,6,7,8,9,0]*>`;
-        var regex_emoji_fix = new RegExp(regex_emoji_fix_str, "g");
-        var regex_emoji_fix_str2 = `<`;
-        var regex_emoji_fix2 = new RegExp(regex_emoji_fix_str2, "g");
-        var learning_text_generalize = message.content.replace(regex, "%s").replace(regex_emoji_fix, ":").replace(regex_emoji_fix2, "");
+        var learning_text_generalize = message.content.replace(regex, "%s");
         fs.appendFileSync(common_learning, learning_text_generalize + "\n");// write message into file with name of invoker
     }
 
