@@ -401,8 +401,8 @@ client.on("ready", () => {
                                 Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
                                 delete soonArray[index];
                                 ///////////////////////////////////////////////////
-                                var str_name = `^(` + item.name + `).*\n`;
-                                var regexx = new RegExp(str_name, "gm");
+                                var str_name = `^(` + item.name + `).*`;
+                                var regexx = new RegExp(str_name, "igm");
                                 var data = fs.readFileSync(announceFile).toString();
                                 var newvalue = data.replace(regexx, "");
                                 fs.writeFileSync(announceFile, newvalue);
@@ -427,8 +427,8 @@ client.on("ready", () => {
                                 Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
                                 delete soonArray[index];
                                 ///////////////////////////////////////////////////
-                                var str_name = `^(` + item.name + `).*\n`;
-                                var regexx = new RegExp(str_name, "g");
+                                var str_name = `^(` + item.name + `).*`;
+                                var regexx = new RegExp(str_name, "igm");
                                 var data = fs.readFileSync(announceFile).toString();
                                 var newvalue = data.replace(regexx, "");
                                 fs.writeFileSync(announceFile, newvalue);
