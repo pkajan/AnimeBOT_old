@@ -54,6 +54,7 @@ var bot_name_txt = reply.text_replies.split(";");
 var bot_name_img = reply.image_replies.split(";");
 var defaultTextChannel = config.defaultTextChannel;
 var bot_name_img_chance = parseInt(config.bot_img_chance);
+fs.appendFileSync(announceFile, ""); //create empty file for announcements
 /**************************************************************************/
 
 
