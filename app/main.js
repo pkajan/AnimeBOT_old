@@ -55,6 +55,7 @@ var bot_name_img = reply.image_replies.split(";");
 var defaultTextChannel = config.defaultTextChannel;
 var bot_name_img_chance = parseInt(config.bot_img_chance);
 fs.appendFileSync(announceFile, ""); //create empty file for announcements
+var page_protocol = https;
 /**************************************************************************/
 
 
@@ -393,59 +394,34 @@ client.on("ready", () => {
         if (typeof soonArray != 'undefined') {
             soonArray.forEach(function (item) {
                 if (item.url) {
-                    if (item.url.substring(0, 5) == 'https') {
-                        https.get(item.url, (res) => {
-                            if (res.statusCode == 200) { // 200 means page exist
-                                Log(translate("BOT_cron_link_yes", item.url));
-                                var messages = "```fix\n" + item.name + "```\n" + `${item.url}`;
-                                var index = soonArray.indexOf(item);
-                                Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
-                                delete soonArray[index];
-                                ///////////////////////////////////////////////////
-                                var str_name = `^(` + item.name + `).*`;
-                                var regexx = new RegExp(str_name, "igm");
-                                var data = fs.readFileSync(announceFile).toString();
-                                var newvalue = data.replace(regexx, "");
-                                fs.writeFileSync(announceFile, newvalue);
-                                ////////////////////////////////////////////////////
-                                if (item.picture) {
-                                    SendtoAllGuilds(messages, item.picture);
-                                } else {
-                                    SendtoAllGuilds(messages);
-                                }
-                            } else {
-                                Log(translate("BOT_cron_link_no", item.name, item.url));
-                            }
-                        }).on('error', (e) => {
-                            console.error(e);
-                        });
-                    } else {
-                        http.get(item.url, (res) => {
-                            if (res.statusCode == 200) { // 200 means page exist
-                                Log(translate("BOT_cron_link_yes", item.url));
-                                var messages = "```fix\n" + item.name + "```\n" + `${item.url}`;
-                                var index = soonArray.indexOf(item);
-                                Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
-                                delete soonArray[index];
-                                ///////////////////////////////////////////////////
-                                var str_name = `^(` + item.name + `).*`;
-                                var regexx = new RegExp(str_name, "igm");
-                                var data = fs.readFileSync(announceFile).toString();
-                                var newvalue = data.replace(regexx, "");
-                                fs.writeFileSync(announceFile, newvalue);
-                                ////////////////////////////////////////////////////
-                                if (item.picture) {
-                                    SendtoAllGuilds(messages, item.picture);
-                                } else {
-                                    SendtoAllGuilds(messages);
-                                }
-                            } else {
-                                Log(translate("BOT_cron_link_no", item.name, item.url));
-                            }
-                        }).on('error', (e) => {
-                            Log(e);
-                        });
+                    if (item.url.substring(0, 5) != 'https') {
+                        page_protocol = http; // if protocol is not https, change it to http
                     }
+                    page_protocol.get(item.url, (res) => {
+                        if (res.statusCode == 200) { // 200 means page exist
+                            Log(translate("BOT_cron_link_yes", item.url));
+                            var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>`;
+                            var index = soonArray.indexOf(item);
+                            Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
+                            delete soonArray[index];
+                            ///////////////////////////////////////////////////
+                            var str_name = `^(` + item.name + `).*`;
+                            var regexx = new RegExp(str_name, "igm");
+                            var data = fs.readFileSync(announceFile).toString();
+                            var newvalue = data.replace(regexx, "");
+                            fs.writeFileSync(announceFile, newvalue);
+                            ////////////////////////////////////////////////////
+                            if (item.picture) {
+                                SendtoAllGuilds(messages, item.picture);
+                            } else {
+                                SendtoAllGuilds(messages);
+                            }
+                        } else {
+                            Log(translate("BOT_cron_link_no", item.name, item.url));
+                        }
+                    }).on('error', (e) => {
+                        console.error(e);
+                    });
                 }
             });
         }
