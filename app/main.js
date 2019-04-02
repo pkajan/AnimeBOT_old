@@ -396,6 +396,8 @@ client.on("ready", () => {
                 if (item.url) {
                     if (item.url.substring(0, 5) != 'https') {
                         page_protocol = http; // if protocol is not https, change it to http
+                    } else {
+                        page_protocol = https;
                     }
                     page_protocol.get(item.url, (res) => {
                         if (res.statusCode == 200) { // 200 means page exist
