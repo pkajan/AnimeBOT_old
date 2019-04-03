@@ -490,6 +490,7 @@ client.on("message", async message => {
         if ((parseInt(new Date().getTime()) - parseInt(LastPoliteMessage)) > 20000) { //prevent spamming channel with hello to hello to hello...HELL NO!!
             LastPoliteMessage = new Date().getTime();
             var message_string = deunicode(message.content).toLowerCase().split(" ")[0];
+            var message_string2 = deunicode(message.content).toLowerCase().split(" ")[1];// if greeting message has 2 parts (good morning...)
 
             isItPartOfString(polite_array_exceptions, message_string).catch(function (exception) {
                 if (!exception) {
@@ -500,9 +501,21 @@ client.on("message", async message => {
                             Log(translate("polite_hello_log", message.author.username.toString()));
                         }
                     });
+                    isItPartOfString(polite_array_day, message_string + " " + message_string2).catch(function (item) { //combined message
+                        if (item) {
+                            message.channel.send(translate("polite_hello", polite_array_hello.randomElement()));
+                            Log(translate("polite_hello_log", message.author.username.toString()));
+                        }
+                    });
 
                     // good night to you too good sir <putting monocle to pocket>
                     isItPartOfString(polite_array_night, message_string).catch(function (item) {
+                        if (item) {
+                            message.channel.send(translate("polite_GN", polite_array_bye.randomElement()));
+                            Log(translate("polite_GN_log", message.author.username.toString()));
+                        }
+                    });
+                    isItPartOfString(polite_array_night, message_string + " " + message_string2).catch(function (item) { //combined message
                         if (item) {
                             message.channel.send(translate("polite_GN", polite_array_bye.randomElement()));
                             Log(translate("polite_GN_log", message.author.username.toString()));
