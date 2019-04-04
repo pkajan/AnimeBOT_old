@@ -491,34 +491,39 @@ client.on("message", async message => {
             LastPoliteMessage = new Date().getTime();
             var message_string = deunicode(message.content).toLowerCase().split(" ")[0];
             var message_string2 = deunicode(message.content).toLowerCase().split(" ")[1];// if greeting message has 2 parts (good morning...)
+            var posted = false;
 
             isItPartOfString(polite_array_exceptions, message_string).catch(function (exception) {
                 if (!exception) {
                     // good morning to you too good sir <moving monocle closer to the eye>
                     isItPartOfString(polite_array_day, message_string).catch(function (item) {
-                        if (item) {
+                        if (item & !posted) {
                             message.channel.send(translate("polite_hello", polite_array_hello.randomElement()));
                             Log(translate("polite_hello_log", message.author.username.toString()));
+                            posted = true;
                         }
                     });
                     isItPartOfString(polite_array_day, message_string + " " + message_string2).catch(function (item) { //combined message
-                        if (item) {
+                        if (item & !posted) {
                             message.channel.send(translate("polite_hello", polite_array_hello.randomElement()));
                             Log(translate("polite_hello_log", message.author.username.toString()));
+                            posted = true;
                         }
                     });
 
                     // good night to you too good sir <putting monocle to pocket>
                     isItPartOfString(polite_array_night, message_string).catch(function (item) {
-                        if (item) {
+                        if (item & !posted) {
                             message.channel.send(translate("polite_GN", polite_array_bye.randomElement()));
                             Log(translate("polite_GN_log", message.author.username.toString()));
+                            posted = true;
                         }
                     });
                     isItPartOfString(polite_array_night, message_string + " " + message_string2).catch(function (item) { //combined message
-                        if (item) {
+                        if (item & !posted) {
                             message.channel.send(translate("polite_GN", polite_array_bye.randomElement()));
                             Log(translate("polite_GN_log", message.author.username.toString()));
+                            posted = true;
                         }
                     });
                 }
