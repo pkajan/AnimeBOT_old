@@ -152,6 +152,18 @@ async function isItPartOfString(any_array, any_string) {
     throw ImBoolean;
 }
 
+/*  return if given string is in array */
+async function isItPartOfString2(any_array, any_string) {
+    var ImBoolean = false;
+    any_array.forEach(function (item) {
+        if (any_string === item) {
+            ImBoolean = true;
+        }
+    });
+    throw ImBoolean;
+}
+
+
 /* Check if user has RIGHTs */
 function hasRights(userID) {
     var admins = config.adminIDs.split(";");
@@ -567,6 +579,7 @@ client.on("message", async message => {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
+    /*
     if (command === translate("cmd_say")) {
         removeCallMsg(message);
         if (hasRights(message.author.id)) {
@@ -689,10 +702,167 @@ client.on("message", async message => {
         Log(translate("cmd_uptime_log", uptime_till_now, message.author.username.toString()));
     }
 
+
     if (command === translate("cmd_test")) {
         removeCallMsg(message);
         //console.log(message.author.username.toString());
     }
+*/
+    /* async commands */
+    // bot repeat posted message and delete original one
+    isItPartOfString2(translate("cmd_say").split(";"), command).catch(function (item) {
+        if (item) {
+            removeCallMsg(message);
+            if (hasRights(message.author.id)) {
+                if (args.length > 0) {
+                    const sayMessage = args.join(" ");
+                    // And we get the bot to say the thing:
+                    message.channel.send(sayMessage);
+                    Log(translate("cmd_say_msg", sayMessage, message.author.username.toString()));
+                } else {
+                    message.channel.send(translate("cmd_say_empty", config.prefix));
+                    Log(translate("cmd_say_msg_log", message.author.username.toString()));
+                }
+            } else {
+                message.channel.send(translate("cmd_say_noOwner"));
+                Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
+            }
+        }
+    });
+
+    //will spam channel X times (to test latency or some shi...)
+    isItPartOfString2(translate("cmd_spam").split(";"), command).catch(function (item) {
+        if (item) {
+            removeCallMsg(message);
+            if (hasRights(message.author.id)) {
+                if (args[0]) {
+                    for (i = args[0]; i > 0; i--) {
+                        message.channel.send(translate("SPAM") + i);
+                    }
+                    Log(translate("cmd_spam_msg", args[0], message.author.username.toString()));
+                }
+                Log(translate("cmd_spam_msg_empty", args[0], message.author.username.toString()));
+            } else {
+                message.channel.send(translate("cmd_say_noOwner"));
+                Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
+            }
+        }
+    });
+
+    // post list of things (anime in this case)
+    isItPartOfString2(translate("cmd_info").split(";"), command).catch(function (item) {
+        if (item) {
+            removeCallMsg(message);
+            AnimeTimer(message, true);
+        }
+    });
+
+    // download update
+    isItPartOfString2(translate("cmd_update").split(";"), command).catch(function (item) {
+        if (item) {
+            if (hasRights(message.author.id)) {
+                removeCallMsg(message);
+                selfDestructMSG(message, translate("cmd_update_msg", translate("cmd_update")), 4000);
+                Log(translate("cmd_update_msg_log", message.author.username.toString()));
+                const { exec } = require('child_process');
+                exec(updCMD, (err, stdout, stderr) => {
+                    if (err) {
+                        Log(err);
+                        return;
+                    }
+                    Log(stdout);
+                });
+            }
+        }
+    });
+
+    // change status to
+    isItPartOfString2(translate("cmd_status").split(";"), command).catch(function (item) {
+        if (item) {
+            removeCallMsg(message);
+            var status_type = args[0];
+            args.splice(0, 1);
+            var status_name = args.join(" ");
+
+            if (hasRights(message.author.id)) {
+                client.user.setPresence({
+                    game: {
+                        name: status_name,
+                        type: status_type
+                    }
+                }).then(presence => Log(translate("BOT_set_activity", status_type, status_name)))
+                    .catch(console.error);
+            } else {
+                message.channel.send(translate("cmd_say_noOwner"));
+                Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
+            }
+        }
+    });
+
+    // screem in voice channel (in channel you are currently on chosen channel (case sensitive!!))
+    isItPartOfString2(translate("cmd_scream").split(";"), command).catch(function (item) {
+        if (item) {
+            if (hasRights(message.author.id)) {
+                removeCallMsg(message);
+                var voiceChannel = null;
+                //if argument is name of channel find ID and set it
+                if (args.length > 0) {
+                    voiceChannel = message.guild.channels.find(channel => channel.name === args.join(" "));
+                }
+                //if channel is not set, join invoker channel
+                if (voiceChannel == null) {
+                    voiceChannel = message.member.voiceChannel;
+                }
+                //if invoker is not on voice channel just throw error
+                if (voiceChannel == null) {
+                    selfDestructMSG(message, translate("cmd_scream_no"), 4000);
+                    Log(translate("cmd_scream_log_no", message.author.username.toString(), translate("cmd_scream")));
+                    return;
+                }
+                voiceChannel.join().then(connection => {
+                    const dispatcher = connection.playFile('./audio/scream.mp3');
+                    dispatcher.on("end", end => {
+                        voiceChannel.leave();
+                    });
+                }).catch(err => console.log(err));
+                Log(translate("cmd_scream_log", message.author.username.toString(), translate("cmd_scream")));
+            }
+        }
+    });
+
+    // upload log to channel
+    isItPartOfString2(translate("cmd_log").split(";"), command).catch(function (item) {
+        if (item) {
+            removeCallMsg(message);
+            if (hasRights(message.author.id)) {
+                message.channel.send(translate("cmd_log_msg"), {
+                    files: [
+                        `./${logFile}`
+                    ]
+                });
+                Log(translate("cmd_log_log", message.author.username.toString()));
+            }
+        }
+    });
+
+    // show bot uptime
+    isItPartOfString2(translate("cmd_uptime").split(";"), command).catch(function (item) {
+        if (item) {
+            console.log(translate("cmd_uptime").split(";"));
+            removeCallMsg(message);
+            var uptime_till_now = ((Date.now() - start_time) / 1000 / 60).toFixed(2); //convert time to minutes
+            message.channel.send(translate("cmd_uptime_msg", uptime_till_now));
+            Log(translate("cmd_uptime_log", uptime_till_now, message.author.username.toString()));
+        }
+    });
+
+    //test
+    isItPartOfString2(translate("cmd_test").split(";"), command).catch(function (item) {
+        if (item) {
+            removeCallMsg(message);
+            //console.log(message.author.username.toString());
+        }
+    });
 });
 
 client.login(config.credentials.token);
