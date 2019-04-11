@@ -349,7 +349,6 @@ function timeCalcMessage() {
         item = item.split(",");
         dt1 = new Date(item[1]);
         dt2 = new Date();
-        //if (timeDiffInMinutes(dt1, dt2) <= 120) {
         if (item[2]) {
             var valueToPush = {};
             valueToPush.name = item[0];
@@ -363,8 +362,6 @@ function timeCalcMessage() {
             soonArray.push(itemz);
         })
         soonArray = uniq(soonArray, JSON.stringify);
-
-        //}
     });
 }
 
@@ -430,7 +427,7 @@ client.on("ready", () => {
     });
     job1.start();
     Log(translate("cron_started", 1));
-    const job2 = new CronJob('1 0 * * *', function () {
+    const job2 = new CronJob('1 1 * * *', function () {
         timeCalcMessage();
     });
     job2.start();
