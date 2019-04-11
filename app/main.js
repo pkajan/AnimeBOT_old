@@ -182,11 +182,47 @@ function parse(str, arg) {
     return str.replace(/%s/gi, arg);
 }
 
+function sortByDays(array) {
+    var tmp = array.split("\n");
+    var Monday = [];
+    var Tuesday = [];
+    var Wednesday = [];
+    var Thursday = [];
+    var Friday = [];
+    var Saturday = [];
+    var Sunday = [];
+
+    tmp.forEach(function (item) {
+        if (item.indexOf("Monday") > -1) {
+            Monday.push(item + "\n");
+        }
+        if (item.indexOf("Tuesday") > -1) {
+            Tuesday.push(item + "\n");
+        }
+        if (item.indexOf("Wednesday") > -1) {
+            Wednesday.push(item + "\n");
+        }
+        if (item.indexOf("Thursday") > -1) {
+            Thursday.push(item + "\n");
+        }
+        if (item.indexOf("Friday") > -1) {
+            Friday.push(item + "\n");
+        }
+        if (item.indexOf("Saturday") > -1) {
+            Saturday.push(item + "\n");
+        }
+        if (item.indexOf("Sunday") > -1) {
+            Sunday.push(item + "\n");
+        }
+    });
+    var finalString = Monday.concat(Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday);// join
+    return finalString.join("\n").replace(/^\n+/gm, "");//convert to string and remove unnecesary empty lines
+}
+
 /* implement "random" into array and return rng value from given array = array.randomElement */
 Array.prototype.randomElement = function () {
     return this[Math.floor(Math.random() * this.length)]
 }
-
 /**************************************************************************/
 
 /* Discord.js based functions */
@@ -324,16 +360,16 @@ function AnimeTimer(message = null, textoutput = false) {
     todayArray = TMPtodayArray;
 
     if (zero_day.length > 1) {
-        zero_day = zero_dayHeader + zero_day;
+        zero_day = zero_dayHeader + sortByDays(zero_day);
     }
     if (one_day.length > 1) {
-        one_day = one_dayHeader + one_day;
+        one_day = one_dayHeader + sortByDays(one_day);
     }
     if (two_days.length > 1) {
-        two_days = two_daysHeader + two_days;
+        two_days = two_daysHeader + sortByDays(two_days);
     }
     if (less_than_week.length > 1) {
-        less_than_week = less_than_weekHeader + less_than_week;
+        less_than_week = less_than_weekHeader + sortByDays(less_than_week);
     }
 
     if (textoutput) {
