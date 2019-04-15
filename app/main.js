@@ -56,6 +56,7 @@ var defaultTextChannel = config.defaultTextChannel;
 var bot_name_img_chance = parseInt(config.bot_img_chance);
 fs.appendFileSync(announceFile, ""); //create empty file for announcements
 var page_protocol = https;
+var show_more_than_week = config.show_more_than_week;
 /**************************************************************************/
 
 
@@ -373,7 +374,12 @@ function AnimeTimer(message = null, textoutput = false) {
     }
 
     if (textoutput) {
-        selfDestructMSG(message, zero_day + one_day + two_days + less_than_week + oth_days, 30000, 'AnimeTable');
+        if (show_more_than_week) {
+            selfDestructMSG(message, zero_day + one_day + two_days + less_than_week + oth_days, 30000, 'AnimeTable');
+        } else {
+            selfDestructMSG(message, zero_day + one_day + two_days + less_than_week, 30000, 'AnimeTable');
+        }
+
     } else {
         /* write data into file for later use */
         data = todayArray.join(";\n");
