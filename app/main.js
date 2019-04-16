@@ -397,12 +397,10 @@ function AnimeTimer(message = null, textoutput = false) {
 function timeCalcMessage() {
     AnimeTimer(null, false);
     var todayArrayFromFile = fs.readFileSync(announceFile); // read from file
-    todayArrayFromFile = todayArrayFromFile.toString().split(";\n"); //make array again
+    todayArrayFromFile = uniqArr(todayArrayFromFile.toString().split(";\n")); //make array again
 
     todayArrayFromFile.forEach(function (item) {
         item = item.split(",");
-        dt1 = new Date(item[1]);
-        dt2 = new Date();
         if (item[2]) {
             var valueToPush = {};
             valueToPush.name = item[0];
@@ -440,7 +438,7 @@ client.on("ready", () => {
     timeCalcMessage();
 
     /* CRON1 ***********************************************************/
-    // check every 5 minutes if anime is there
+    // check every X minutes if anime is there
     const job1 = new CronJob('*/15 * * * *', function () {
         if (typeof soonArray != 'undefined') {
             soonArray.forEach(function (item) {
