@@ -479,7 +479,7 @@ client.on("ready", () => {
     });
     job1.start();
     Log(translate("cron_started", 1));
-    const job2 = new CronJob('1 1 * * *', function () {
+    const job2 = new CronJob('1 2 * * *', function () {
         timeCalcMessage();
     });
     job2.start();
