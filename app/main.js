@@ -9,6 +9,7 @@ const http = require('http');
 const fs = require('fs');
 const logFile = 'logs.txt';
 const announceFile = 'announce.json';
+const announceFileFIN = 'announceFIN.json';
 const common_learning = 'common_learning.txt';
 const start_time = Date.now();
 
@@ -25,49 +26,66 @@ Object.keys(obj).forEach(function (key) {
     }
 });
 
-/* Loading files */
+/* Loading files & other file related stuff */
 const config = require('../data/config.json'); //file with config
 const data_file = require('../data/anime.json'); //file with names and times
 const reply = require('../data/replies.json'); //bot replies
+fs.appendFileSync(announceFile, ""); //create empty file for announcements
+fs.appendFileSync(announceFileFIN, ""); //create empty file for finished announcements
 /**************************************************************************/
 
 /* CONSTs & VARs (Random vars that i will need later...or never) */
 const one_week = Number(604800000); // 7days in miliseconds (7 * 24 * 60 * 60 * 1000)
 const ms_per_day = Number(86400000); // miliseconds per day 1000 * 60 * 60 * 24;
-const timeShift = config.timeshift;
 const updCMD = 'start cmd.exe @cmd /k "git reset --hard & git fetch --all & git pull & exit';
 var todayArray;
 var soonArray = new Array();
 var soonArrays = new Array();
+var page_protocol = https;
+var LastPoliteMessage = 0;
+var LastVoiceChannelMessageJ = 0;
+var LastVoiceChannelMessageL = 0;
+
+var timeShift = config.timeshift;
+var bot_name_img_chance = parseInt(config.bot_img_chance);
+var show_more_than_week = config.show_more_than_week;
+var slice_by_chars = config.slice_name_by_chars;
+var defaultTextChannel = config.defaultTextChannel;
+
 var polite_array_day = reply.messages_day.split(";");
 var polite_array_night = reply.messages_night.split(";");
 var polite_array_hello = reply.polite_hello.split(";");
 var polite_array_bye = reply.polite_night.split(";");
 var polite_array_exceptions = reply.exceptions.split(";");
-var LastPoliteMessage = 0;
-var LastVoiceChannelMessageJ = 0;
-var LastVoiceChannelMessageL = 0;
-var slice_by_chars = config.slice_name_by_chars;
 var voice_join = reply.voice_join_msg.split(";");
 var voice_leave = reply.voice_leave_msg.split(";");
 var bot_name_txt = reply.text_replies.split(";");
 var bot_name_img = reply.image_replies.split(";");
-var defaultTextChannel = config.defaultTextChannel;
-var bot_name_img_chance = parseInt(config.bot_img_chance);
-fs.appendFileSync(announceFile, ""); //create empty file for announcements
-var page_protocol = https;
-var show_more_than_week = config.show_more_than_week;
 /**************************************************************************/
 
-
 /* FUNCTIONS */
+
+function fwASYNC(filepath, data, options = null) {
+    fs.appendFile(filepath, data, options,
+        // callback function
+        function (err) {
+            if (err) throw err;
+            // if no error
+            //console.log("[ASYNC] Data is appended to file successfully.")
+        });
+}
+
+function fwSYNC(filepath, data, options = null) {
+    fs.appendFileSync(filepath, data, options);
+    //console.log("[SYNC] Data is appended to file successfully.")
+}
 
 /* Logging - will show logs in console and write them into file (for later debugging?) */
 function Log(any_string, /**/) {
     var now = dateFormat(new Date(), "dd.mm HH:MM:ss"); // 23.03 16:46:00
     var text = `${now} [LOG] ${util.inspect(any_string)}`;
     console.log(text); // show log in console
-    fs.appendFileSync(logFile, text + "\n");// write log into file
+    fwASYNC(logFile, text + "\n");// write log into file
 }
 
 /* Translate - load translated string from json */
@@ -98,12 +116,6 @@ function dateDiffInDays(a, b) { // a and b must be Date objects
     return Math.floor((utc2 - utc1) / ms_per_day);
 }
 
-/* OUTPUT difference between two dates in minutes */
-function timeDiffInMinutes(a, b) { // a and b must be Date objects
-    var diff = ((a.getTime() - b.getTime()) / 1000) / 60; // /1000 => time in seconds
-    return Math.abs(Math.round(diff));
-}
-
 /* Return only uniq values */
 const uniq = (a, key) => {
     var seen = {};
@@ -118,17 +130,12 @@ function onlyStringArr(array) {
     return array.filter(e => typeof e === 'string' && e !== '');
 }
 
-/* return array that return only nonempty values (removes null, nan...) */
-function deNULLArr(array) {
-    return array.filter(Boolean);
-}
-
 /* return array that contain only uniq nonempty values */
 function uniqArr(array) {
     var filteredArray = array.filter(function (item, pos) {
         return array.indexOf(item) == pos;
     });
-    return deNULLArr(filteredArray);
+    return filteredArray.filter(Boolean);
 }
 
 /* "waiting" function */
@@ -141,12 +148,11 @@ function deunicode(any_string) {
     return any_string.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
 }
 
-/* ASYNC!!! will return if part of given string is somewhere in array */
+/* will return Boolean value if part of given string is somewhere in given array */
 async function isItPartOfString(any_array, any_string) {
     var ImBoolean = false;
     any_array.forEach(function (item) {
         if ((any_string.match(item))) {
-            //console.log(any_string.match(item));
             ImBoolean = true;
         }
     });
@@ -164,7 +170,6 @@ async function isItPartOfString2(any_array, any_string) {
     throw ImBoolean;
 }
 
-
 /* Check if user has RIGHTs */
 function hasRights(userID) {
     var admins = config.adminIDs.split(";");
@@ -173,6 +178,7 @@ function hasRights(userID) {
     }
     return false;
 }
+
 /* return random numbers from 0 (zero) to MAX */
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
@@ -249,12 +255,6 @@ function selfDestructMSGID(channelID, MSGText, time, user = null, cmd_name) {
     Log(translate("BOT_send_selfdestructid", user, cmd_name));
 }
 
-/* Send message into given channel */
-function sendMSGID(channelID, MSGText) {
-    client.channels.get(channelID).send(MSGText);
-    Log(translate("BOT_send_specific"));
-}
-
 /* Send message to all servers (guilds) bot is in */
 function SendtoAllGuilds(text, picture = null) {
     try {
@@ -262,23 +262,19 @@ function SendtoAllGuilds(text, picture = null) {
         client.guilds.map((guild) => {
             let found = 0
             guild.channels.map((c) => {
-                if (found === 0) {
-                    if (c.type === "text") {
-                        if (c.permissionsFor(client.user).has("VIEW_CHANNEL") === true) {
-                            if (c.permissionsFor(client.user).has("SEND_MESSAGES") === true) {
-                                if (picture) {
-                                    c.send(toSay, {
-                                        files: [
-                                            picture
-                                        ]
-                                    });
-                                } else {
-                                    c.send(toSay);
-                                }
-                                found = 1;
-                            }
-                        }
+                if (found === 0 & c.type === "text" &
+                    c.permissionsFor(client.user).has("VIEW_CHANNEL") === true &
+                    c.permissionsFor(client.user).has("SEND_MESSAGES") === true) {
+                    if (picture) {
+                        c.send(toSay, {
+                            files: [
+                                picture
+                            ]
+                        });
+                    } else {
+                        c.send(toSay);
                     }
+                    found = 1;
                 }
             });
         });
@@ -289,10 +285,9 @@ function SendtoAllGuilds(text, picture = null) {
     }
 }
 
-/* WALL OF CODE */
+/* EVERYTHING */
 function AnimeTimer(message = null, textoutput = false) {
-    var anime = data_file;
-    var obj = anime;
+    var obj = data_file; //anime
     var zero_dayHeader = "```fix\nToday:```\n";
     var zero_day = "";
     var one_dayHeader = "\n```fix\nOne Day:```\n";
@@ -439,7 +434,7 @@ client.on("ready", () => {
 
     /* CRON1 ***********************************************************/
     // check every X minutes if anime is there
-    const job1 = new CronJob('*/15 * * * *', function () {
+    const job1 = new CronJob('*/1 * * * *', function () {
         if (typeof soonArray != 'undefined') {
             soonArray.forEach(function (item) {
                 if (item.url) {
@@ -462,10 +457,14 @@ client.on("ready", () => {
                             var newvalue = data.replace(regexx, "");
                             fs.writeFileSync(announceFile, newvalue);
                             ////////////////////////////////////////////////////
-                            if (item.picture) {
-                                SendtoAllGuilds(messages, item.picture);
-                            } else {
-                                SendtoAllGuilds(messages);
+                            var alreadyDONE = fs.readFileSync(announceFileFIN).toString();
+                            if (alreadyDONE.indexOf(item.url) == -1) {
+                                if (item.picture) {
+                                    SendtoAllGuilds(messages, item.picture);
+                                } else {
+                                    SendtoAllGuilds(messages);
+                                }
+                                fwASYNC(announceFileFIN, messages.replace("\n", "").replace("\r", ""));
                             }
                         } else {
                             Log(translate("BOT_cron_link_no", item.name, item.url));
@@ -619,135 +618,6 @@ client.on("message", async message => {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
-    /*
-    if (command === translate("cmd_say")) {
-        removeCallMsg(message);
-        if (hasRights(message.author.id)) {
-            if (args.length > 0) {
-                const sayMessage = args.join(" ");
-                // And we get the bot to say the thing:
-                message.channel.send(sayMessage);
-                Log(translate("cmd_say_msg", sayMessage, message.author.username.toString()));
-            } else {
-                message.channel.send(translate("cmd_say_empty", config.prefix));
-                Log(translate("cmd_say_msg_log", message.author.username.toString()));
-            }
-        } else {
-            message.channel.send(translate("cmd_say_noOwner"));
-            Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
-        }
-    }
-
-    if (command === translate("cmd_spam")) {
-        removeCallMsg(message);
-        if (hasRights(message.author.id)) {
-            if (args[0]) {
-                for (i = args[0]; i > 0; i--) {
-                    message.channel.send(translate("SPAM") + i);
-                }
-                Log(translate("cmd_spam_msg", args[0], message.author.username.toString()));
-            }
-            Log(translate("cmd_spam_msg_empty", args[0], message.author.username.toString()));
-        } else {
-            message.channel.send(translate("cmd_say_noOwner"));
-            Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
-        }
-    }
-
-    if (command === translate("cmd_info")) {
-        removeCallMsg(message);
-        AnimeTimer(message, true);
-    }
-
-    if (command === translate("cmd_update")) {
-        if (hasRights(message.author.id)) {
-            removeCallMsg(message);
-            selfDestructMSG(message, translate("cmd_update_msg", translate("cmd_update")), 4000);
-            Log(translate("cmd_update_msg_log", message.author.username.toString()));
-            const { exec } = require('child_process');
-            exec(updCMD, (err, stdout, stderr) => {
-                if (err) {
-                    Log(err);
-                    return;
-                }
-                Log(stdout);
-            });
-        }
-    }
-
-    if (command === translate("cmd_status")) {
-        removeCallMsg(message);
-        var status_type = args[0];
-        args.splice(0, 1);
-        var status_name = args.join(" ");
-
-        if (hasRights(message.author.id)) {
-            client.user.setPresence({
-                game: {
-                    name: status_name,
-                    type: status_type
-                }
-            }).then(presence => Log(translate("BOT_set_activity", status_type, status_name)))
-                .catch(console.error);
-        } else {
-            message.channel.send(translate("cmd_say_noOwner"));
-            Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
-        }
-    }
-
-    if (command === translate("cmd_scream")) {
-        if (hasRights(message.author.id)) {
-            removeCallMsg(message);
-            var voiceChannel = null;
-            //if argument is name of channel find ID and set it
-            if (args.length > 0) {
-                voiceChannel = message.guild.channels.find(channel => channel.name === args.join(" "));
-            }
-            //if channel is not set, join invoker channel
-            if (voiceChannel == null) {
-                voiceChannel = message.member.voiceChannel;
-            }
-            //if invoker is not on voice channel just throw error
-            if (voiceChannel == null) {
-                selfDestructMSG(message, translate("cmd_scream_no"), 4000);
-                Log(translate("cmd_scream_log_no", message.author.username.toString(), translate("cmd_scream")));
-                return;
-            }
-            voiceChannel.join().then(connection => {
-                const dispatcher = connection.playFile('./audio/scream.mp3');
-                dispatcher.on("end", end => {
-                    voiceChannel.leave();
-                });
-            }).catch(err => console.log(err));
-            Log(translate("cmd_scream_log", message.author.username.toString(), translate("cmd_scream")));
-        }
-    }
-
-    if (command === translate("cmd_log")) {
-        removeCallMsg(message);
-        if (hasRights(message.author.id)) {
-            message.channel.send(translate("cmd_log_msg"), {
-                files: [
-                    `./${logFile}`
-                ]
-            });
-            Log(translate("cmd_log_log", message.author.username.toString()));
-        }
-    }
-
-    if (command === translate("cmd_uptime")) {
-        removeCallMsg(message);
-        var uptime_till_now = ((Date.now() - start_time) / 1000 / 60).toFixed(2); //convert time to minutes
-        message.channel.send(translate("cmd_uptime_msg", uptime_till_now));
-        Log(translate("cmd_uptime_log", uptime_till_now, message.author.username.toString()));
-    }
-
-
-    if (command === translate("cmd_test")) {
-        removeCallMsg(message);
-        //console.log(message.author.username.toString());
-    }
-*/
     /* async commands */
     // bot repeat posted message and delete original one
     isItPartOfString2(translate("cmd_say").split(";"), command).catch(function (item) {
@@ -763,25 +633,6 @@ client.on("message", async message => {
                     message.channel.send(translate("cmd_say_empty", config.prefix));
                     Log(translate("cmd_say_msg_log", message.author.username.toString()));
                 }
-            } else {
-                message.channel.send(translate("cmd_say_noOwner"));
-                Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
-            }
-        }
-    });
-
-    //will spam channel X times (to test latency or some shi...)
-    isItPartOfString2(translate("cmd_spam").split(";"), command).catch(function (item) {
-        if (item) {
-            removeCallMsg(message);
-            if (hasRights(message.author.id)) {
-                if (args[0]) {
-                    for (i = args[0]; i > 0; i--) {
-                        message.channel.send(translate("SPAM") + i);
-                    }
-                    Log(translate("cmd_spam_msg", args[0], message.author.username.toString()));
-                }
-                Log(translate("cmd_spam_msg_empty", args[0], message.author.username.toString()));
             } else {
                 message.channel.send(translate("cmd_say_noOwner"));
                 Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
@@ -835,37 +686,6 @@ client.on("message", async message => {
             } else {
                 message.channel.send(translate("cmd_say_noOwner"));
                 Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
-            }
-        }
-    });
-
-    // screem in voice channel (in channel you are currently on chosen channel (case sensitive!!))
-    isItPartOfString2(translate("cmd_scream").split(";"), command).catch(function (item) {
-        if (item) {
-            if (hasRights(message.author.id)) {
-                removeCallMsg(message);
-                var voiceChannel = null;
-                //if argument is name of channel find ID and set it
-                if (args.length > 0) {
-                    voiceChannel = message.guild.channels.find(channel => channel.name === args.join(" "));
-                }
-                //if channel is not set, join invoker channel
-                if (voiceChannel == null) {
-                    voiceChannel = message.member.voiceChannel;
-                }
-                //if invoker is not on voice channel just throw error
-                if (voiceChannel == null) {
-                    selfDestructMSG(message, translate("cmd_scream_no"), 4000);
-                    Log(translate("cmd_scream_log_no", message.author.username.toString(), translate("cmd_scream")));
-                    return;
-                }
-                voiceChannel.join().then(connection => {
-                    const dispatcher = connection.playFile('./audio/scream.mp3');
-                    dispatcher.on("end", end => {
-                        voiceChannel.leave();
-                    });
-                }).catch(err => console.log(err));
-                Log(translate("cmd_scream_log", message.author.username.toString(), translate("cmd_scream")));
             }
         }
     });
