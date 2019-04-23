@@ -7,10 +7,10 @@ const client = new Discord.Client();
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
-const logFile = 'logs.txt';
-const announceFile = 'announce.json';
-const announceFileFIN = 'announceFIN.json';
-const common_learning = 'common_learning.txt';
+const logFile = "logs.txt";
+const announceFile = "announce.json";
+const announceFileFIN = "announceFIN.json";
+const common_learning = "common_learning.txt";
 const start_time = Date.now();
 
 /**************************************************************************/
@@ -37,7 +37,7 @@ fs.appendFileSync(announceFileFIN, ""); //create empty file for finished announc
 /* CONSTs & VARs (Random vars that i will need later...or never) */
 const one_week = Number(604800000); // 7days in miliseconds (7 * 24 * 60 * 60 * 1000)
 const ms_per_day = Number(86400000); // miliseconds per day 1000 * 60 * 60 * 24;
-const updCMD = 'start cmd.exe @cmd /k "git reset --hard & git fetch --all & git pull & exit';
+const updCMD = "start cmd.exe @cmd /k \"git reset --hard & git fetch --all & git pull & exit\"";
 var todayArray;
 var soonArray = new Array();
 var soonArrays = new Array();
@@ -69,15 +69,12 @@ function fwASYNC(filepath, data, options = null) {
     fs.appendFile(filepath, data, options,
         // callback function
         function (err) {
-            if (err) throw err;
-            // if no error
-            //console.log("[ASYNC] Data is appended to file successfully.")
+            if (err) { throw err; }
         });
 }
 
 function fwSYNC(filepath, data, options = null) {
     fs.appendFileSync(filepath, data, options);
-    //console.log("[SYNC] Data is appended to file successfully.")
 }
 
 /* Logging - will show logs in console and write them into file (for later debugging?) */
@@ -127,7 +124,7 @@ const uniq = (a, key) => {
 
 /* return array that contain only nonempty strings */
 function onlyStringArr(array) {
-    return array.filter(e => typeof e === 'string' && e !== '');
+    return array.filter(e => typeof e === "string" && e !== "");
 }
 
 /* return array that contain only uniq nonempty values */
@@ -236,13 +233,13 @@ Array.prototype.randomElement = function () {
 
 /* Remove invoking message */
 function removeCallMsg(message) {
-    message.delete().catch(error => Log(error));
+    message.delete().catch(error => Log(translate("BOT_removeCallMsg_err")));
 }
 
 /* Send and remove message in X seconds */
 function selfDestructMSG(message, MSGText, time, cmd_name) {
     message.channel.send(MSGText).then(sentMessage => {
-        sentMessage.delete(time).catch(error => Log(error));
+        sentMessage.delete(time).catch(error => Log(translate("BOT_send_selfdestruct_err")));
     });
     Log(translate("BOT_send_selfdestruct", message.author.username.toString(), cmd_name));
 }
@@ -250,7 +247,7 @@ function selfDestructMSG(message, MSGText, time, cmd_name) {
 /* Send and remove message in X seconds (from given channel)*/
 function selfDestructMSGID(channelID, MSGText, time, user = null, cmd_name) {
     client.channels.get(channelID).send(MSGText).then(sentMessage => {
-        sentMessage.delete(time).catch(error => Log(error));
+        sentMessage.delete(time).catch(error => Log(translate("BOT_send_selfdestruct_err")));
     });
     Log(translate("BOT_send_selfdestructid", user, cmd_name));
 }
@@ -300,7 +297,7 @@ function AnimeTimer(message = null, textoutput = false) {
 
     var anime_in_array = [];
     var TMPtodayArray = [];
-    for (i in obj) {
+    for (var i in obj) {
         var valueToPush = {};
         valueToPush.name = i;
         valueToPush.year = obj[i]["year"];
@@ -370,9 +367,9 @@ function AnimeTimer(message = null, textoutput = false) {
 
     if (textoutput) {
         if (show_more_than_week) {
-            selfDestructMSG(message, zero_day + one_day + two_days + less_than_week + oth_days, 30000, 'AnimeTable');
+            selfDestructMSG(message, zero_day + one_day + two_days + less_than_week + oth_days, 30000, "AnimeTable");
         } else {
-            selfDestructMSG(message, zero_day + one_day + two_days + less_than_week, 30000, 'AnimeTable');
+            selfDestructMSG(message, zero_day + one_day + two_days + less_than_week, 30000, "AnimeTable");
         }
 
     } else {
@@ -429,16 +426,16 @@ client.on("ready", () => {
     }).then(presence => Log(translate("BOT_set_activity", config.activityType, config.activityName)))
         .catch(console.error);
 
-    //recalculate timers    
+    //recalculate timers
     timeCalcMessage();
 
     /* CRON1 ***********************************************************/
     // check every X minutes if anime is there
-    const job1 = new CronJob('*/15 * * * *', function () {
-        if (typeof soonArray != 'undefined') {
+    const job1 = new CronJob("*/15 * * * *", function () {
+        if (typeof soonArray != "undefined") {
             soonArray.forEach(function (item) {
                 if (item.url) {
-                    if (item.url.substring(0, 5) != 'https') {
+                    if (item.url.substring(0, 5) != "https") {
                         page_protocol = http; // if protocol is not https, change it to http
                     } else {
                         page_protocol = https;
@@ -469,8 +466,8 @@ client.on("ready", () => {
                         } else {
                             Log(translate("BOT_cron_link_no", item.name, item.url));
                         }
-                    }).on('error', (e) => {
-                        console.error(e);
+                    }).on("error", (e) => {
+                        Log("[CRON] " + e);
                     });
                 }
             });
@@ -478,7 +475,7 @@ client.on("ready", () => {
     });
     job1.start();
     Log(translate("cron_started", 1));
-    const job2 = new CronJob('1 2 * * *', function () {
+    const job2 = new CronJob("1 0 * * *", function () {
         timeCalcMessage();
     });
     job2.start();
@@ -502,11 +499,11 @@ client.on("error", (e) => {
     Log(e);
     sleep(5000);
     const execSync = require('child_process').execSync;
-    execSync('start cmd.exe @cmd /k "run_bot.cmd"');
+    execSync("start cmd.exe @cmd /k \"run_bot.cmd\"");
 });
 
 /* Triggered when user join/leave voice channel */
-client.on('voiceStateUpdate', (oldMember, newMember) => {
+client.on("voiceStateUpdate", (oldMember, newMember) => {
     let newUserChannel = newMember.voiceChannel;
     let oldUserChannel = oldMember.voiceChannel;
 
@@ -515,14 +512,14 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
             // User Joins a voice channel
             if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageJ)) > 60000 && Boolean(getRandomInt(2)) == true) { //prevent spamming on join/leave!!
                 LastVoiceChannelMessageJ = new Date().getTime();
-                selfDestructMSGID(defaultTextChannel, translate("voice_join", voice_join.randomElement()), 20000, newMember.user.username.toString(), 'userJoinVoice');//send message and remove if after X seconds
+                selfDestructMSGID(defaultTextChannel, translate("voice_join", voice_join.randomElement()), 20000, newMember.user.username.toString(), "userJoinVoice");//send message and remove if after X seconds
             }
             Log(translate("voice_join_log", newMember.user.username.toString()));
         } else if (newUserChannel === undefined) {
             // User leaves a voice channel
             if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageL)) > 60000 && Boolean(getRandomInt(2)) == true) { //prevent spamming on join/leave!!
                 LastVoiceChannelMessageL = new Date().getTime();
-                selfDestructMSGID(defaultTextChannel, translate("voice_leave", voice_leave.randomElement()), 20000, oldMember.user.username.toString(), 'userLeaveVoice');//send message and remove if after X seconds
+                selfDestructMSGID(defaultTextChannel, translate("voice_leave", voice_leave.randomElement()), 20000, oldMember.user.username.toString(), "userLeaveVoice");//send message and remove if after X seconds
             }
             Log(translate("voice_leave_log", oldMember.user.username.toString()));
         }
