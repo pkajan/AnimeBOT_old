@@ -461,7 +461,7 @@ client.on("ready", () => {
                                 } else {
                                     SendtoAllGuilds(messages);
                                 }
-                                fwASYNC(announceFileFIN, messages.replace("\n", "").replace("\r", ""));
+                                fwASYNC(announceFileFIN, item.url + " \n");
                             }
                         } else {
                             Log(translate("BOT_cron_link_no", item.name, item.url));
