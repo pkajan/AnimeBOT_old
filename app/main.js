@@ -313,6 +313,9 @@ function AnimeTimer(message = null, textoutput = false) {
         if (obj[i]["picture"]) {
             valueToPush.picture = obj[i]["picture"];
         }
+        if (obj[i]["checkTo"]) {
+            valueToPush.checkTo = obj[i]["checkTo"];
+        }
         anime_in_array.push(valueToPush);
     }
 
@@ -331,7 +334,8 @@ function AnimeTimer(message = null, textoutput = false) {
                     case (difference == 0):
                         zero_day = zero_day + cd_text;
                         if (item.link) {
-                            TMPtodayArray.push([item.name, CDNext.getTime(), parse(item.link, parseInt(item.starting_episode) + parseInt(weeks)), item.picture]);
+                            var eps = parseInt(item.starting_episode) + parseInt(weeks);
+                            TMPtodayArray.push([item.name, CDNext.getTime(), parse(item.link, eps), item.picture, parse(item.checkTo, eps)]);
                             Log(translate("upcoming_check", item.name, parse(item.link, parseInt(item.starting_episode) + parseInt(weeks))));
                         }
                         break;
@@ -399,6 +403,7 @@ function timeCalcMessage() {
             valueToPush.time = item[1];
             valueToPush.url = item[2];
             valueToPush.picture = item[3];
+            valueToPush.checkTo = item[4];
             soonArrays.push(valueToPush);
             valueToPush = {};
         }
@@ -434,42 +439,48 @@ client.on("ready", () => {
     const job1 = new CronJob("*/15 * * * *", function () {
         if (typeof soonArray != "undefined") {
             soonArray.forEach(function (item) {
-                if (item.url) {
-                    if (item.url.substring(0, 5) != "https") {
-                        page_protocol = http; // if protocol is not https, change it to http
-                    } else {
-                        page_protocol = https;
-                    }
-                    page_protocol.get(item.url, (res) => {
-                        if (res.statusCode == 200) { // 200 means page exist
-                            Log(translate("BOT_cron_link_yes", item.url));
-                            var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>`;
-                            var index = soonArray.indexOf(item);
-                            Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
-                            delete soonArray[index];
-                            ///////////////////////////////////////////////////
-                            var str_name = `^(` + item.name + `).*`;
-                            var regexx = new RegExp(str_name, "igm");
-                            var data = fs.readFileSync(announceFile).toString();
-                            var newvalue = data.replace(regexx, "");
-                            fs.writeFileSync(announceFile, newvalue);
-                            ////////////////////////////////////////////////////
-                            var alreadyDONE = fs.readFileSync(announceFileFIN).toString();
-                            if (alreadyDONE.indexOf(item.url) == -1) {
-                                if (item.picture) {
-                                    SendtoAllGuilds(messages, item.picture);
-                                } else {
-                                    SendtoAllGuilds(messages);
-                                }
-                                fwASYNC(announceFileFIN, item.url + " \n");
-                            }
-                        } else {
-                            Log(translate("BOT_cron_link_no", item.name, item.url));
-                        }
-                    }).on("error", (e) => {
-                        Log("[CRON] " + e);
-                    });
+                var tmpCHECKVAR = null;
+                if (typeof (item.checkTo) == 'string') {
+                    tmpCHECKVAR = item.checkTo;
+                } else {
+                    tmpCHECKVAR = item.url;
                 }
+
+                if (tmpCHECKVAR.substring(0, 5) != "https") {
+                    page_protocol = http; // if protocol is not https, change it to http
+                } else {
+                    page_protocol = https;
+                }
+                page_protocol.get(tmpCHECKVAR, (res) => {
+                    if (res.statusCode == 200) { // 200 means page exist
+                        Log(translate("BOT_cron_link_yes", tmpCHECKVAR));
+                        var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>`;
+                        var index = soonArray.indexOf(item);
+                        Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
+                        delete soonArray[index];
+                        ///////////////////////////////////////////////////
+                        var str_name = `^(` + item.name + `).*`;
+                        var regexx = new RegExp(str_name, "igm");
+                        var data = fs.readFileSync(announceFile).toString();
+                        var newvalue = data.replace(regexx, "");
+                        fs.writeFileSync(announceFile, newvalue);
+                        ////////////////////////////////////////////////////
+                        var alreadyDONE = fs.readFileSync(announceFileFIN).toString();
+                        if (alreadyDONE.indexOf(item.url) == -1) {
+                            if (item.picture) {
+                                SendtoAllGuilds(messages, item.picture);
+                            } else {
+                                SendtoAllGuilds(messages);
+                            }
+                            fwASYNC(announceFileFIN, item.url + " \n");
+                        }
+                    } else {
+                        Log(translate("BOT_cron_link_no", item.name, item.url));
+                    }
+                }).on("error", (e) => {
+                    Log("[CRON] " + e);
+                });
+
             });
         }
     });
