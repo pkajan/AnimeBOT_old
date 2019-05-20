@@ -9,6 +9,7 @@
         "_skipped_episodes": "1",
         "_last_episode": "24",
         "link": "URL_string_where___%s___represent_episode_number",
+        "checkTo": "URL_string_where___%s___represent_episode_number",
         "picture": "https://my_cover_image.jpg"
     },
     "ANIME TWO": {
@@ -20,7 +21,8 @@
         "_starting_episode": "1",
         "_skipped_episodes": "0",
         "_last_episode": "9999",
-        "link": "http://www.animexd.me/watch/dororo_episode-%s-online",
+        "link": "https://twist.moe/a/dororo-2019/%s",
+        "checkTo": "http://www.animexd.me/watch/dororo_episode-%s-online",
         "picture": "https://mypowerfullhosting.eu/Dororo.jpg"
     }
 }
