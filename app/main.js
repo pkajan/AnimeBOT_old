@@ -47,6 +47,7 @@ var LastVoiceChannelMessageJ = 0;
 var LastVoiceChannelMessageL = 0;
 
 var timeShift = config.timeshift;
+var checkXminutes = config.checkXminutes;
 var bot_name_img_chance = parseInt(config.bot_img_chance);
 var show_more_than_week = config.show_more_than_week;
 var slice_by_chars = config.slice_name_by_chars;
@@ -436,7 +437,7 @@ client.on("ready", () => {
 
     /* CRON1 ***********************************************************/
     // check every X minutes if anime is there
-    const job1 = new CronJob("*/15 * * * *", function () {
+    const job1 = new CronJob(`*/${checkXminutes} * * * *`, function () {
         if (typeof soonArray != "undefined") {
             soonArray.forEach(function (item) {
                 var tmpCHECKVAR = null;

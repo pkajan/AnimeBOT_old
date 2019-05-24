@@ -14,5 +14,6 @@
     "polite": true,
     "slice_name_by_chars": "2",
     "bot_img_chance": "5",
-    "show_more_than_week": true
+    "show_more_than_week": true,
+    "checkXminutes": "60"
 }
