@@ -336,7 +336,11 @@ function AnimeTimer(message = null, textoutput = false) {
                         zero_day = zero_day + cd_text;
                         if (item.link) {
                             var eps = parseInt(item.starting_episode) + parseInt(weeks);
-                            TMPtodayArray.push([item.name, CDNext.getTime(), parse(item.link, eps), item.picture, parse(item.checkTo, eps)]);
+                            if (item.checkTo) {
+                                TMPtodayArray.push([item.name, CDNext.getTime(), parse(item.link, eps), item.picture, parse(item.checkTo, eps)]);
+                            } else {
+                                TMPtodayArray.push([item.name, CDNext.getTime(), parse(item.link, eps), item.picture, parse(item.link, eps)]);
+                            }
                             Log(translate("upcoming_check", item.name, parse(item.link, parseInt(item.starting_episode) + parseInt(weeks))));
                         }
                         break;
@@ -455,7 +459,12 @@ client.on("ready", () => {
                 page_protocol.get(tmpCHECKVAR, (res) => {
                     if (res.statusCode == 200) { // 200 means page exist
                         Log(translate("BOT_cron_link_yes", tmpCHECKVAR));
-                        var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>`;
+                        if (item.url == tmpCHECKVAR) {
+                            console.log(item.url + `\n` + tmpCHECKVAR);
+                            var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>\n`;
+                        } else {
+                            var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>\n` + `or\n<${tmpCHECKVAR}>\n`;
+                        }
                         var index = soonArray.indexOf(item);
                         Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
                         delete soonArray[index];
