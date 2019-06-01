@@ -476,7 +476,7 @@ client.on("ready", () => {
                             fwASYNC(announceFileFIN, item.url + " \n");
                         }
                     } else {
-                        Log(translate("BOT_cron_link_no", item.name, item.url));
+                        Log(translate("BOT_cron_link_no", item.name, item.url, tmpCHECKVAR));
                     }
                 }).on("error", (e) => {
                     Log("[CRON] " + e);
