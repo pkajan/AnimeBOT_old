@@ -618,6 +618,9 @@ client.on("message", async message => {
                     if (err) throw err;
                     var array = onlyStringArr(uniqArr(data.toString().split("\n")));
                     var repl_txt = parse(array.randomElement(), message.author.username.toString());
+                    if (Boolean(getRandomInt(2)) == true) { //sometimes post learned message without mentioning username
+                        repl_txt = parse(array.randomElement(), "");
+                    }
                     message.channel.send(translate("bot_name", repl_txt));
                     Log(translate("bot_name_learning_log", message.author.username.toString()));
                 });
