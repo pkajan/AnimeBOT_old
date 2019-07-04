@@ -748,10 +748,26 @@ client.on("message", async message => {
             removeCallMsg(message);
             selfDestructMSG(message, translate("cmd_forcecheck_msg"), 4000);
             CheckAnimeOnNet();
-            Log(translate("cmd_forcecheck_log", uptime_till_now, message.author.username.toString()));
+            Log(translate("cmd_forcecheck_log", message.author.username.toString()));
         }
     });
 
+    // HELP
+    isItPartOfString2(translate("cmd_help").split(";"), command).catch(function (item) {
+        if (item) {
+            removeCallMsg(message);
+            var available_commands = "\n**Says something**: " + translate("cmd_say").split(";");
+            available_commands += "\n**Post current list**: " + translate("cmd_info").split(";");
+            available_commands += "\n**Download update from github**: " + translate("cmd_update").split(";");
+            available_commands += "\n**Change status**: " + translate("cmd_status").split(";");
+            available_commands += "\n**Show uptime**: " + translate("cmd_uptime").split(";");
+            available_commands += "\n**Force chceck**: " + translate("cmd_forcecheck").split(";");
+
+            selfDestructMSG(message, translate("cmd_help_msg", available_commands), 10000);
+
+            Log(translate("cmd_help_log", message.author.username.toString()));
+        }
+    });
     //test
     isItPartOfString2(translate("cmd_test").split(";"), command).catch(function (item) {
         if (item) {
