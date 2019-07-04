@@ -419,6 +419,61 @@ function timeCalcMessage() {
     });
 }
 
+/* check "today" animes for existance */
+function CheckAnimeOnNet() {
+    if (typeof soonArray != "undefined") {
+        soonArray.forEach(function (item) {
+            var tmpCHECKVAR = null;
+            if (typeof (item.checkTo) == 'string') {
+                tmpCHECKVAR = item.checkTo;
+            } else {
+                tmpCHECKVAR = item.url;
+            }
+
+            if (tmpCHECKVAR.substring(0, 5) != "https") {
+                page_protocol = http; // if protocol is not https, change it to http
+            } else {
+                page_protocol = https;
+            }
+            page_protocol.get(tmpCHECKVAR, (res) => {
+                if (res.statusCode == 200) { // 200 means page exist
+                    Log(translate("BOT_cron_link_yes", tmpCHECKVAR));
+                    if (item.url == tmpCHECKVAR) {
+                        console.log(item.url + `\n` + tmpCHECKVAR);
+                        var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>\n`;
+                    } else {
+                        var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>\n` + `or\n<${tmpCHECKVAR}>\n`;
+                    }
+                    var index = soonArray.indexOf(item);
+                    Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
+                    delete soonArray[index];
+                    ///////////////////////////////////////////////////
+                    var str_name = `^(` + item.name + `).*`;
+                    var regexx = new RegExp(str_name, "igm");
+                    var data = fs.readFileSync(announceFile).toString();
+                    var newvalue = data.replace(regexx, "");
+                    fs.writeFileSync(announceFile, newvalue);
+                    ////////////////////////////////////////////////////
+                    var alreadyDONE = fs.readFileSync(announceFileFIN).toString();
+                    if (alreadyDONE.indexOf(item.url) == -1) {
+                        if (item.picture) {
+                            SendtoAllGuilds(messages, item.picture);
+                        } else {
+                            SendtoAllGuilds(messages);
+                        }
+                        fwASYNC(announceFileFIN, item.url + " \n");
+                    }
+                } else {
+                    Log(translate("BOT_cron_link_no", item.name, item.url, tmpCHECKVAR));
+                }
+            }).on("error", (e) => {
+                Log("[CRON] " + e);
+            });
+
+        });
+    }
+}
+
 /**************************************************************************/
 
 /* STARTUP THINGS */
@@ -442,57 +497,7 @@ client.on("ready", () => {
     /* CRON1 ***********************************************************/
     // check every X minutes if anime is there
     const job1 = new CronJob(`*/${checkXminutes} * * * *`, function () {
-        if (typeof soonArray != "undefined") {
-            soonArray.forEach(function (item) {
-                var tmpCHECKVAR = null;
-                if (typeof (item.checkTo) == 'string') {
-                    tmpCHECKVAR = item.checkTo;
-                } else {
-                    tmpCHECKVAR = item.url;
-                }
-
-                if (tmpCHECKVAR.substring(0, 5) != "https") {
-                    page_protocol = http; // if protocol is not https, change it to http
-                } else {
-                    page_protocol = https;
-                }
-                page_protocol.get(tmpCHECKVAR, (res) => {
-                    if (res.statusCode == 200) { // 200 means page exist
-                        Log(translate("BOT_cron_link_yes", tmpCHECKVAR));
-                        if (item.url == tmpCHECKVAR) {
-                            console.log(item.url + `\n` + tmpCHECKVAR);
-                            var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>\n`;
-                        } else {
-                            var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>\n` + `or\n<${tmpCHECKVAR}>\n`;
-                        }
-                        var index = soonArray.indexOf(item);
-                        Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
-                        delete soonArray[index];
-                        ///////////////////////////////////////////////////
-                        var str_name = `^(` + item.name + `).*`;
-                        var regexx = new RegExp(str_name, "igm");
-                        var data = fs.readFileSync(announceFile).toString();
-                        var newvalue = data.replace(regexx, "");
-                        fs.writeFileSync(announceFile, newvalue);
-                        ////////////////////////////////////////////////////
-                        var alreadyDONE = fs.readFileSync(announceFileFIN).toString();
-                        if (alreadyDONE.indexOf(item.url) == -1) {
-                            if (item.picture) {
-                                SendtoAllGuilds(messages, item.picture);
-                            } else {
-                                SendtoAllGuilds(messages);
-                            }
-                            fwASYNC(announceFileFIN, item.url + " \n");
-                        }
-                    } else {
-                        Log(translate("BOT_cron_link_no", item.name, item.url, tmpCHECKVAR));
-                    }
-                }).on("error", (e) => {
-                    Log("[CRON] " + e);
-                });
-
-            });
-        }
+        CheckAnimeOnNet();
     });
     job1.start();
     Log(translate("cron_started", 1));
@@ -734,6 +739,16 @@ client.on("message", async message => {
             var uptime_till_now = ((Date.now() - start_time) / 1000 / 60).toFixed(2); //convert time to minutes
             message.channel.send(translate("cmd_uptime_msg", uptime_till_now));
             Log(translate("cmd_uptime_log", uptime_till_now, message.author.username.toString()));
+        }
+    });
+
+    // force check today anime existance on server
+    isItPartOfString2(translate("cmd_forcecheck").split(";"), command).catch(function (item) {
+        if (item) {
+            removeCallMsg(message);
+            selfDestructMSG(message, translate("cmd_forcecheck_msg"), 4000);
+            CheckAnimeOnNet();
+            Log(translate("cmd_forcecheck_log", uptime_till_now, message.author.username.toString()));
         }
     });
 
