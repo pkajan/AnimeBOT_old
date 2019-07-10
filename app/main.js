@@ -734,11 +734,26 @@ client.on("message", async message => {
     // show bot uptime
     isItPartOfString2(translate("cmd_uptime").split(";"), command).catch(function (item) {
         if (item) {
-            console.log(translate("cmd_uptime").split(";"));
             removeCallMsg(message);
-            var uptime_till_now = ((Date.now() - start_time) / 1000 / 60).toFixed(2); //convert time to minutes
-            message.channel.send(translate("cmd_uptime_msg", uptime_till_now));
-            Log(translate("cmd_uptime_log", uptime_till_now, message.author.username.toString()));
+            var uptime_m = ((Date.now() - start_time) / 1000 / 60).toFixed(2); //convert time to minutes
+            var uptime_h = 0;
+            var uptime_d = 0;
+            do {
+                if (uptime_m > 1440) { // 24*60 = 1440 (one day is 1440min)
+                    uptime_d++;
+                    uptime_m = uptime_m - 1440;
+                }
+            } while (uptime_m >= 1440);
+
+            do {
+                if (uptime_m > 60) { // 1h is 60min
+                    uptime_h++;
+                    uptime_m = uptime_m - 60;
+                }
+            }
+            while (uptime_m >= 60);
+            message.channel.send(translate("cmd_uptime_msg", uptime_d, uptime_h, uptime_m));
+            Log(translate("cmd_uptime_log", uptime_d, uptime_h, uptime_m, message.author.username.toString()));
         }
     });
 
