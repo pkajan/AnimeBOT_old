@@ -7,6 +7,7 @@ const client = new Discord.Client();
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
+const path = require('path');
 const logFile = "logs.txt";
 const announceFile = "announce.json";
 const announceFileFIN = "announceFIN.json";
@@ -62,6 +63,14 @@ var voice_join = reply.voice_join_msg.split(";");
 var voice_leave = reply.voice_leave_msg.split(";");
 var bot_name_txt = reply.text_replies.split(";");
 var bot_name_img = reply.image_replies.split(";");
+var pathToImages = "images";
+var imagesInFolder = [];
+fs.readdir(pathToImages, function (err, items) {
+    for (var i = 0; i < items.length; i++) {
+        var file = pathToImages + '/' + items[i];
+        imagesInFolder.push(file);
+    }
+});
 /**************************************************************************/
 
 /* FUNCTIONS */
@@ -228,6 +237,7 @@ function sortByDays(array) {
 Array.prototype.randomElement = function () {
     return this[Math.floor(Math.random() * this.length)]
 }
+
 /**************************************************************************/
 
 /* Discord.js based functions */
@@ -613,11 +623,19 @@ client.on("message", async message => {
             Log(translate("bot_name_log", message.author.username.toString()));
         } else {
             if (Boolean(getRandomInt(2)) == true || !fs.existsSync(common_learning)) {
-                var rngimg = bot_name_img.randomElement().split("==");
-                message.channel.send(`${rngimg[0]}`, {
-                    file: `${rngimg[1]}`
+                var indexOfTxT = imagesInFolder.indexOf("images/info.txt");
+                if (indexOfTxT !== -1) {
+                    imagesInFolder.splice(indexOfTxT, 1); //remove git file from array (who need empty file...)
+                }
+                var randomImageFile = `${process.cwd()}\\${imagesInFolder.randomElement()}`;
+                var msg_text = path.parse(randomImageFile).name;
+                if (Number(msg_text)) {
+                    msg_text = "";
+                }
+                message.channel.send(msg_text, {
+                    file: randomImageFile
                 });
-                Log(translate("bot_name_log_img", message.author.username.toString(), rngimg[0], rngimg[1]));
+                Log(translate("bot_name_log_img", message.author.username.toString(), msg_text, randomImageFile));
             } else {
                 fs.readFile(common_learning, function (err, data) {
                     if (err) throw err;

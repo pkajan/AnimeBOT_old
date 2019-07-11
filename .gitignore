@@ -4,6 +4,12 @@ package-lock.json
 data/config.json
 data/replies.json
 data/anime.json
-*.txt
+common_learning.txt
+logs.txt
 announce.json
 announceFIN.json
+images/*.gif
+images/*.jpg
+images/*.jpeg
+images/*.webm
+images/*.png
