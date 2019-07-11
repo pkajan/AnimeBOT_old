@@ -752,8 +752,8 @@ client.on("message", async message => {
                 }
             }
             while (uptime_m >= 60);
-            message.channel.send(translate("cmd_uptime_msg", uptime_d, uptime_h, uptime_m));
-            Log(translate("cmd_uptime_log", uptime_d, uptime_h, uptime_m, message.author.username.toString()));
+            message.channel.send(translate("cmd_uptime_msg", uptime_d, uptime_h, parseFloat(uptime_m).toFixed(0)));
+            Log(translate("cmd_uptime_log", uptime_d, uptime_h, parseFloat(uptime_m).toFixed(0), message.author.username.toString()));
         }
     });
 
