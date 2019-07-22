@@ -7,6 +7,7 @@ const client = new Discord.Client();
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
+const request = require("request");
 const path = require('path');
 const logFile = "logs.txt";
 const announceFile = "announce.json";
@@ -196,6 +197,7 @@ function parse(str, arg) {
     return str.replace(/%s/gi, arg);
 }
 
+/* sort output list by days */
 function sortByDays(array) {
     var tmp = array.split("\n");
     var Monday = [];
@@ -237,6 +239,22 @@ function sortByDays(array) {
 Array.prototype.randomElement = function () {
     return this[Math.floor(Math.random() * this.length)]
 }
+
+/* gogoanime check */
+async function gogoanime(url) {
+    var ImBoolean = true;
+
+    request({
+        uri: url,
+    }, function (error, response, body) {
+        if (body.includes('Page not found')) {
+            ImBoolean = false;
+        }
+    });
+    console.log(ImBoolean);
+    throw ImBoolean;
+}
+
 
 /**************************************************************************/
 
@@ -445,8 +463,13 @@ function CheckAnimeOnNet() {
             } else {
                 page_protocol = https;
             }
-            page_protocol.get(tmpCHECKVAR, (res) => {
-                if (res.statusCode == 200) { // 200 means page exist
+            console.log(tmpCHECKVAR);
+            gogoanime(tmpCHECKVAR).catch(function (itemz) {
+                if (itemz) {
+                    //}
+                    //});
+                    //page_protocol.get(tmpCHECKVAR, (res) => {
+                    //if (res.statusCode == 200) { // 200 means page exist
                     Log(translate("BOT_cron_link_yes", tmpCHECKVAR));
                     if (item.url == tmpCHECKVAR) {
                         console.log(item.url + `\n` + tmpCHECKVAR);
@@ -476,10 +499,7 @@ function CheckAnimeOnNet() {
                 } else {
                     Log(translate("BOT_cron_link_no", item.name, item.url, tmpCHECKVAR));
                 }
-            }).on("error", (e) => {
-                Log("[CRON] " + e);
-            });
-
+            })
         });
     }
 }
