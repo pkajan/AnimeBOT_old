@@ -241,20 +241,19 @@ Array.prototype.randomElement = function () {
 }
 
 /* gogoanime check */
-async function gogoanime(url) {
-    var ImBoolean = true;
-
-    request({
-        uri: url,
-    }, function (error, response, body) {
-        if (body.includes('Page not found')) {
-            ImBoolean = false;
-        }
+function gogoanime(url) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            request({
+                uri: url,
+            }, function (error, response, body) {
+                resolve(
+                    !body.includes('Page not found')
+                );
+            });
+        }, 5000);
     });
-    console.log(ImBoolean);
-    throw ImBoolean;
 }
-
 
 /**************************************************************************/
 
@@ -458,18 +457,14 @@ function CheckAnimeOnNet() {
                 tmpCHECKVAR = item.url;
             }
 
-            if (tmpCHECKVAR.substring(0, 5) != "https") {
+            /*if (tmpCHECKVAR.substring(0, 5) != "https") {
                 page_protocol = http; // if protocol is not https, change it to http
             } else {
                 page_protocol = https;
-            }
-            console.log(tmpCHECKVAR);
-            gogoanime(tmpCHECKVAR).catch(function (itemz) {
-                if (itemz) {
-                    //}
-                    //});
-                    //page_protocol.get(tmpCHECKVAR, (res) => {
-                    //if (res.statusCode == 200) { // 200 means page exist
+            }*/
+
+            gogoanime(tmpCHECKVAR).then(data => {
+                if (data) {
                     Log(translate("BOT_cron_link_yes", tmpCHECKVAR));
                     if (item.url == tmpCHECKVAR) {
                         console.log(item.url + `\n` + tmpCHECKVAR);
@@ -499,7 +494,7 @@ function CheckAnimeOnNet() {
                 } else {
                     Log(translate("BOT_cron_link_no", item.name, item.url, tmpCHECKVAR));
                 }
-            })
+            });
         });
     }
 }
