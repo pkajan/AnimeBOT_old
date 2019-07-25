@@ -244,15 +244,15 @@ Array.prototype.randomElement = function () {
 /* gogoanime check */
 function gogoanime(url) {
     return new Promise(resolve => {
-        setTimeout(() => {
-            request({
-                uri: url,
-            }, function (error, response, body) {
-                resolve(
-                    !body.includes('Page not found')
-                );
-            });
-        }, checkTimeOut);
+        request({
+            uri: url,
+        }, function (error, response, body) {
+            if (body === undefined || body === null) {
+                resolve(false);
+            } else {
+                resolve(!body.includes('Page not found'));
+            }
+        });
     });
 }
 
