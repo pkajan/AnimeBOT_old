@@ -50,6 +50,7 @@ var LastVoiceChannelMessageL = 0;
 
 var timeShift = config.timeshift;
 var checkXminutes = config.checkXminutes;
+var checkTimeOut = config.checkTimeOut * 1000;
 var bot_name_img_chance = parseInt(config.bot_img_chance);
 var show_more_than_week = config.show_more_than_week;
 var slice_by_chars = config.slice_name_by_chars;
@@ -251,7 +252,7 @@ function gogoanime(url) {
                     !body.includes('Page not found')
                 );
             });
-        }, 5000);
+        }, checkTimeOut);
     });
 }
 
