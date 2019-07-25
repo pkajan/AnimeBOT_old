@@ -713,7 +713,7 @@ client.on("message", async message => {
         if (item) {
             if (hasRights(message.author.id)) {
                 removeCallMsg(message);
-                selfDestructMSG(message, translate("cmd_update_msg"), 4000);
+                selfDestructMSG(message, translate("cmd_update_msg"), 4000, "update");
                 Log(translate("cmd_update_msg_log", message.author.username.toString()));
                 const { exec } = require('child_process');
                 exec(updCMD, (err, stdout, stderr) => {
@@ -795,7 +795,7 @@ client.on("message", async message => {
     isItPartOfString2(translate("cmd_forcecheck").split(";"), command).catch(function (item) {
         if (item) {
             removeCallMsg(message);
-            selfDestructMSG(message, translate("cmd_forcecheck_msg"), 4000);
+            selfDestructMSG(message, translate("cmd_forcecheck_msg"), 4000, "forcecheck");
             CheckAnimeOnNet();
             Log(translate("cmd_forcecheck_log", message.author.username.toString()));
         }
@@ -812,7 +812,7 @@ client.on("message", async message => {
             available_commands += "\n**Show uptime**: " + translate("cmd_uptime").split(";");
             available_commands += "\n**Force chceck**: " + translate("cmd_forcecheck").split(";");
 
-            selfDestructMSG(message, translate("cmd_help_msg", available_commands), 10000);
+            selfDestructMSG(message, translate("cmd_help_msg", available_commands), 10000, "help");
 
             Log(translate("cmd_help_log", message.author.username.toString()));
         }
