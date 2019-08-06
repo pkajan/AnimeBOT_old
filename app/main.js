@@ -471,7 +471,7 @@ function CheckAnimeOnNet() {
                         console.log(item.url + `\n` + tmpCHECKVAR);
                         var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>\n`;
                     } else {
-                        var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>\n` + `or\n<${tmpCHECKVAR}>\n`;
+                        var messages = "```fix\n" + item.name + "```\n" + `<${tmpCHECKVAR}>\n` + `or\n<${item.url}>\n`;
                     }
                     var index = soonArray.indexOf(item);
                     Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
