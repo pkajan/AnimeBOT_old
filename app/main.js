@@ -43,14 +43,12 @@ const updCMD = "start cmd.exe @cmd /k \"git reset --hard & git fetch --all & git
 var todayArray;
 var soonArray = new Array();
 var soonArrays = new Array();
-var page_protocol = https;
 var LastPoliteMessage = 0;
 var LastVoiceChannelMessageJ = 0;
 var LastVoiceChannelMessageL = 0;
 
 var timeShift = config.timeshift;
 var checkXminutes = config.checkXminutes;
-var checkTimeOut = config.checkTimeOut * 1000;
 var bot_name_img_chance = parseInt(config.bot_img_chance);
 var show_more_than_week = config.show_more_than_week;
 var slice_by_chars = config.slice_name_by_chars;
@@ -64,7 +62,6 @@ var polite_array_exceptions = reply.exceptions.split(";");
 var voice_join = reply.voice_join_msg.split(";");
 var voice_leave = reply.voice_leave_msg.split(";");
 var bot_name_txt = reply.text_replies.split(";");
-var bot_name_img = reply.image_replies.split(";");
 var pathToImages = "images";
 var imagesInFolder = [];
 fs.readdir(pathToImages, function (err, items) {
@@ -83,10 +80,6 @@ function fwASYNC(filepath, data, options = null) {
         function (err) {
             if (err) { throw err; }
         });
-}
-
-function fwSYNC(filepath, data, options = null) {
-    fs.appendFileSync(filepath, data, options);
 }
 
 /* Logging - will show logs in console and write them into file (for later debugging?) */
@@ -126,7 +119,14 @@ function dateDiffInDays(a, b) { // a and b must be Date objects
 }
 
 /* Return only uniq values */
-const uniq = (a, key) => {
+/*const uniq = (a, key) => {
+    var seen = {};
+    return a.filter(function (item) {
+        var k = key(item);
+        return seen.hasOwnProperty(k) ? false : (seen[k] = true);
+    })
+}*/
+function uniq(a, key) {
     var seen = {};
     return a.filter(function (item) {
         var k = key(item);
@@ -168,7 +168,7 @@ async function isItPartOfString(any_array, any_string) {
     throw ImBoolean;
 }
 
-/*  return if given string is in array */
+/*  return Boolean value, if given string is in array */
 async function isItPartOfString2(any_array, any_string) {
     var ImBoolean = false;
     any_array.forEach(function (item) {
@@ -251,6 +251,21 @@ function gogoanime(url) {
                 resolve(false);
             } else {
                 resolve(!body.includes('Page not found'));
+            }
+        });
+    });
+}
+
+/* image existance check */
+function imgExist(url) {
+    return new Promise(resolve => {
+        request({
+            uri: url,
+        }, function (error, response, body) {
+            if (body === undefined || body === null || response.statusCode != 200) {
+                resolve(false);
+            } else {
+                resolve(true);
             }
         });
     });
@@ -486,7 +501,15 @@ function CheckAnimeOnNet() {
                     var alreadyDONE = fs.readFileSync(announceFileFIN).toString();
                     if (alreadyDONE.indexOf(item.url) == -1) {
                         if (item.picture) {
-                            SendtoAllGuilds(messages, item.picture);
+                            /*img existance check */
+                            imgExist(item.picture).then(data => {
+                                if (data == true) {
+                                    SendtoAllGuilds(messages, item.picture);
+                                } else {
+                                    SendtoAllGuilds(messages, `${process.cwd()}\\false.png`);
+                                }
+                            });
+
                         } else {
                             SendtoAllGuilds(messages);
                         }
@@ -817,6 +840,7 @@ client.on("message", async message => {
             Log(translate("cmd_help_log", message.author.username.toString()));
         }
     });
+
     //test
     isItPartOfString2(translate("cmd_test").split(";"), command).catch(function (item) {
         if (item) {
