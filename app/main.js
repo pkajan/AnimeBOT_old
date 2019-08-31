@@ -406,24 +406,31 @@ function AnimeTimer(message = null, textoutput = false) {
 
     if (zero_day.length > 1) {
         zero_day = zero_dayHeader + sortByDays(zero_day);
+    } else {
+        zero_day = "";
     }
     if (one_day.length > 1) {
         one_day = one_dayHeader + sortByDays(one_day);
+    } else {
+        one_day = "";
     }
     if (two_days.length > 1) {
         two_days = two_daysHeader + sortByDays(two_days);
+    } else {
+        two_day = "";
     }
     if (less_than_week.length > 1) {
         less_than_week = less_than_weekHeader + sortByDays(less_than_week);
+    } else {
+        less_than_week = "";
     }
 
     if (textoutput) {
         if (show_more_than_week) {
-            selfDestructMSG(message, zero_day + one_day + two_days + less_than_week + oth_days, 30000, "AnimeTable");
+            selfDestructMSG(message, zero_day + " " + one_day + " " + two_days + " " + less_than_week + " " + oth_days, 30000, "AnimeTable");
         } else {
-            selfDestructMSG(message, zero_day + one_day + two_days + less_than_week, 30000, "AnimeTable");
+            selfDestructMSG(message, zero_day + " " + one_day + " " + two_days + " " + less_than_week, 30000, "AnimeTable");
         }
-
     } else {
         /* write data into file for later use */
         data = todayArray.join(";\n");
