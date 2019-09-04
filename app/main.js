@@ -689,6 +689,8 @@ client.on("message", async message => {
                     var repl_txt = parse(array.randomElement(), message.author.username.toString());
                     if (Boolean(getRandomInt(2)) == true) { //sometimes post learned message without mentioning username
                         repl_txt = parse(array.randomElement(), "");
+                        repl_txt = repl_txt.replace(/^\s*,/g, ' ').replace(/\s\s+/g, ' ').replace(/\s\./g, '.');
+                        //replace "bugged" texts: comma at start, multiple spaces, space before comma"
                     }
                     message.channel.send(translate("bot_name", repl_txt));
                     Log(translate("bot_name_learning_log", message.author.username.toString()));
