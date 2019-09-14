@@ -53,6 +53,9 @@ var bot_name_img_chance = parseInt(config.bot_img_chance);
 var show_more_than_week = config.show_more_than_week;
 var slice_by_chars = config.slice_name_by_chars;
 var defaultTextChannel = config.defaultTextChannel;
+var status_update_channel = config.status_update_announce_channel_id;
+var stat_message = "";
+var delayer = 0;
 
 var polite_array_day = reply.messages_day.split(";");
 var polite_array_night = reply.messages_night.split(";");
@@ -294,6 +297,12 @@ function selfDestructMSGID(channelID, MSGText, time, user = null, cmd_name) {
         sentMessage.delete(time).catch(error => Log(translate("BOT_send_selfdestruct_err")));
     });
     Log(translate("BOT_send_selfdestructid", user, cmd_name));
+}
+
+/* Send to channel with ID */
+function sendMSGID(channelID, MSGText) {
+    client.channels.get(channelID).send(MSGText)
+    Log(translate("BOT_send_sendMSGID", channelID));
 }
 
 /* Send message to all servers (guilds) bot is in */
@@ -564,6 +573,36 @@ client.on("ready", () => {
     Log(translate("cron_started", 2));
 });
 
+
+/* STATUS update */
+client.on('presenceUpdate', (oldMember, newMember) => {
+    if (status_update_channel > 1) {
+        if (Date.now() - delayer > 200) {
+            if (newMember.presence.game == null) {
+                stat_message = newMember.user.username.toString() + " stopped playing " + oldMember.presence.game;
+                sendMSGID(status_update_channel, stat_message);
+                Log(stat_message);
+            } else {
+                stat_message = newMember.user.username.toString() + " is playing " + newMember.presence.game;
+                sendMSGID(status_update_channel, stat_message);
+                Log(stat_message);
+            }
+            delayer = Date.now();
+        }
+    } else {
+        if (Date.now() - delayer > 200) {
+            if (newMember.presence.game == null) {
+                stat_message = newMember.user.username.toString() + " stopped playing " + oldMember.presence.game;
+                Log(stat_message);
+            } else {
+                stat_message = newMember.user.username.toString() + " is playing " + newMember.presence.game;
+                Log(stat_message);
+            }
+            delayer = Date.now();
+        }
+    }
+
+});
 
 
 /* Triggered when addeded/removed from server */

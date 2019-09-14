@@ -9,6 +9,7 @@
     "BOT_send_selfdestruct": "Selfdestruct message send. [Invoked by %s] (%s)",
     "BOT_send_selfdestructid": "Selfdestruct message send. [Invoked for %s] (%s)",
     "BOT_send_selfdestruct_err": "Selfdestruct message cannot be deleted (rights or someone was faster than BOT).",
+    "BOT_send_sendMSGID": "Message send to channel: %s.",
     "BOT_removeCallMsg_err": "Invoking message cannot be deleted (rights or someone was faster than BOT).",
     "BOT_serving": "Serving %d servers",
     "BOT_set_activity": "Activity set to %s: %s.",

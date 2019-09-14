@@ -4,7 +4,7 @@
   "description": "-",
   "main": "index.js",
   "dependencies": {
-    "cron": "^1.7.1",
+    "cron": "^1.7.2",
     "dateformat": "^3.0.3",
     "discord.js": "^11.5.1",
     "request": "^2.88.0"
