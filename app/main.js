@@ -580,9 +580,11 @@ client.on('presenceUpdate', (oldMember, newMember) => {
         if (status_update_channel > 1) {
             if (Date.now() - delayer > 200) {
                 if (newMember.presence.game == null) {
-                    stat_message = newMember.user.username.toString() + " stopped playing " + oldMember.presence.game;
-                    sendMSGID(status_update_channel, stat_message);
-                    Log(stat_message);
+                    if (oldMember.presence.game != null) {
+                        stat_message = newMember.user.username.toString() + " stopped playing " + oldMember.presence.game;
+                        sendMSGID(status_update_channel, stat_message);
+                        Log(stat_message);
+                    }
                 } else {
                     stat_message = newMember.user.username.toString() + " is playing " + newMember.presence.game;
                     sendMSGID(status_update_channel, stat_message);
@@ -593,8 +595,10 @@ client.on('presenceUpdate', (oldMember, newMember) => {
         } else {
             if (Date.now() - delayer > 200) {
                 if (newMember.presence.game == null) {
-                    stat_message = newMember.user.username.toString() + " stopped playing " + oldMember.presence.game;
-                    Log(stat_message);
+                    if (oldMember.presence.game != null) {
+                        stat_message = newMember.user.username.toString() + " stopped playing " + oldMember.presence.game;
+                        Log(stat_message);
+                    }
                 } else {
                     stat_message = newMember.user.username.toString() + " is playing " + newMember.presence.game;
                     Log(stat_message);
