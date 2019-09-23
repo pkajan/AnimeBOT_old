@@ -73,6 +73,7 @@ fs.readdir(pathToImages, function (err, items) {
         imagesInFolder.push(file);
     }
 });
+var userStatus = {};
 /**************************************************************************/
 
 /* FUNCTIONS */
@@ -573,42 +574,30 @@ client.on("ready", () => {
     Log(translate("cron_started", 2));
 });
 
-
 /* STATUS update */
 client.on('presenceUpdate', (oldMember, newMember) => {
-    if (!newMember.user.bot || !oldMember.user.bot) { // bot protection
-        if (status_update_channel > 1) {
-            if (Date.now() - delayer > 200) {
-                if (newMember.presence.game == null) {
-                    if (oldMember.presence.game != null) {
-                        stat_message = newMember.user.username.toString() + " stopped playing " + oldMember.presence.game;
-                        sendMSGID(status_update_channel, stat_message);
-                        Log(stat_message);
-                    }
-                } else {
-                    stat_message = newMember.user.username.toString() + " is playing " + newMember.presence.game;
-                    sendMSGID(status_update_channel, stat_message);
-                    Log(stat_message);
-                }
-                delayer = Date.now();
-            }
-        } else {
-            if (Date.now() - delayer > 200) {
-                if (newMember.presence.game == null) {
-                    if (oldMember.presence.game != null) {
-                        stat_message = newMember.user.username.toString() + " stopped playing " + oldMember.presence.game;
-                        Log(stat_message);
-                    }
-                } else {
-                    stat_message = newMember.user.username.toString() + " is playing " + newMember.presence.game;
-                    Log(stat_message);
-                }
-                delayer = Date.now();
-            }
+    if ((!newMember.user.bot || !oldMember.user.bot) & (Date.now() - delayer > 20)) { // bot & spam protection
+        var UserName = newMember.user.username.toString();
+        var OldStatus = oldMember.presence.game;
+        var NewStatus = newMember.presence.game;
+
+        if (userStatus[UserName] != NewStatus) {
+            stat_message = UserName + " is playing " + NewStatus;
+            userStatus[UserName] == NewStatus;
         }
+
+        if (NewStatus == null) {
+            stat_message = UserName + " stopped playing " + OldStatus;
+            userStatus[UserName] == NewStatus;
+        }
+
+        if (status_update_channel > 1) {
+            sendMSGID(status_update_channel, stat_message);
+        }
+        Log(stat_message);
+        delayer = Date.now();
     }
 });
-
 
 /* Triggered when addeded/removed from server */
 client.on("guildCreate", guild => {
