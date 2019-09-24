@@ -578,8 +578,21 @@ client.on("ready", () => {
 client.on('presenceUpdate', (oldMember, newMember) => {
     if ((!newMember.user.bot || !oldMember.user.bot) & (Date.now() - delayer > 300)) { // bot & spam protection (300ms delay)
         var UserName = newMember.user.username.toString();
-        var OldStatus = oldMember.presence.game;
-        var NewStatus = newMember.presence.game;
+        if (oldMember.presence.game == null) { //get "old" activity name + null fix
+            var OldStatus = null;
+        } else {
+            var OldStatus = oldMember.presence.game.name;
+        }
+
+        if (newMember.presence.game == null) { //get "new" activity name + null fix
+            var NewStatus = null;
+        } else {
+            var NewStatus = newMember.presence.game.name;
+        }
+
+        if (OldStatus == NewStatus) { // end function if there is nothing to announce
+            return;
+        }
 
         if (((userStatus[UserName] != NewStatus) & (OldStatus == null)) || ((NewStatus != userStatus[UserName]) & (OldStatus != NewStatus))) {
             stat_message = UserName + " is playing " + NewStatus;
@@ -592,7 +605,7 @@ client.on('presenceUpdate', (oldMember, newMember) => {
         }
 
         if (status_update_channel > 1) {
-            sendMSGID(status_update_channel, stat_message);
+            sendMSGID(status_update_channel, stat_message); //if allowed send message into chat
         }
         Log(stat_message);
         delayer = Date.now();
