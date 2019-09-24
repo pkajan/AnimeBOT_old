@@ -576,12 +576,12 @@ client.on("ready", () => {
 
 /* STATUS update */
 client.on('presenceUpdate', (oldMember, newMember) => {
-    if ((!newMember.user.bot || !oldMember.user.bot) & (Date.now() - delayer > 20)) { // bot & spam protection
+    if ((!newMember.user.bot || !oldMember.user.bot) & (Date.now() - delayer > 300)) { // bot & spam protection (300ms delay)
         var UserName = newMember.user.username.toString();
         var OldStatus = oldMember.presence.game;
         var NewStatus = newMember.presence.game;
 
-        if (userStatus[UserName] != NewStatus) {
+        if (((userStatus[UserName] != NewStatus) & (OldStatus == null)) || ((NewStatus != userStatus[UserName]) & (OldStatus != NewStatus))) {
             stat_message = UserName + " is playing " + NewStatus;
             userStatus[UserName] == NewStatus;
         }
