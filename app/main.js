@@ -586,7 +586,7 @@ client.on('presenceUpdate', (oldMember, newMember) => {
             userStatus[UserName] == NewStatus;
         }
 
-        if (NewStatus == null) {
+        if (NewStatus == null & OldStatus != null) {
             stat_message = UserName + " stopped playing " + OldStatus;
             userStatus[UserName] == NewStatus;
         }
