@@ -7,7 +7,7 @@ data/anime.json
 common_learning.txt
 logs.txt
 announce.json
-announceFIN.json
+announceFIN.txt
 images/*.gif
 images/*.jpg
 images/*.jpeg

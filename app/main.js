@@ -4,14 +4,12 @@ const dateFormat = require('dateformat');
 const CronJob = require('cron').CronJob;
 const Discord = require('discord.js'); // Load up the discord.js library
 const client = new Discord.Client();
-const https = require('https');
-const http = require('http');
-const fs = require('fs');
+const fs = require('fs-extra');
 const request = require("request");
 const path = require('path');
 const logFile = "logs.txt";
 const announceFile = "announce.json";
-const announceFileFIN = "announceFIN.json";
+const announceFileFIN = "announceFIN.txt";
 const common_learning = "common_learning.txt";
 const start_time = Date.now();
 
@@ -32,8 +30,10 @@ Object.keys(obj).forEach(function (key) {
 const config = require('../data/config.json'); //file with config
 const data_file = require('../data/anime.json'); //file with names and times
 const reply = require('../data/replies.json'); //bot replies
-fs.appendFileSync(announceFile, ""); //create empty file for announcements
 fs.appendFileSync(announceFileFIN, ""); //create empty file for finished announcements
+if (!fs.existsSync(announceFile)) {
+    fs.appendFileSync(announceFile, "{}");//create empty file for announcements
+}
 /**************************************************************************/
 
 /* CONSTs & VARs (Random vars that i will need later...or never) */
@@ -123,13 +123,6 @@ function dateDiffInDays(a, b) { // a and b must be Date objects
 }
 
 /* Return only uniq values */
-/*const uniq = (a, key) => {
-    var seen = {};
-    return a.filter(function (item) {
-        var k = key(item);
-        return seen.hasOwnProperty(k) ? false : (seen[k] = true);
-    })
-}*/
 function uniq(a, key) {
     var seen = {};
     return a.filter(function (item) {
@@ -275,6 +268,26 @@ function imgExist(url) {
     });
 }
 
+/* read JSON and return results as object */
+function JSON_file_read(filename) {
+    var data = fs.readFileSync(filename, 'utf8').toString(); //read data
+    return JSON.parse(data); //parse - create object
+}
+
+/* remove given element from JSON object */
+function JSON_file_remove_element(filename, elem) {
+    var obj = JSON_file_read(filename); //read data
+    delete obj[`${elem}`]; // remove element
+    fs.writeFileSync(filename, JSON.stringify(obj)); // write back to file
+}
+
+/* add or edit given element in JSON object */
+function JSON_file_add_edit_element(filename, elem, data) {
+    var obj = JSON_file_read(filename); //read data
+    obj[`${elem}`] = data; // add/edit element
+    fs.writeFileSync(filename, JSON.stringify(obj)); // write back to file
+}
+
 /**************************************************************************/
 
 /* Discord.js based functions */
@@ -391,8 +404,18 @@ function AnimeTimer(message = null, textoutput = false) {
                             var eps = parseInt(item.starting_episode) + parseInt(weeks);
                             if (item.checkTo) {
                                 TMPtodayArray.push([item.name, CDNext.getTime(), parse(item.link, eps), item.picture, parse(item.checkTo, eps)]);
+                                JSON_file_add_edit_element(announceFile, parse(item.checkTo, eps), {
+                                    "URL": `${parse(item.link, eps)}`,
+                                    "IMAGE": `${item.picture}`,
+                                    "NAME": `${item.name}`
+                                })
                             } else {
                                 TMPtodayArray.push([item.name, CDNext.getTime(), parse(item.link, eps), item.picture, parse(item.link, eps)]);
+                                JSON_file_add_edit_element(announceFile, parse(item.link, eps), {
+                                    "URL": `${parse(item.link, eps)}`,
+                                    "IMAGE": `${item.picture}`,
+                                    "NAME": `${item.name}`
+                                })
                             }
                             Log(translate("upcoming_check", item.name, parse(item.link, parseInt(item.starting_episode) + parseInt(weeks))));
                         }
@@ -441,42 +464,28 @@ function AnimeTimer(message = null, textoutput = false) {
         } else {
             selfDestructMSG(message, zero_day + " " + one_day + " " + two_days + " " + less_than_week, 30000, "AnimeTable");
         }
-    } else {
-        /* write data into file for later use */
-        data = todayArray.join(";\n");
-        if (fs.readFileSync(announceFile) != "") {
-            if (!fs.readFileSync(announceFile).toString().includes(data)) {
-                fs.appendFileSync(announceFile, ";\n" + data); // if file is not empty add semicolon at end
-            }
-        } else {
-            fs.appendFileSync(announceFile, data);
-        }
     }
 }
 
 /* Put "today" animes into array for later use */
 function timeCalcMessage() {
     AnimeTimer(null, false);
-    var todayArrayFromFile = fs.readFileSync(announceFile); // read from file
-    todayArrayFromFile = uniqArr(todayArrayFromFile.toString().split(";\n")); //make array again
+    var todayArrayFromFile = JSON_file_read(announceFile); // read from file
 
-    todayArrayFromFile.forEach(function (item) {
-        item = item.split(",");
-        if (item[2]) {
-            var valueToPush = {};
-            valueToPush.name = item[0];
-            valueToPush.time = item[1];
-            valueToPush.url = item[2];
-            valueToPush.picture = item[3];
-            valueToPush.checkTo = item[4];
-            soonArrays.push(valueToPush);
-            valueToPush = {};
-        }
+    for (var item in todayArrayFromFile) {
+        var valueToPush = {};
+        valueToPush.name = todayArrayFromFile[item].NAME;
+        valueToPush.url = todayArrayFromFile[item].URL;
+        valueToPush.picture = todayArrayFromFile[item].IMAGE;
+        valueToPush.checkTo = item;
+        soonArrays.push(valueToPush);
+        valueToPush = {};
+
         soonArrays.forEach(function (itemz) {
             soonArray.push(itemz);
         })
         soonArray = uniq(soonArray, JSON.stringify);
-    });
+    }
 }
 
 /* check "today" animes for existance */
@@ -490,12 +499,6 @@ function CheckAnimeOnNet() {
                 tmpCHECKVAR = item.url;
             }
 
-            /*if (tmpCHECKVAR.substring(0, 5) != "https") {
-                page_protocol = http; // if protocol is not https, change it to http
-            } else {
-                page_protocol = https;
-            }*/
-
             gogoanime(tmpCHECKVAR).then(data => {
                 if (data) {
                     Log(translate("BOT_cron_link_yes", tmpCHECKVAR));
@@ -505,15 +508,8 @@ function CheckAnimeOnNet() {
                     } else {
                         var messages = "```fix\n" + item.name + "```\n" + `<${tmpCHECKVAR}>\n` + `or\n<${item.url}>\n`;
                     }
-                    var index = soonArray.indexOf(item);
-                    Log(translate("BOT_deleting", JSON.stringify(soonArray[index])));
-                    delete soonArray[index];
-                    ///////////////////////////////////////////////////
-                    var str_name = `^(` + item.name + `).*`;
-                    var regexx = new RegExp(str_name, "igm");
-                    var data = fs.readFileSync(announceFile).toString();
-                    var newvalue = data.replace(regexx, "");
-                    fs.writeFileSync(announceFile, newvalue);
+                    Log(translate("BOT_deleting", item.name));
+                    JSON_file_remove_element(announceFile, tmpCHECKVAR, tmpCHECKVAR);
                     ////////////////////////////////////////////////////
                     var alreadyDONE = fs.readFileSync(announceFileFIN).toString();
                     if (alreadyDONE.indexOf(item.url) == -1) {
@@ -526,7 +522,6 @@ function CheckAnimeOnNet() {
                                     SendtoAllGuilds(messages, `${process.cwd()}\\false.png`);
                                 }
                             });
-
                         } else {
                             SendtoAllGuilds(messages);
                         }
