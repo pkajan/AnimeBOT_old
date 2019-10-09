@@ -1,1 +1,1 @@
-npm install -g nodemon & npm update & git reset --hard & git fetch --all & git pull & pause
+git reset --hard & git fetch --all & git pull & npm install -g nodemon & npm install & npm update & pause
