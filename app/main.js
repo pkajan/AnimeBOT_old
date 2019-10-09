@@ -508,6 +508,8 @@ function CheckAnimeOnNet() {
                     } else {
                         var messages = "```fix\n" + item.name + "```\n" + `<${tmpCHECKVAR}>\n` + `or\n<${item.url}>\n`;
                     }
+                    var index = soonArray.indexOf(item);
+                    delete soonArray[index];
                     Log(translate("BOT_deleting", item.name));
                     JSON_file_remove_element(announceFile, tmpCHECKVAR, tmpCHECKVAR);
                     ////////////////////////////////////////////////////
@@ -898,6 +900,7 @@ client.on("message", async message => {
             //console.log(message.author.username.toString());
         }
     });
+
 });
 
 client.login(config.credentials.token);
