@@ -247,7 +247,8 @@ function gogoanime(url) {
             if (body === undefined || body === null) {
                 resolve(false);
             } else {
-                resolve(!body.includes('Page not found'));
+                //resolve(!body.includes('Page not found'));
+                resolve(body.includes('Related episode'));
             }
         });
     });
