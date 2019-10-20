@@ -247,15 +247,14 @@ function gogoanime(url) {
             if (body === undefined || body === null) {
                 resolve(false);
             } else {
-                //resolve(!body.includes('Page not found'));
                 resolve(body.includes('Related episode'));
             }
         });
     });
 }
 
-/* image existance check */
-function imgExist(url) {
+/* basic page check */
+function defaultPageCheck(url) {
     return new Promise(resolve => {
         request({
             uri: url,
@@ -489,6 +488,41 @@ function timeCalcMessage() {
     }
 }
 
+function animeCheckRoutine(data, tmpCHECKVAR, item) {
+    if (data) {
+        Log(translate("BOT_cron_link_yes", tmpCHECKVAR));
+        if (item.url == tmpCHECKVAR) {
+            console.log(item.url + `\n` + tmpCHECKVAR);
+            var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>\n`;
+        } else {
+            var messages = "```fix\n" + item.name + "```\n" + `<${tmpCHECKVAR}>\n` + `or\n<${item.url}>\n`;
+        }
+        var index = soonArray.indexOf(item);
+        delete soonArray[index];
+        Log(translate("BOT_deleting", item.name));
+        JSON_file_remove_element(announceFile, tmpCHECKVAR, tmpCHECKVAR);
+        ////////////////////////////////////////////////////
+        var alreadyDONE = fs.readFileSync(announceFileFIN).toString();
+        if (alreadyDONE.indexOf(item.url) == -1) {
+            if (item.picture) {
+                /*img existance check */
+                defaultPageCheck(item.picture).then(data => {
+                    if (data == true) {
+                        SendtoAllGuilds(messages, item.picture);
+                    } else {
+                        SendtoAllGuilds(messages, `${process.cwd()}\\false.png`);
+                    }
+                });
+            } else {
+                SendtoAllGuilds(messages);
+            }
+            fwASYNC(announceFileFIN, item.url + " \n");
+        }
+    } else {
+        Log(translate("BOT_cron_link_no", item.name, item.url, tmpCHECKVAR));
+    }
+}
+
 /* check "today" animes for existance */
 function CheckAnimeOnNet() {
     if (typeof soonArray != "undefined") {
@@ -500,40 +534,16 @@ function CheckAnimeOnNet() {
                 tmpCHECKVAR = item.url;
             }
 
-            gogoanime(tmpCHECKVAR).then(data => {
-                if (data) {
-                    Log(translate("BOT_cron_link_yes", tmpCHECKVAR));
-                    if (item.url == tmpCHECKVAR) {
-                        console.log(item.url + `\n` + tmpCHECKVAR);
-                        var messages = "```fix\n" + item.name + "```\n" + `<${item.url}>\n`;
-                    } else {
-                        var messages = "```fix\n" + item.name + "```\n" + `<${tmpCHECKVAR}>\n` + `or\n<${item.url}>\n`;
-                    }
-                    var index = soonArray.indexOf(item);
-                    delete soonArray[index];
-                    Log(translate("BOT_deleting", item.name));
-                    JSON_file_remove_element(announceFile, tmpCHECKVAR, tmpCHECKVAR);
-                    ////////////////////////////////////////////////////
-                    var alreadyDONE = fs.readFileSync(announceFileFIN).toString();
-                    if (alreadyDONE.indexOf(item.url) == -1) {
-                        if (item.picture) {
-                            /*img existance check */
-                            imgExist(item.picture).then(data => {
-                                if (data == true) {
-                                    SendtoAllGuilds(messages, item.picture);
-                                } else {
-                                    SendtoAllGuilds(messages, `${process.cwd()}\\false.png`);
-                                }
-                            });
-                        } else {
-                            SendtoAllGuilds(messages);
-                        }
-                        fwASYNC(announceFileFIN, item.url + " \n");
-                    }
-                } else {
-                    Log(translate("BOT_cron_link_no", item.name, item.url, tmpCHECKVAR));
-                }
-            });
+            // if anime is on gogoanime.io
+            if (tmpCHECKVAR.includes("gogoanime.io")) {
+                gogoanime(tmpCHECKVAR).then(data => {
+                    animeCheckRoutine(data, tmpCHECKVAR, item);
+                });
+            } else { // if link reffers to somewhere else
+                defaultPageCheck(tmpCHECKVAR).then(data => {
+                    animeCheckRoutine(data, tmpCHECKVAR, item);
+                });
+            }
         });
     }
 }
