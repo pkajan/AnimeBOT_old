@@ -409,14 +409,16 @@ function AnimeTimer(message = null, textoutput = false) {
                                 JSON_file_add_edit_element(announceFile, parse(item.checkTo, eps), {
                                     "URL": `${parse(item.link, eps)}`,
                                     "IMAGE": `${item.picture}`,
-                                    "NAME": `${item.name}`
+                                    "NAME": `${item.name}`,
+                                    "EPS": `${eps}`,
                                 })
                             } else {
                                 TMPtodayArray.push([item.name, CDNext.getTime(), parse(item.link, eps), item.picture, parse(item.link, eps)]);
                                 JSON_file_add_edit_element(announceFile, parse(item.link, eps), {
                                     "URL": `${parse(item.link, eps)}`,
                                     "IMAGE": `${item.picture}`,
-                                    "NAME": `${item.name}`
+                                    "NAME": `${item.name}`,
+                                    "EPS": `${eps}`,
                                 })
                             }
                             Log(translate("upcoming_check", item.name, parse(item.link, parseInt(item.starting_episode) + parseInt(weeks))));
@@ -479,6 +481,7 @@ function timeCalcMessage() {
         valueToPush.name = todayArrayFromFile[item].NAME;
         valueToPush.url = todayArrayFromFile[item].URL;
         valueToPush.picture = todayArrayFromFile[item].IMAGE;
+        valueToPush.eps = todayArrayFromFile[item].EPS;
         valueToPush.checkTo = item;
         soonArrays.push(valueToPush);
         valueToPush = {};
@@ -521,7 +524,7 @@ function animeCheckRoutine(data, tmpCHECKVAR, item) {
             fwASYNC(announceFileFIN, item.url + " \n");
         }
     } else {
-        Log(translate("BOT_cron_link_no", item.name, item.url, tmpCHECKVAR));
+        Log(translate("BOT_cron_link_no", item.name, item.eps, tmpCHECKVAR));
     }
 }
 
