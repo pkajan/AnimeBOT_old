@@ -553,6 +553,45 @@ function CheckAnimeOnNet() {
     }
 }
 
+
+function bot_response_poster(message) {
+    if (Boolean(getRandomInt(bot_name_img_chance)) == true || !fs.existsSync(common_learning)) {
+        var indexOfTxT = imagesInFolder.indexOf("images/info.txt");
+        if (indexOfTxT !== -1) {
+            imagesInFolder.splice(indexOfTxT, 1); //remove git file from array (who need empty file...)
+        }
+        var randomImageFile = `${process.cwd()}\\${imagesInFolder.randomElement()}`;
+        var msg_text = path.parse(randomImageFile).name;
+        if (Number(msg_text)) {
+            msg_text = "";
+        }
+        message.channel.send(msg_text, {
+            file: randomImageFile
+        });
+        Log(translate("bot_name_log_img", message.author.username.toString(), msg_text, randomImageFile));
+    } else {
+        fs.readFile(common_learning, function (err, data) {
+            if (err) throw err;
+            var array = onlyStringArr(uniqArr(data.toString().split("\n")));
+            var repl_txt = parse(array.randomElement(), message.author.username.toString());
+            if (Boolean(getRandomInt(2)) == true) { //sometimes post learned message, without mentioning username
+                repl_txt = parse(array.randomElement(), "");
+                repl_txt = repl_txt.replace(/^\s*,/g, ' ').replace(/\s\s+/g, ' ').replace(/\s\./g, '.');
+                //replace "bugged" texts: comma at start, multiple spaces, space before comma"
+            }
+            message.channel.send(translate("bot_name", repl_txt));
+            Log(translate("bot_name_learning_log", message.author.username.toString()));
+        });
+    }
+
+
+    /* create REGEX that match BOT name (first 4 chars to be precise) */
+    var str1 = `[${client.user.username.charAt(0)},${client.user.username.charAt(0).toLowerCase()}][${client.user.username.charAt(1)},${client.user.username.charAt(1).toLowerCase()}][${client.user.username.charAt(2)},${client.user.username.charAt(2).toLowerCase()}][${client.user.username.charAt(3)},${client.user.username.charAt(3).toLowerCase()}][a-zA-Z0-9À-ž]*`;
+    var regex = new RegExp(str1, "g");
+    var learning_text_generalize = message.content.replace(regex, "%s");
+    fs.appendFileSync(common_learning, learning_text_generalize + "\n");// write message into file with name of invoker
+}
+
 /**************************************************************************/
 
 /* STARTUP THINGS */
@@ -722,45 +761,16 @@ client.on("message", async message => {
 
     /* Called by name */
     if (deunicode(message.content.toLowerCase()).indexOf(deunicode(client.user.username.slice(0, -slice_by_chars).toLowerCase())) > -1) { //slice to allow bot name "mutations"
-
-        if (Boolean(getRandomInt(bot_name_img_chance)) == true || !fs.existsSync(common_learning)) {
-            var indexOfTxT = imagesInFolder.indexOf("images/info.txt");
-            if (indexOfTxT !== -1) {
-                imagesInFolder.splice(indexOfTxT, 1); //remove git file from array (who need empty file...)
-            }
-            var randomImageFile = `${process.cwd()}\\${imagesInFolder.randomElement()}`;
-            var msg_text = path.parse(randomImageFile).name;
-            if (Number(msg_text)) {
-                msg_text = "";
-            }
-            message.channel.send(msg_text, {
-                file: randomImageFile
-            });
-            Log(translate("bot_name_log_img", message.author.username.toString(), msg_text, randomImageFile));
-        } else {
-            fs.readFile(common_learning, function (err, data) {
-                if (err) throw err;
-                var array = onlyStringArr(uniqArr(data.toString().split("\n")));
-                var repl_txt = parse(array.randomElement(), message.author.username.toString());
-                if (Boolean(getRandomInt(2)) == true) { //sometimes post learned message, without mentioning username
-                    repl_txt = parse(array.randomElement(), "");
-                    repl_txt = repl_txt.replace(/^\s*,/g, ' ').replace(/\s\s+/g, ' ').replace(/\s\./g, '.');
-                    //replace "bugged" texts: comma at start, multiple spaces, space before comma"
-                }
-                message.channel.send(translate("bot_name", repl_txt));
-                Log(translate("bot_name_learning_log", message.author.username.toString()));
-            });
-        }
-
-
-        /* create REGEX that match BOT name (first 4 chars to be precise) */
-        var str1 = `[${client.user.username.charAt(0)},${client.user.username.charAt(0).toLowerCase()}][${client.user.username.charAt(1)},${client.user.username.charAt(1).toLowerCase()}][${client.user.username.charAt(2)},${client.user.username.charAt(2).toLowerCase()}][${client.user.username.charAt(3)},${client.user.username.charAt(3).toLowerCase()}][a-zA-Z0-9À-ž]*`;
-        var regex = new RegExp(str1, "g");
-        var learning_text_generalize = message.content.replace(regex, "%s");
-        fs.appendFileSync(common_learning, learning_text_generalize + "\n");// write message into file with name of invoker
+        bot_response_poster(message);
     }
 
-    if (message.content.indexOf(config.prefix) !== 0) return; // ignore messages without OUR prefix, except... we must be polite right (up)?
+    if (message.content.indexOf(config.prefix) !== 0) {
+        if (getRandomInt(5) >= 4) {
+            bot_response_poster(message);
+        } else {
+            return; // ignore messages without OUR prefix, except... we must be polite and...a bit of random doesnt hurt :D
+        }
+    }
 
     // remove prefix and put statements into array
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
