@@ -909,6 +909,7 @@ client.on("message", async message => {
             available_commands += "\n**Change status**: " + translate("cmd_status").split(";");
             available_commands += "\n**Show uptime**: " + translate("cmd_uptime").split(";");
             available_commands += "\n**Force chceck**: " + translate("cmd_forcecheck").split(";");
+            available_commands += "\n**Learning**: " + translate("cmd_dictionary").split(";");
 
             selfDestructMSG(message, translate("cmd_help_msg", available_commands), 10000, "help");
 
