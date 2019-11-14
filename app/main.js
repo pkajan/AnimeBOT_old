@@ -916,6 +916,28 @@ client.on("message", async message => {
         }
     });
 
+
+    // add string to dictionary
+    isItPartOfString2(translate("cmd_dictionary").split(";"), command).catch(function (item) {
+        if (item) {
+            removeCallMsg(message);
+            if (hasRights(message.author.id)) {
+                if (args.length > 0) {
+                    const sayMessage = args.join(" ");
+                    // And we get the bot to say the thing:
+                    fs.appendFileSync(common_learning, sayMessage + "\n");// write message into dictionary
+                    Log(translate("cmd_dictionary_log", sayMessage, message.author.username.toString()));
+                } else {
+                    message.channel.send(translate("cmd_say_empty", config.prefix));
+                    Log(translate("cmd_say_msg_log", message.author.username.toString()));
+                }
+            } else {
+                message.channel.send(translate("cmd_say_noOwner"));
+                Log(translate("cmd_say_noOwner_log", message.author.username.toString()));
+            }
+        }
+    });
+
     //test
     isItPartOfString2(translate("cmd_test").split(";"), command).catch(function (item) {
         if (item) {

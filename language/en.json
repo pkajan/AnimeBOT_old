@@ -43,6 +43,8 @@
     "cmd_help": "help",
     "cmd_help_msg": "`Bot commands`: %s",
     "cmd_help_log": "Help. [Invoked by %s]",
+    "cmd_dictionary":"dict;learn",
+    "cmd_dictionary_log":"I learned something.(%s) [Invoked by %s]",
     "SPAM": "SPAM ",
     "polite_GN": "%s",
     "polite_hello": "%s",
