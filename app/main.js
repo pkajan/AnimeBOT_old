@@ -56,6 +56,7 @@ var defaultTextChannel = config.defaultTextChannel;
 var status_update_channel = config.status_update_announce_channel_id;
 var stat_message = "";
 var delayer = 0;
+var delayer_learning = 0;
 
 var polite_array_day = reply.messages_day.split(";");
 var polite_array_night = reply.messages_night.split(";");
@@ -589,7 +590,8 @@ function bot_response_poster(message) {
     var str1 = `[${client.user.username.charAt(0)},${client.user.username.charAt(0).toLowerCase()}][${client.user.username.charAt(1)},${client.user.username.charAt(1).toLowerCase()}][${client.user.username.charAt(2)},${client.user.username.charAt(2).toLowerCase()}][${client.user.username.charAt(3)},${client.user.username.charAt(3).toLowerCase()}][a-zA-Z0-9À-ž]*`;
     var regex = new RegExp(str1, "g");
     var learning_text_generalize = message.content.replace(regex, "%s");
-    fs.appendFileSync(common_learning, learning_text_generalize + "\n");// write message into file with name of invoker
+    fs.appendFileSync(common_learning, learning_text_generalize + "\n");// write message into dictionary
+    delayer_learning = Date.now();
 }
 
 /**************************************************************************/
@@ -765,7 +767,7 @@ client.on("message", async message => {
     }
 
     if (message.content.indexOf(config.prefix) !== 0) {
-        if (getRandomInt(5) >= 4) {
+        if (getRandomInt(5) >= 4 & (Date.now() - delayer_learning > 300)) {
             bot_response_poster(message);
         } else {
             return; // ignore messages without OUR prefix, except... we must be polite and...a bit of random doesnt hurt :D
