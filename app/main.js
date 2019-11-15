@@ -941,6 +941,23 @@ client.on("message", async message => {
         }
     });
 
+    // link test
+    isItPartOfString2(translate("cmd_link").split(";"), command).catch(function (item) {
+        if (item) {
+            removeCallMsg(message);
+            const link_in_Message = args.join(" ");
+            defaultPageCheck(link_in_Message).then(data => {
+                if (data) {
+                    selfDestructMSG(message, translate("cmd_link_exist", "<" + link_in_Message + ">"), 30000, "LinkCheck");
+                    Log(translate("cmd_link_exist", link_in_Message));
+                } else {
+                    selfDestructMSG(message, translate("cmd_link_notexist", "<" + link_in_Message + ">"), 30000, "LinkCheck");
+                    Log(translate("cmd_link_notexist", link_in_Message));
+                }
+            });
+        }
+    });
+
     //test
     isItPartOfString2(translate("cmd_test").split(";"), command).catch(function (item) {
         if (item) {
