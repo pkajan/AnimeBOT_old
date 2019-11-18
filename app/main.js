@@ -598,7 +598,7 @@ function bot_response_poster(message) {
 
     var message_string = deunicode(message.content).toLowerCase().split(" ")[0];
     isItPartOfString(learning_array_exceptions, message_string).catch(function (exception) {
-        if (!exception) {
+        if (!exception & message_string != null) {
             /* create REGEX that match BOT name (first 4 chars to be precise) */
             var str1 = `[${client.user.username.charAt(0)},${client.user.username.charAt(0).toLowerCase()}][${client.user.username.charAt(1)},${client.user.username.charAt(1).toLowerCase()}][${client.user.username.charAt(2)},${client.user.username.charAt(2).toLowerCase()}][${client.user.username.charAt(3)},${client.user.username.charAt(3).toLowerCase()}][a-zA-Z0-9À-ž]*`;
             var regex = new RegExp(str1, "g");
