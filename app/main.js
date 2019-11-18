@@ -556,6 +556,15 @@ function CheckAnimeOnNet() {
 
 
 function bot_response_poster(message) {
+    var message_author = message.author.username.toString();
+    var nickname_of_user = client.guilds.get(message.guild.id).member(message.author).nickname;
+    if (nickname_of_user == null) { //prevent error when nickname is not set
+        nickname_of_user = message.author.username.toString();
+    } else {
+        nickname_of_user = nickname_of_user.toString();
+    }
+
+
     if (Boolean(getRandomInt(bot_name_img_chance)) == true || !fs.existsSync(common_learning)) {
         var indexOfTxT = imagesInFolder.indexOf("images/info.txt");
         if (indexOfTxT !== -1) {
@@ -574,14 +583,14 @@ function bot_response_poster(message) {
         fs.readFile(common_learning, function (err, data) {
             if (err) throw err;
             var array = onlyStringArr(uniqArr(data.toString().split("\n")));
-            var repl_txt = parse(array.randomElement(), message.author.username.toString());
+            var repl_txt = parse(array.randomElement(), nickname_of_user);
             if (Boolean(getRandomInt(2)) == true) { //sometimes post learned message, without mentioning username
                 repl_txt = parse(array.randomElement(), "");
                 repl_txt = repl_txt.replace(/^\s*,/g, ' ').replace(/\s\s+/g, ' ').replace(/\s\./g, '.');
                 //replace "bugged" texts: comma at start, multiple spaces, space before comma"
             }
             message.channel.send(translate("bot_name", repl_txt));
-            Log(translate("bot_name_learning_log", message.author.username.toString()));
+            Log(translate("bot_name_learning_log", message_author));
         });
     }
 
