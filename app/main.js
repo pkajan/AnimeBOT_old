@@ -57,7 +57,8 @@ var status_update_channel = config.status_update_announce_channel_id;
 var stat_message = "";
 var delayer = 0;
 var delayer_learning = 0;
-
+var silence_time_ms = config.silence_time_ms;
+var silencer = 0;
 var polite_array_day = reply.messages_day.split(";");
 var polite_array_night = reply.messages_night.split(";");
 var polite_array_hello = reply.polite_hello.split(";");
@@ -783,7 +784,11 @@ client.on("message", async message => {
 
     if (message.content.indexOf(config.prefix) !== 0) {
         if (getRandomInt(5) >= 4 & (Date.now() - delayer_learning > 300)) {
-            bot_response_poster(message);
+            if (Date.now() - silencer > silence_time_ms) {
+                bot_response_poster(message);
+            } else {
+                Log(translate("cmd_silencer_msg_log"));
+            }
         } else {
             return; // ignore messages without OUR prefix, except... we must be polite and...a bit of random doesnt hurt :D
         }
@@ -972,6 +977,17 @@ client.on("message", async message => {
             });
         }
     });
+
+    // silencer
+    isItPartOfString2(translate("cmd_silencer").split(";"), command).catch(function (item) {
+        if (item) {
+            removeCallMsg(message);
+            selfDestructMSG(message, translate("cmd_silencer_msg", silence_time_ms / 60000), 5000, "Silence");
+            silencer = Date.now();
+        }
+    });
+
+
 
     //test
     isItPartOfString2(translate("cmd_test").split(";"), command).catch(function (item) {

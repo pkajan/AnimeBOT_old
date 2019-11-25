@@ -16,5 +16,6 @@
     "bot_img_chance": "5",
     "show_more_than_week": true,
     "checkXminutes": "60",
-    "status_update_announce_channel_id": "0"
+    "status_update_announce_channel_id": "0",
+    "silence_time_ms": "600000"
 }
