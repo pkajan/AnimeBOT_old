@@ -76,6 +76,7 @@ fs.readdir(pathToImages, function (err, items) {
     }
 });
 var userStatus = {};
+var sleepDuration_seconds = 10; //10s
 /**************************************************************************/
 
 /* FUNCTIONS */
@@ -146,10 +147,27 @@ function uniqArr(array) {
     return filteredArray.filter(Boolean);
 }
 
-/* "waiting" function */
-function sleep(millis) {
-    return new Promise(resolve => setTimeout(resolve, millis));
+/* code to restart bot */
+function restart_program() {
+    const execSync = require('child_process').execSync;
+    execSync("start cmd.exe @cmd /k \"run_bot.cmd\"");
 }
+
+/* "waiting"/countdown function */
+function startCountdown(seconds, functions = null) {
+    var counter = seconds;
+    var interval = setInterval(() => {
+        console.log(counter);
+        counter--;
+
+        if (counter < 0) {
+            clearInterval(interval);
+            if (functions != null) {
+                functions();
+            }
+        };
+    }, 1000);
+};
 
 /* remove accents/diacritics */
 function deunicode(any_string) {
@@ -693,11 +711,31 @@ client.on("guildDelete", guild => {
 });
 
 /* Error handling (dull one) - wait X miliseconds and restart - helps on network interupts */
-client.on("error", (e) => {
-    Log(e);
-    sleep(5000);
-    const execSync = require('child_process').execSync;
-    execSync("start cmd.exe @cmd /k \"run_bot.cmd\"");
+
+client.on("error", (error) => {
+    Log("---------ERROR----------");
+    if (isItPartOfString(error.message, "getaddrinfo ENOTFOUND")) {
+        Log("Connection fault...");
+        startCountdown(sleepDuration_seconds, restart_program);
+        console.log("restarting");
+    } else {
+        Log("Unknown error...");
+        Log(JSON.stringify(error));
+        startCountdown(sleepDuration_seconds, restart_program);
+        console.log("restarting");
+    }
+});
+
+client.on('warning', (warning) => {
+    Log("---------ERROR----------");
+    if (isItPartOfString(warning.message, "<reserved_for_later>")) {
+        //nothing known, yet...
+    } else {
+        Log("Unknown warning...");
+        Log(JSON.stringify(warning));
+        startCountdown(sleepDuration_seconds, restart_program);
+        console.log("restarting");
+    }
 });
 
 /* Triggered when user join/leave voice channel */
@@ -722,7 +760,7 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
             Log(translate("voice_leave_log", oldMember.user.username.toString()));
         }
     }
-})
+});
 
 /* Triggered when message is send into chat */
 client.on("message", async message => {
