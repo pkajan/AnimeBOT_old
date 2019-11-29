@@ -65,6 +65,7 @@ var polite_array_hello = reply.polite_hello.split(";");
 var polite_array_bye = reply.polite_night.split(";");
 var polite_array_exceptions = reply.exceptions.split(";");
 var learning_array_exceptions = reply.exceptions_learning.split(";");
+console.log(learning_array_exceptions);
 var voice_join = reply.voice_join_msg.split(";");
 var voice_leave = reply.voice_leave_msg.split(";");
 var pathToImages = "images";
@@ -616,7 +617,7 @@ function bot_response_poster(message) {
     }
 
     var message_string = deunicode(message.content).toLowerCase().split(" ")[0];
-    isItPartOfString(learning_array_exceptions, message_string).catch(function (exception) {
+    isItPartOfString(learning_array_exceptions, deunicode(message.content).toLowerCase()).catch(function (exception) {
         if (!exception & message_string != null) {
             /* create REGEX that match BOT name (first 4 chars to be precise) */
             var str1 = `[${client.user.username.charAt(0)},${client.user.username.charAt(0).toLowerCase()}][${client.user.username.charAt(1)},${client.user.username.charAt(1).toLowerCase()}][${client.user.username.charAt(2)},${client.user.username.charAt(2).toLowerCase()}][${client.user.username.charAt(3)},${client.user.username.charAt(3).toLowerCase()}][a-zA-Z0-9À-ž]*`;
