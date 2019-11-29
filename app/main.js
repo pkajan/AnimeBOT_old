@@ -65,7 +65,6 @@ var polite_array_hello = reply.polite_hello.split(";");
 var polite_array_bye = reply.polite_night.split(";");
 var polite_array_exceptions = reply.exceptions.split(";");
 var learning_array_exceptions = reply.exceptions_learning.split(";");
-console.log(learning_array_exceptions);
 var voice_join = reply.voice_join_msg.split(";");
 var voice_leave = reply.voice_leave_msg.split(";");
 var pathToImages = "images";
