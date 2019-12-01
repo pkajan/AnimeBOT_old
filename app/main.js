@@ -615,9 +615,8 @@ function bot_response_poster(message) {
         });
     }
 
-    var message_string = deunicode(message.content).toLowerCase().split(" ")[0];
     isItPartOfString(learning_array_exceptions, deunicode(message.content).toLowerCase()).catch(function (exception) {
-        if (!exception & message_string != null) {
+        if (!exception & message.content != null) {
             /* create REGEX that match BOT name (first 4 chars to be precise) */
             var str1 = `[${client.user.username.charAt(0)},${client.user.username.charAt(0).toLowerCase()}][${client.user.username.charAt(1)},${client.user.username.charAt(1).toLowerCase()}][${client.user.username.charAt(2)},${client.user.username.charAt(2).toLowerCase()}][${client.user.username.charAt(3)},${client.user.username.charAt(3).toLowerCase()}][a-zA-Z0-9À-ž]*`;
             var regex = new RegExp(str1, "g");
@@ -820,6 +819,7 @@ client.on("message", async message => {
         bot_response_poster(message);
     }
 
+    /* random responses */
     if (message.content.indexOf(config.prefix) !== 0) {
         if (getRandomInt(5) >= 4 & (Date.now() - delayer_learning > 300)) {
             if (Date.now() - silencer > silence_time_ms) {
