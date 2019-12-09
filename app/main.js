@@ -10,6 +10,8 @@ const CronJob = require('cron').CronJob;
 var LastPoliteMessage = 0;
 var delayer_learning = 0;
 var silencer = 0;
+var LastVoiceChannelMessageJ = 0;
+var LastVoiceChannelMessageL = 0;
 
 /* Check for necessary files */
 const fs = require('fs-extra');
@@ -200,16 +202,16 @@ client.on("voiceStateUpdate", (oldMember, newMember) => {
     if (!newMember.user.bot || !oldMember.user.bot) { // bot protection
         if (oldUserChannel === undefined && newUserChannel !== undefined) {
             // User Joins a voice channel
-            if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageJ)) > 60000 && Boolean(getRandomInt(2)) == true) { //prevent spamming on join/leave!!
+            if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageJ)) > 60000 && Boolean(things.getRandomInt(2)) == true) { //prevent spamming on join/leave!!
                 LastVoiceChannelMessageJ = new Date().getTime();
-                selfDestructMSGID(defaultTextChannel, things.translate("voice_join", voice_join.randomElement()), 20000, newMember.user.username.toString(), "userJoinVoice");//send message and remove if after X seconds
+                discord.selfDestructMSGID(client, config.defaultTextChannel, things.translate("voice_join", reply.voice_join_msg.split(";").randomElement()), 20000, newMember.user.username.toString(), "userJoinVoice");//send message and remove if after X seconds
             }
             things.log(things.translate("voice_join_log", newMember.user.username.toString()));
         } else if (newUserChannel === undefined) {
             // User leaves a voice channel
-            if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageL)) > 60000 && Boolean(getRandomInt(2)) == true) { //prevent spamming on join/leave!!
+            if ((parseInt(new Date().getTime()) - parseInt(LastVoiceChannelMessageL)) > 60000 && Boolean(things.getRandomInt(2)) == true) { //prevent spamming on join/leave!!
                 LastVoiceChannelMessageL = new Date().getTime();
-                selfDestructMSGID(defaultTextChannel, things.translate("voice_leave", voice_leave.randomElement()), 20000, oldMember.user.username.toString(), "userLeaveVoice");//send message and remove if after X seconds
+                discord.selfDestructMSGID(client, config.defaultTextChannel, things.translate("voice_leave", reply.voice_leave_msg.split(";").randomElement()), 20000, oldMember.user.username.toString(), "userLeaveVoice");//send message and remove if after X seconds
             }
             things.log(things.translate("voice_leave_log", oldMember.user.username.toString()));
         }

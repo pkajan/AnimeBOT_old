@@ -21,7 +21,7 @@ module.exports = {
   },
 
   /* Send and remove message in X seconds (from given channel)*/
-  selfDestructMSGID: function (channelID, MSGText, time, user = null, cmd_name) {
+  selfDestructMSGID: function (client, channelID, MSGText, time, user = null, cmd_name) {
     client.channels.get(channelID).send(MSGText).then(sentMessage => {
       sentMessage.delete(time).catch(error => things.log(things.translate("BOT_send_selfdestruct_err")));
     });
