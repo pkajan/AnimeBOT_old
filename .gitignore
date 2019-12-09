@@ -1,7 +1,6 @@
 node_modules/
 package-lock.json
-3rd_party/ffmpeg.exe
-data/config.json
+config/config.json
 data/replies.json
 data/anime.json
 common_learning.txt
@@ -13,3 +12,5 @@ images/*.jpg
 images/*.jpeg
 images/*.webm
 images/*.png
+data/anime.json
+data/replies.json

@@ -10,12 +10,12 @@
     "adminIDs": "987654321",
     "defaultTextChannel": "123456789",
     "translation": "en",
-    "timeshift": "1",
     "polite": true,
     "slice_name_by_chars": "2",
     "bot_img_chance": "5",
     "show_more_than_week": true,
     "checkXminutes": "60",
     "status_update_announce_channel_id": "0",
+    "sleepDuration_seconds": "10",
     "silence_time_ms": "600000"
 }
