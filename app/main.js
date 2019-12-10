@@ -48,6 +48,7 @@ const checkXminutes = config.checkXminutes;
 var delayer = 0;
 var userStatus = {};
 var soonArray = new Array();
+var postThrottling = false;
 
 
 function animeCheckRoutine(existance, tmpCHECKVAR, item) {
@@ -429,6 +430,7 @@ client.on("message", async message => {
         /* Called by name */
         if (things.deunicode(message.content.toLowerCase()).indexOf(things.deunicode(client.user.username.slice(0, -config.slice_name_by_chars).toLowerCase())) > -1) { //slice to allow bot name "mutations"
             learning.bot_response_poster(client, message);
+            postThrottling = true;
         }
 
         /* Polite hello/bye */
@@ -473,6 +475,7 @@ client.on("message", async message => {
                             }
                         });
                     }
+                    postThrottling = true;
                 });
             }
         } else {
@@ -481,15 +484,19 @@ client.on("message", async message => {
         }
 
         /* random responses */
-        if (things.getRandomInt(5) >= 4 & (Date.now() - delayer_learning > 300)) {
-            if (Date.now() - silencer > config.silence_time_ms) {
-                learning.bot_response_poster(client, message, true);
-                delayer_learning = Date.now();
+        if (postThrottling == false) {
+            if (things.getRandomInt(5) >= 4 & (Date.now() - delayer_learning > 300)) {
+                if (Date.now() - silencer > config.silence_time_ms) {
+                    learning.bot_response_poster(client, message, true);
+                    delayer_learning = Date.now();
+                } else {
+                    things.log(things.translate("cmd_silencer_msg_log"));
+                }
             } else {
-                things.log(things.translate("cmd_silencer_msg_log"));
+                return; // ignore messages without OUR prefix, except... we must be polite and...a bit of random doesnt hurt :D
             }
         } else {
-            return; // ignore messages without OUR prefix, except... we must be polite and...a bit of random doesnt hurt :D
+            postThrottling = false;
         }
     }
 });
