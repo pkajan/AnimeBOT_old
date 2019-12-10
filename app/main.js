@@ -12,6 +12,7 @@ var delayer_learning = 0;
 var silencer = 0;
 var LastVoiceChannelMessageJ = 0;
 var LastVoiceChannelMessageL = 0;
+const updCMD = "start cmd.exe @cmd /k \"git reset --hard & git fetch --all & git pull & exit\"";
 
 /* Check for necessary files */
 const fs = require('fs-extra');
@@ -332,6 +333,25 @@ client.on("message", async message => {
                         ]
                     });
                     things.log(things.translate("cmd_log_log", message.author.username.toString()));
+                }
+            }
+        });
+
+        // download update
+        things.isItPartOfString_identical(things.translate("cmd_update").split(";"), command).catch(function (item) {
+            if (item) {
+                if (things.hasRights(message.author.id)) {
+                    discord.removeCallMsg(message);
+                    discord.selfDestructMSG(message, things.translate("cmd_update_msg"), 4000, "update");
+                    things.log(things.translate("cmd_update_msg_log", message.author.username.toString()));
+                    const { exec } = require('child_process');
+                    exec(updCMD, (err, stdout, stderr) => {
+                        if (err) {
+                            things.log(err);
+                            return;
+                        }
+                        things.log(stdout);
+                    });
                 }
             }
         });
