@@ -1,14 +1,12 @@
 const things = require('./things.js');
-const discord = require('./things_discord.js');
 const fs = require('fs-extra');
-const reply = require('../data/replies.json'); //bot replies
-var learning_array_exceptions = reply.exceptions_learning.split(";");
-
-var pathToImages = "images";
-const common_learning = "common_learning.txt";
 const path = require('path');
-var imagesInFolder = [];
+const reply = require('../data/replies.json'); //bot replies
 const config = require('../config/config.json'); //file with config
+const learning_array_exceptions = reply.exceptions_learning.split(";");
+const pathToImages = "images";
+const common_learning = "common_learning.txt";
+var imagesInFolder = [];
 
 fs.readdir(pathToImages, function (err, items) {
     if (items) {

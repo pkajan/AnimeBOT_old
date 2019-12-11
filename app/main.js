@@ -5,8 +5,14 @@ const calculate = require('./calculate.js');
 const learning = require('./learning.js');
 
 
+const config = require('../config/config.json'); //file with config
+const data_file = require('../data/anime.json'); //file with names and times
+const reply = require('../data/replies.json'); //bot replies
+
 const Discord = require('discord.js');
 const CronJob = require('cron').CronJob;
+
+
 var LastPoliteMessage = 0;
 var delayer_learning = 0;
 var silencer = 0;
@@ -26,14 +32,6 @@ Object.keys(obj).forEach(function (key) {
     }
 });
 
-const client = new Discord.Client();
-const start_time = Date.now();
-
-/* Loading files & other file related stuff */
-const config = require('../config/config.json'); //file with config
-const data_file = require('../data/anime.json'); //file with names and times
-const reply = require('../data/replies.json'); //bot replies
-
 const announceFile = "announce.json";
 const announceFileFIN = "announceFIN.txt";
 const common_learning = "common_learning.txt";
@@ -44,17 +42,17 @@ if (!fs.existsSync(announceFile)) {
 }
 
 
-
-const checkXminutes = config.checkXminutes;
 var delayer = 0;
 var userStatus = {};
 var soonArray = new Array();
 var postThrottling = false;
 
+const client = new Discord.Client();
+const start_time = Date.now();
+
 
 function animeCheckRoutine(existance, tmpCHECKVAR, item) {
     if (existance) {
-
         things.log(things.translate("BOT_cron_link_yes", tmpCHECKVAR));
         if (item.url == tmpCHECKVAR) {
             console.log(item.url + `\n` + tmpCHECKVAR);
@@ -173,7 +171,7 @@ client.on('ready', () => {
 
     /* CRONS ***********************************************************/
     // check every X minutes if anime is there
-    const job1 = new CronJob(`*/${checkXminutes} * * * *`, function () {
+    const job1 = new CronJob(`*/${config.checkXminutes} * * * *`, function () {
         CheckAnimeOnNet();
     });
     job1.start();
@@ -329,7 +327,7 @@ client.on("message", async message => {
                 if (things.hasRights(message.author.id)) {
                     discord.MSGReply(message, things.translate("cmd_log_msg"), {
                         files: [
-                            `./${logFile}`
+                            `./${config.logFile}`
                         ]
                     });
                     things.log(things.translate("cmd_log_log", message.author.username.toString()));

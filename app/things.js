@@ -1,11 +1,7 @@
 const fs = require('fs-extra');
-const path = require('path');
 const util = require('util');
 const date = require('date-and-time');
-//const dateFormat = require('dateformat');
 const config = require('../config/config.json'); //file with config
-const logFile = "logs.txt";
-
 
 
 /* implement "random" into array and return rng value from given array = array.randomElement */
@@ -30,7 +26,7 @@ module.exports = {
     var now = date.format(new Date(), 'DD.MM HH:mm:ss'); // 23.03 16:46:00
     var text = `${now} [${type}] ${util.inspect(anything)}`; //util.inspect - returns a string representation of an object
     console.log(text); // show log in console
-    this.fwASYNC(logFile, text + "\n");// write log into file
+    this.fwASYNC(config.logFile, text + "\n");// write log into file
   },
 
   /* Check if user has RIGHTs */
