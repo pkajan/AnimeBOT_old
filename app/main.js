@@ -45,7 +45,6 @@ if (!fs.existsSync(announceFile)) {
 var delayer = 0;
 var userStatus = {};
 var soonArray = new Array();
-var postThrottling = false;
 
 const client = new Discord.Client();
 const start_time = Date.now();
@@ -440,6 +439,7 @@ client.on("message", async message => {
 
 
 /* working with messages without our prefix */
+var postThrottling = false;
 client.on("message", async message => {
     if (message.author.bot) return; // ignore other bots and self
 
@@ -448,7 +448,6 @@ client.on("message", async message => {
         /* Called by name */
         if (things.deunicode(message.content.toLowerCase()).indexOf(things.deunicode(client.user.username.slice(0, -config.slice_name_by_chars).toLowerCase())) > -1) { //slice to allow bot name "mutations"
             learning.bot_response_poster(client, message);
-            postThrottling = true;
         }
 
         /* Polite hello/bye */
@@ -467,6 +466,7 @@ client.on("message", async message => {
                                 message.channel.send(things.translate("polite_hello", reply.polite_hello.split(";").randomElement()));
                                 things.log(things.translate("polite_hello_log", message.author.username.toString()));
                                 posted = true;
+                                postThrottling = true;
                             }
                         });
                         things.isItPartOfString(reply.messages_day.split(";"), message_string + " " + message_string2).catch(function (item) { //combined message
@@ -474,6 +474,7 @@ client.on("message", async message => {
                                 message.channel.send(things.translate("polite_hello", reply.polite_hello.split(";").randomElement()));
                                 things.log(things.translate("polite_hello_log", message.author.username.toString()));
                                 posted = true;
+                                postThrottling = true;
                             }
                         });
 
@@ -483,6 +484,7 @@ client.on("message", async message => {
                                 message.channel.send(things.translate("polite_GN", reply.polite_night.split(";").randomElement()));
                                 things.log(things.translate("polite_GN_log", message.author.username.toString()));
                                 posted = true;
+                                postThrottling = true;
                             }
                         });
                         things.isItPartOfString(reply.messages_night.split(";"), message_string + " " + message_string2).catch(function (item) { //combined message
@@ -490,10 +492,10 @@ client.on("message", async message => {
                                 message.channel.send(things.translate("polite_GN", reply.polite_night.split(";").randomElement()));
                                 things.log(things.translate("polite_GN_log", message.author.username.toString()));
                                 posted = true;
+                                postThrottling = true;
                             }
                         });
                     }
-                    postThrottling = true;
                 });
             }
         } else {
