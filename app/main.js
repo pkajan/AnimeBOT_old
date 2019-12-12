@@ -12,12 +12,6 @@ const reply = require('../data/replies.json'); //bot replies
 const Discord = require('discord.js');
 const CronJob = require('cron').CronJob;
 
-
-var LastPoliteMessage = 0;
-var delayer_learning = 0;
-var silencer = 0;
-var LastVoiceChannelMessageJ = 0;
-var LastVoiceChannelMessageL = 0;
 const updCMD = "start cmd.exe @cmd /k \"git reset --hard & git fetch --all & git pull & exit\"";
 
 /* Check for necessary files */
@@ -43,6 +37,11 @@ if (!fs.existsSync(announceFile)) {
 
 
 var delayer = 0;
+var silencer = 0;
+var LastPoliteMessage = 0;
+var delayer_learning = 0;
+var LastVoiceChannelMessageJ = 0;
+var LastVoiceChannelMessageL = 0;
 var userStatus = {};
 var soonArray = new Array();
 
@@ -424,6 +423,15 @@ client.on("message", async message => {
                 discord.selfDestructMSG(message, things.translate("cmd_forcecheck_msg"), 4000, "forcecheck");
                 CheckAnimeOnNet();
                 things.log(things.translate("cmd_forcecheck_log", message.author.username.toString()));
+            }
+        });
+
+        // silencer
+        things.isItPartOfString_identical(things.translate("cmd_silencer").split(";"), command).catch(function (item) {
+            if (item) {
+                discord.removeCallMsg(message);
+                discord.selfDestructMSG(message, things.translate("cmd_silencer_msg", config.silence_time_ms / 60000), 5000, "Silence");
+                silencer = Date.now();
             }
         });
 
