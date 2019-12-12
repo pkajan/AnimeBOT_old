@@ -198,6 +198,15 @@ module.exports = {
       }
     });
     return value;
+  },
+
+/* wait X-ms before executing rest of code */
+  wait: function wait(ms) {
+    var start = new Date().getTime();
+    var end = start;
+    while (end < start + ms) {
+      end = new Date().getTime();
+    }
   }
 
 }
