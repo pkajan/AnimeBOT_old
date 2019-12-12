@@ -187,6 +187,17 @@ module.exports = {
   restart_program: function () {
     const execSync = require('child_process').execSync;
     execSync("start cmd.exe @cmd /k \"run_bot.cmd\"");
+  },
+
+  /* test if string start with value from array */
+  startWithArr: function (string, array) {
+    var value = false;
+    array.forEach(function (key) {
+      if (string[0] == key) {
+        value = true;
+      }
+    });
+    return value;
   }
 
 }

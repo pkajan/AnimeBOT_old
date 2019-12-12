@@ -451,7 +451,8 @@ var postThrottling = false;
 client.on("message", async message => {
     if (message.author.bot) return; // ignore other bots and self
 
-    if (!message.content.startsWith(config.prefix)) {
+
+    if (!message.content.startsWith(config.prefix) && !things.startWithArr(message.content, config.prefix_ignore.split(" "))) {
 
         /* Called by name */
         if (things.deunicode(message.content.toLowerCase()).indexOf(things.deunicode(client.user.username.slice(0, -config.slice_name_by_chars).toLowerCase())) > -1) { //slice to allow bot name "mutations"

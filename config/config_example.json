@@ -1,5 +1,6 @@
 {
     "prefix": "?",
+    "prefix_ignore": "! * /",
     "activityType": "WATCHING",
     "activityName": "Anime all day...",
     "status": "available",
