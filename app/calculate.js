@@ -64,10 +64,9 @@ module.exports = {
 
                 var json_date = date.parse(`${item.year}-${item.month}-${item.day}`, 'YYYY-MM-DD');
                 var weeks = Math.ceil((date.subtract(new Date(), json_date).toDays()) / 7); //round weeks UP to determine next episode release
-                var newep_date = date.addDays(json_date, weeks * 7); // calculate next ep date from weeks
+                var newep_date = date.addDays(json_date, Math.abs(weeks) * 7); // calculate next ep date from weeks
                 var new_ep_in = date.subtract(newep_date, new Date()).toHours(); //new ep in X hours
                 var difference = new_ep_in / 24;
-
                 var countDownDate = date.format(newep_date, 'dddd, DDD MMMM').toString(); /* Saturday, 9th*/
                 var countDownDate_oth = date.format(newep_date, 'dddd, DDD MMMM').toString(); /* Saturday, 9th April */;
                 var episode = parseInt(item.episode) + parseInt(weeks);
@@ -76,8 +75,8 @@ module.exports = {
                 }
 
                 if (episode >= 1) {
-                    var cd_text = `**${item.name}**: ${countDownDate} ${item.time} \`ep${episode}\`]\n`;
-                    var cd_text_oth = `**${item.name}**: ${countDownDate_oth} ${item.time} \`ep${episode}\`]\n`;
+                    var cd_text = `**${item.name}**: ${countDownDate} ${item.time} [\`ep${episode}\`]\n`;
+                    var cd_text_oth = `**${item.name}**: ${countDownDate_oth} ${item.time} [\`ep${episode}\`]\n`;
                 } else {
                     countDownDate = date.format(date.parse(`${item.year}-${item.month}-${item.day}`, 'YYYY-MM-DD'), 'dddd, DDD MMMM').toString();
                     countDownDate_oth = date.format(date.parse(`${item.year}-${item.month}-${item.day}`, 'YYYY-MM-DD'), 'dddd, DDD MMMM').toString();
