@@ -75,8 +75,16 @@ module.exports = {
                     return; // skip if serie has ended...
                 }
 
-                var cd_text = `**${item.name}**: ` + countDownDate + ` ${item.time}` + " [`ep" + `${episode}` + "`]\n";
-                var cd_text_oth = `**${item.name}**: ` + countDownDate_oth + ` ${item.time}` + " [`ep" + `${episode}` + "`]\n";
+                if (episode >= 1) {
+                    var cd_text = `**${item.name}**: ${countDownDate} ${item.time} \`ep${episode}\`]\n`;
+                    var cd_text_oth = `**${item.name}**: ${countDownDate_oth} ${item.time} \`ep${episode}\`]\n`;
+                } else {
+                    countDownDate = date.format(date.parse(`${item.year}-${item.month}-${item.day}`, 'YYYY-MM-DD'), 'dddd, DDD MMMM').toString();
+                    countDownDate_oth = date.format(date.parse(`${item.year}-${item.month}-${item.day}`, 'YYYY-MM-DD'), 'dddd, DDD MMMM').toString();
+                    var cd_text = `**${item.name}**: ${countDownDate} \`[in ${episode * -1} week(s)\`]\n`;
+                    var cd_text_oth = `**${item.name}**: ${countDownDate_oth} \`[in ${episode * -1} week(s)\`]\n`;
+                }
+
 
                 switch (true) {
                     case (difference <= 0): //today
