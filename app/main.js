@@ -130,7 +130,7 @@ function CheckAnimeOnNet() {
 /* poor attempt for error handling */
 client.on("error", (error) => {
     things.log("---------ERROR----------");
-    if (things.isItPartOfString(error.message, "getaddrinfo ENOTFOUND")) {
+    if (error.message.includes("getaddrinfo ENOTFOUND")) {
         things.log("Connection fault...");
         things.startCountdown(config.sleepDuration_seconds, things.restart_program);
         console.log("restarting");
@@ -144,7 +144,7 @@ client.on("error", (error) => {
 
 client.on('warning', (warning) => {
     things.log("---------WARNING----------");
-    if (things.isItPartOfString(warning.message, "<reserved_for_later>")) {
+    if (warning.message.includes("<reserved_for_later>")) {
         //nothing known, yet...
     } else {
         things.log("Unknown warning...");
