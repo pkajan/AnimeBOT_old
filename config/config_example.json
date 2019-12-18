@@ -19,5 +19,6 @@
     "status_update_announce_channel_id": "0",
     "sleepDuration_seconds": "10",
     "silence_time_ms": "600000",
+    "randomChance": "5",
     "logFile": "logs.txt"
 }

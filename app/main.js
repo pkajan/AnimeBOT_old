@@ -515,7 +515,7 @@ client.on("message", async message => {
         /* random responses */
         things.wait(500);
         if (postThrottling == false) {
-            if (things.getRandomInt(5) >= 4 & (Date.now() - delayer_learning > 300)) {
+            if (things.getRandomInt(config.randomChance) == true && (Date.now() - delayer_learning > 300)) {
                 if (Date.now() - silencer > config.silence_time_ms) {
                     learning.bot_response_poster(client, message, true);
                     delayer_learning = Date.now();
