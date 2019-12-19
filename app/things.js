@@ -96,6 +96,7 @@ module.exports = {
     var ImBoolean = false;
     any_array.forEach(function (item) {
       if ((any_string.match(item))) {
+        console.log(any_string + " | contain: " + item);
         ImBoolean = true;
       }
     });
@@ -200,7 +201,7 @@ module.exports = {
     return value;
   },
 
-/* wait X-ms before executing rest of code */
+  /* wait X-ms before executing rest of code */
   wait: function wait(ms) {
     var start = new Date().getTime();
     var end = start;
