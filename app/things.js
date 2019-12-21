@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const util = require('util');
+const request = require('request');
 const date = require('date-and-time');
 const config = require('../config/config.json'); //file with config
 
@@ -202,12 +203,20 @@ module.exports = {
   },
 
   /* wait X-ms before executing rest of code */
-  wait: function wait(ms) {
+  wait: function (ms) {
     var start = new Date().getTime();
     var end = start;
     while (end < start + ms) {
       end = new Date().getTime();
     }
+  },
+
+  download: function (url, destination) {
+    request(url)
+      .pipe(fs.createWriteStream(destination))
   }
+
+
+
 
 }

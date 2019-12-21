@@ -4,16 +4,6 @@ const page_checks = require('./page_checks.js');
 const calculate = require('./calculate.js');
 const learning = require('./learning.js');
 
-
-const config = require('../config/config.json'); //file with config
-const data_file = require('../data/anime.json'); //file with names and times
-const reply = require('../data/replies.json'); //bot replies
-
-const Discord = require('discord.js');
-const CronJob = require('cron').CronJob;
-
-const updCMD = "start cmd.exe @cmd /k \"git reset --hard & git fetch --all & git pull & exit\"";
-
 /* Check for necessary files */
 const fs = require('fs-extra');
 const obj = require('../config/check.json');
@@ -25,6 +15,15 @@ Object.keys(obj).forEach(function (key) {
         process.exit(1);
     }
 });
+
+const config = require('../config/config.json'); //file with config
+const data_file = require('../data/anime.json'); //file with names and times
+const reply = require('../data/replies.json'); //bot replies
+
+const Discord = require('discord.js');
+const CronJob = require('cron').CronJob;
+
+const updCMD = "start cmd.exe @cmd /k \"git reset --hard & git fetch --all & git pull & exit\"";
 
 const announceFile = "announce.json";
 const announceFileFIN = "announceFIN.txt";
@@ -174,12 +173,29 @@ client.on('ready', () => {
     });
     job1.start();
     things.log(things.translate("cron_started", 1));
-    const job2 = new CronJob("1 0 * * *", function () {
-        calculate.StringOfAnime(calculate.fillAnimeArray(data_file), null, false); //find todays anime and put it into file
+
+    //find todays anime and put it into file
+    const job2 = new CronJob("1 1 * * *", function () {
+        calculate.StringOfAnime(calculate.fillAnimeArray(data_file), null, false);
     });
     job2.start();
     things.log(things.translate("cron_started", 2));
 
+    //download online list
+    if (config.onlineList !== null && config.onlineList !== "" && typeof config.onlineList !== 'undefined') {
+        const job3 = new CronJob("1 0 * * *", function () {
+            page_checks.defaultPageCheck(config.onlineList).then(data => {
+                if (data) {
+                    things.download(config.onlineList, "data/anime.json");
+                    things.log(things.translate("cmd_onlineList_exist"));
+                } else {
+                    things.log(things.translate("cmd_onlineList_notexist"));
+                }
+            });
+        });
+        job3.start();
+        things.log(things.translate("cron_started", 3));
+    }
 });
 
 /* Triggered when addeded/removed from server */
@@ -291,7 +307,12 @@ client.on("message", async message => {
         things.isItPartOfString_identical(things.translate("cmd_info").split(";"), command).catch(function (item) {
             if (item) {
                 discord.removeCallMsg(message);
-                calculate.StringOfAnime(calculate.fillAnimeArray(data_file), message, true); //post table
+                var arrayOfthings = calculate.fillAnimeArray(data_file);
+                if (arrayOfthings.length > 0) {
+                    calculate.StringOfAnime(calculate.fillAnimeArray(data_file), message, true); //post table
+                } else {
+                    discord.selfDestructMSG(message, things.translate("cmd_info_empty"), 5000);
+                }
             }
         });
 
@@ -435,6 +456,23 @@ client.on("message", async message => {
             }
         });
 
+        // manualy initiate anime list update
+        things.isItPartOfString_identical(things.translate("cmd_onlinelist").split(";"), command).catch(function (item) {
+            if (item) {
+                discord.removeCallMsg(message);
+                page_checks.defaultPageCheck(config.onlineList).then(data => {
+                    if (data) {
+                        things.download(config.onlineList, "data/anime.json");
+                        discord.selfDestructMSG(message, things.translate("cmd_onlineList_exist"), 10000, "LinkCheck");
+                        things.log(things.translate("cmd_onlineList_exist"));
+                    } else {
+                        discord.selfDestructMSG(message, things.translate("cmd_onlineList_notexist"), 5000, "LinkCheck");
+                        things.log(things.translate("cmd_onlineList_notexist"));
+                    }
+                });
+            }
+        });
+
         //test
         things.isItPartOfString_identical(things.translate("cmd_test").split(";"), command).catch(function (item) {
             if (item) {
@@ -442,6 +480,7 @@ client.on("message", async message => {
                 //console.log(message.author.username.toString());
             }
         });
+
     }
 });
 

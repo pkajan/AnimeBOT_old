@@ -20,5 +20,6 @@
     "sleepDuration_seconds": "10",
     "silence_time_ms": "600000",
     "randomChance": "5",
-    "logFile": "logs.txt"
+    "logFile": "logs.txt",
+    "onlineList": "https://myanimelist.eu/anime.json"
 }
