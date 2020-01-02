@@ -81,7 +81,7 @@ module.exports = {
                     countDownDate = date.format(date.parse(`${item.year}-${item.month}-${item.day}`, 'YYYY-MM-DD'), 'dddd, DDD MMMM').toString();
                     countDownDate_oth = date.format(date.parse(`${item.year}-${item.month}-${item.day}`, 'YYYY-MM-DD'), 'dddd, DDD MMMM').toString();
                     var cd_text = `**${item.name}**: ${countDownDate} \`[in ${episode * -1} week(s)\`]\n`;
-                    var cd_text_oth = `**${item.name}**: ${countDownDate_oth} \`[in ${episode * -1} week(s)\`]\n`;
+                    var cd_text_oth = `**${item.name}**: ${countDownDate_oth} \`[in ${Math.abs(weeks)} week(s)\`]\n`;
                 }
 
 
