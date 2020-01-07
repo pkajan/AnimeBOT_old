@@ -113,7 +113,7 @@ function CheckAnimeOnNet() {
             }
 
             // if anime is on gogoanime.io
-            if (tmpCHECKVAR.includes("gogoanime.io")) {
+            if (tmpCHECKVAR.includes("gogoanime")) {
                 page_checks.gogoanime(tmpCHECKVAR).then(existance => {
                     animeCheckRoutine(existance, tmpCHECKVAR, item);
                 });
