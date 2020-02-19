@@ -473,6 +473,16 @@ client.on("message", async message => {
             }
         });
 
+        //google
+        things.isItPartOfString_identical(things.translate("cmd_google").split(";"), command).catch(function (item) {
+            if (item) {
+                discord.removeCallMsg(message);
+                const search_string = args.join("+");
+                things.log(things.translate("cmd_google_msg_log", args.join(" "), message.author.username.toString()));
+                discord.MSGReply(message, things.translate("cmd_google_msg", "https://www.google.com/search?q=" + search_string));
+            }
+        });
+
         //test
         things.isItPartOfString_identical(things.translate("cmd_test").split(";"), command).catch(function (item) {
             if (item) {
