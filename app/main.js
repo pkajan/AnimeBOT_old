@@ -483,6 +483,24 @@ client.on("message", async message => {
             }
         });
 
+        //musicbot command
+        things.isItPartOfString_identical(things.translate("cmd_radio").split(";"), command).catch(function (item) {
+            if (item) {
+                var express = "https://stream.expres.sk/128.mp3?aw_0_req.gdpr=true";
+                var antena = "https://stream.radioservices.sk/antena-hi.mp3";
+                discord.removeCallMsg(message);
+                var radio = express;
+                if (args[0] == "antena") {
+                    radio = antena;
+                }
+
+                things.log(things.translate("cmd_radio_log", radio, message.author.username.toString()));
+                discord.MSGReply(message, things.translate("cmd_radio_msg", radio));
+                console.log(things.translate("cmd_radio_msg", radio));
+                discord.MSGReply(message, "!skip");
+            }
+        });
+
         //test
         things.isItPartOfString_identical(things.translate("cmd_test").split(";"), command).catch(function (item) {
             if (item) {
@@ -545,6 +563,7 @@ client.on("message", async message => {
                                 postThrottling = true;
                             }
                         });
+
                         things.isItPartOfString(reply.messages_night.split(";"), message_string + " " + message_string2).catch(function (item) { //combined message
                             if (item & !posted) {
                                 message.channel.send(things.translate("polite_GN", reply.polite_night.split(";").randomElement()));
