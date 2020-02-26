@@ -28,6 +28,7 @@ const updCMD = "start cmd.exe @cmd /k \"git reset --hard & git fetch --all & git
 const announceFile = "announce.json";
 const announceFileFIN = "announceFIN.txt";
 const common_learning = "common_learning.txt";
+const radioFile = 'data/radio.json';
 
 fs.appendFileSync(announceFileFIN, ""); //create empty file for finished announcements
 if (!fs.existsSync(announceFile)) {
@@ -486,18 +487,23 @@ client.on("message", async message => {
         //musicbot command
         things.isItPartOfString_identical(things.translate("cmd_radio").split(";"), command).catch(function (item) {
             if (item) {
-                var express = "https://stream.expres.sk/128.mp3?aw_0_req.gdpr=true";
-                var antena = "https://stream.radioservices.sk/antena-hi.mp3";
                 discord.removeCallMsg(message);
-                var radio = express;
-                if (args[0] == "antena") {
-                    radio = antena;
+                var radioList = things.JSON_file_read(radioFile);
+
+                if (typeof radioList[args[0]] !== 'undefined') {
+                    things.log(things.translate("cmd_radio_log", radioList[args[0]], message.author.username.toString()));
+                    discord.MSGReply(message, things.translate("cmd_radio_msg", radioList[args[0]]));
+                    console.log(things.translate("cmd_radio_msg", radioList[args[0]]));
+                    discord.MSGReply(message, "!skip");
+                } else {
+                    var radioListReadable = "";
+                    var objectKeysArray = Object.keys(radioList)
+                    objectKeysArray.forEach(function (objKey) {
+                        radioListReadable += objKey + "\n"
+                    })
+                    discord.MSGReply(message, things.translate("cmd_radio_msg_nonexist", radioListReadable));
                 }
 
-                things.log(things.translate("cmd_radio_log", radio, message.author.username.toString()));
-                discord.MSGReply(message, things.translate("cmd_radio_msg", radio));
-                console.log(things.translate("cmd_radio_msg", radio));
-                discord.MSGReply(message, "!skip");
             }
         });
 

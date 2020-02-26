@@ -1,0 +1,8 @@
+{
+    "express": "https://stream.expres.sk/128.mp3?aw_0_req.gdpr=true",
+    "antena": "https://stream.radioservices.sk/antena-hi.mp3",
+    "hardrock": "https://stream.radioservices.sk/hardrock.mp3",
+    "funsk": "https://stream.funradio.sk/cs128.mp3",
+    "fun80": "https://stream.funradio.sk/80-90-128.mp3",
+    "jazz": "http://stream.radiojazz.sk:8000/jazz128.mp3"
+}

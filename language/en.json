@@ -58,6 +58,7 @@
     "cmd_radio": "radio",
     "cmd_radio_msg": "!stream %s",
     "cmd_radio_log": "Stream: %s [%s]",
+    "cmd_radio_msg_nonexist": "That radio doesn't exist. Choose one of those:\n%s",
     "cmd_onlinelist": "download;onlinelist",
     "cmd_onlineList_exist": "Anime list UPDATED! <restarting>",
     "cmd_onlineList_notexist": "Anime list does **NOT** exists!",
