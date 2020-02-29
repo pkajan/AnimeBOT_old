@@ -4,5 +4,11 @@
     "hardrock": "https://stream.radioservices.sk/hardrock.mp3",
     "funsk": "https://stream.funradio.sk/cs128.mp3",
     "fun80": "https://stream.funradio.sk/80-90-128.mp3",
-    "jazz": "http://stream.radiojazz.sk:8000/jazz128.mp3"
+    "jazz": "http://stream.radiojazz.sk:8000/jazz128.mp3",
+    "hindi": "https://us3.internet-radio.com/proxy/ritu?mp=/live",
+    "hindi2": "http://198.178.123.14:8216/;stream/1",
+    "funk": "https://uk6.internet-radio.com/proxy/soulcentralradio?mp=/stream",
+    "joy": "https://uk5.internet-radio.com/proxy/joyradio?mp=/stream",
+    "magicoldies": "https://uk4.internet-radio.com/proxy/mof?mp=/stream",
+    "ireland": "http://192.111.140.11:8058/;stream/1"
 }
