@@ -10,5 +10,7 @@
     "funk": "https://uk6.internet-radio.com/proxy/soulcentralradio?mp=/stream",
     "joy": "https://uk5.internet-radio.com/proxy/joyradio?mp=/stream",
     "magicoldies": "https://uk4.internet-radio.com/proxy/mof?mp=/stream",
-    "ireland": "http://192.111.140.11:8058/;stream/1"
+    "ireland": "http://192.111.140.11:8058/;stream/1",
+    "punk":"http://94.23.26.22:8090/live.mp3",
+    "rock": "http://us5.internet-radio.com:8267/stream?type=http"
 }
