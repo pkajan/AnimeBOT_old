@@ -64,7 +64,8 @@ function animeCheckRoutine(existance, tmpCHECKVAR, item) {
         things.JSON_file_remove_element(announceFile, tmpCHECKVAR, tmpCHECKVAR);
         ////////////////////////////////////////////////////
         var alreadyDONE = fs.readFileSync(announceFileFIN).toString();
-        if (alreadyDONE.indexOf(item.url) == -1) {
+        things.wait(1000);
+        if (alreadyDONE.indexOf(item.url) < 0) {
             if (item.picture) {
                 /*img existance check */
                 page_checks.defaultPageCheck(item.picture).then(data => {
