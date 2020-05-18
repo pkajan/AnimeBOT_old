@@ -519,10 +519,7 @@ client.on("message", async message => {
     }
 });
 
-
-/* working with messages without our prefix */
-var postThrottling = false;
-client.on("message", async message => {
+function uglyfunction(message, type_of_response) {
     if (message.author.bot) return; // ignore other bots and self
 
 
@@ -531,6 +528,7 @@ client.on("message", async message => {
         /* Called by name */
         if (things.deunicode(message.content.toLowerCase()).indexOf(things.deunicode(client.user.username.slice(0, -config.slice_name_by_chars).toLowerCase())) > -1) { //slice to allow bot name "mutations"
             learning.bot_response_poster(client, message);
+            things.log("Called by name,", type_of_response);
         }
 
         /* Polite hello/bye */
@@ -579,6 +577,7 @@ client.on("message", async message => {
                                 postThrottling = true;
                             }
                         });
+                        things.log("Hello,", type_of_response);
                     }
                 });
             }
@@ -594,6 +593,7 @@ client.on("message", async message => {
                 if (Date.now() - silencer > config.silence_time_ms) {
                     learning.bot_response_poster(client, message, true);
                     delayer_learning = Date.now();
+                    things.log("Random message,", type_of_response);
                 } else {
                     things.log(things.translate("cmd_silencer_msg_log"));
                 }
@@ -604,7 +604,17 @@ client.on("message", async message => {
             postThrottling = false;
         }
     }
+}
+
+/* working with messages without our prefix */
+var postThrottling = false;
+client.on("message", async message => {
+    uglyfunction(message, "Normal Message");
 });
 
+client.on('messageUpdate', (oldMessage, newMessage) => {
+    uglyfunction(newMessage, "Edited Message");
+
+});
 
 client.login(config.credentials.token);
