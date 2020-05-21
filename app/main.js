@@ -137,7 +137,7 @@ client.on("error", (error) => {
         console.log("restarting");
     } else {
         things.log("Unknown error...");
-        things.log(JSON.stringify(error));
+        things.log(util.inspect(error));
         things.startCountdown(config.sleepDuration_seconds, things.restart_program);
         console.log("restarting");
     }
@@ -149,7 +149,7 @@ client.on('warning', (warning) => {
         //nothing known, yet...
     } else {
         things.log("Unknown warning...");
-        things.log(JSON.stringify(warning));
+        things.log(util.inspect(warning));
         things.startCountdown(config.sleepDuration_seconds, things.restart_program);
         console.log("restarting");
     }

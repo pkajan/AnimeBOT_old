@@ -130,7 +130,19 @@ module.exports = {
 
   /* read JSON and return results as object */
   JSON_file_read: function (filename) {
-    var data = fs.readFileSync(filename, 'utf8').toString(); //read data
+    var data;
+    try {
+      data = fs.readFileSync(filename, 'utf8').toString(); //read data
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        console.log('File not found!');
+        data = "{}"
+      } else {
+        throw err;
+      }
+    }
+
+
     return JSON.parse(data); //parse - create object
   },
 
