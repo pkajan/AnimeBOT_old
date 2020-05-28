@@ -1,4 +1,5 @@
 const things = require('./things.js');
+const util = require('util');
 const discord = require('./things_discord.js');
 const page_checks = require('./page_checks.js');
 const calculate = require('./calculate.js');
