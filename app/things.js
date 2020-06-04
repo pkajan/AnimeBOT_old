@@ -141,8 +141,6 @@ module.exports = {
         throw err;
       }
     }
-
-
     return JSON.parse(data); //parse - create object
   },
 

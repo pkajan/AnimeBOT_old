@@ -1,4 +1,5 @@
 const things = require('./things.js');
+const config = require('../config/config.json'); //file with config
 
 module.exports = {
   /* Remove invoking message */
@@ -37,30 +38,19 @@ module.exports = {
   /* Send message to all servers (guilds) bot is in */
   SendtoAllGuilds: function (client, text, picture = null) {
     try {
+      var animeDefaultChannels = config.animeDefaultChannels.split(";");
       var toSay = text;
-      client.guilds.map((guild) => {
-        var found = 0;
-        guild.channels.map((c) => {
-          if (found === 0 & c.type === "text" &
-            c.permissionsFor(client.user).has("VIEW_CHANNEL") === true &
-            c.permissionsFor(client.user).has("SEND_MESSAGES") === true) {
-            if (picture) {
-              c.send(toSay, {
-                files: [
-                  picture
-                ]
-              });
-            } else {
-              c.send(toSay);
-            }
-            found = 1;
-          }
-        });
+      animeDefaultChannels.forEach(function (entry) {
+        if (picture) {
+          client.channels.get(entry).send(toSay, { files: [picture] });
+        } else {
+          client.channels.get(entry).send(toSay);
+        }
+        things.log(things.translate("BOT_send_all"));
       });
-      things.log(things.translate("BOT_send_all"));
-    }
-    catch (err) {
+    } catch (err) {
       things.log(things.translate("BOT_could_not_send"));
     }
+
   }
 }

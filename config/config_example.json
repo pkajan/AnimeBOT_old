@@ -10,6 +10,7 @@
     "ownerID": "123456789",
     "adminIDs": "987654321",
     "defaultTextChannel": "123456789",
+    "animeDefaultChannels": "321654987;963258741",
     "translation": "en",
     "polite": true,
     "slice_name_by_chars": "2",

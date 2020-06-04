@@ -64,7 +64,13 @@ function animeCheckRoutine(existance, tmpCHECKVAR, item) {
         things.log(things.translate("BOT_deleting", item.name));
         things.JSON_file_remove_element(announceFile, tmpCHECKVAR, tmpCHECKVAR);
         ////////////////////////////////////////////////////
-        var alreadyDONE = fs.readFileSync(announceFileFIN).toString();
+        try {
+            var alreadyDONE = fs.readFileSync(announceFileFIN).toString();
+        } catch (err) {
+            things.log(err);
+            fs.appendFileSync(announceFileFIN, ""); //create empty file for finished announcements
+            var alreadyDONE = fs.readFileSync(announceFileFIN).toString();
+        }
         things.wait(1000);
         if (alreadyDONE.indexOf(item.url) < 0) {
             if (item.picture) {
