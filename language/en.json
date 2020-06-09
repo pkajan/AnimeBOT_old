@@ -79,5 +79,6 @@
     "bot_name_log_img": "I was called by name [by %s] (text:'%s', url:'%s')",
     "bot_RNG_log_img": "I decided to post this [invoked by %s] (text:'%s', url:'%s')",
     "cron_started": "Cron started",
-    "upcoming_check": "Today Anime: %s | link: %s"
+    "upcoming_check": "Today Anime: %s | link: %s",
+    "msg_empty": "Message was empty"
 }

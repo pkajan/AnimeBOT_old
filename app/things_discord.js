@@ -23,10 +23,14 @@ module.exports = {
 
   /* Send and remove message in X seconds (from given channel)*/
   selfDestructMSGID: function (client, channelID, MSGText, time, user = null, cmd_name) {
-    client.channels.get(channelID).send(MSGText).then(sentMessage => {
-      sentMessage.delete(time).catch(error => things.log(things.translate("BOT_send_selfdestruct_err")));
-    });
-    things.log(things.translate("BOT_send_selfdestructid", user, cmd_name));
+    if (MSGText == "" || MSGText == null || MSGText == "\n") {
+      things.log(things.translate("msg_empty", user, cmd_name));
+    } else {
+      client.channels.get(channelID).send(MSGText).then(sentMessage => {
+        sentMessage.delete(time).catch(error => things.log(things.translate("BOT_send_selfdestruct_err")));
+      });
+      things.log(things.translate("BOT_send_selfdestructid", user, cmd_name));
+    }
   },
 
   /* Send to channel with ID */
