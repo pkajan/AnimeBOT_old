@@ -53,10 +53,15 @@ module.exports = {
                 if (err) throw err;
                 var array = things.onlyStringArr(things.uniqArr(data.toString().split("\n")));
                 var repl_txt = things.parse(array.randomElement(), nickname_of_user);
+
                 if (Boolean(things.getRandomInt(2)) == true) { //sometimes post learned message, without mentioning username
                     repl_txt = things.parse(array.randomElement(), "");
                     repl_txt = repl_txt.replace(/^\s*,/g, ' ').replace(/\s\s+/g, ' ').replace(/\s\./g, '.');
                     //replace "bugged" texts: comma at start, multiple spaces, space before comma"
+                }
+
+                if (repl_txt == "" || repl_txt == null) { // empty string fix
+                    repl_txt = nickname_of_user;
                 }
                 message.channel.send(things.translate("bot_name", repl_txt));
                 if (!randomresponse) {

@@ -535,7 +535,7 @@ function uglyfunction(message, type_of_response) {
         /* Called by name */
         if (things.deunicode(message.content.toLowerCase()).indexOf(things.deunicode(client.user.username.slice(0, -config.slice_name_by_chars).toLowerCase())) > -1) { //slice to allow bot name "mutations"
             learning.bot_response_poster(client, message);
-            things.log("Called by name,", type_of_response);
+            things.log("Called by name, " + message.author.username.toString(), type_of_response);
         }
 
         /* Polite hello/bye */
@@ -555,6 +555,7 @@ function uglyfunction(message, type_of_response) {
                                 things.log(things.translate("polite_hello_log", message.author.username.toString()));
                                 posted = true;
                                 postThrottling = true;
+                                things.log("Day", type_of_response, message.author.username.toString());
                             }
                         });
                         things.isItPartOfString(reply.messages_day.split(";"), message_string + " " + message_string2).catch(function (item) { //combined message
@@ -563,6 +564,7 @@ function uglyfunction(message, type_of_response) {
                                 things.log(things.translate("polite_hello_log", message.author.username.toString()));
                                 posted = true;
                                 postThrottling = true;
+                                things.log("Day combined", type_of_response, message.author.username.toString());
                             }
                         });
 
@@ -573,6 +575,7 @@ function uglyfunction(message, type_of_response) {
                                 things.log(things.translate("polite_GN_log", message.author.username.toString()));
                                 posted = true;
                                 postThrottling = true;
+                                things.log("Night", type_of_response, message.author.username.toString());
                             }
                         });
 
@@ -582,9 +585,9 @@ function uglyfunction(message, type_of_response) {
                                 things.log(things.translate("polite_GN_log", message.author.username.toString()));
                                 posted = true;
                                 postThrottling = true;
+                                things.log("Night combined", type_of_response, message.author.username.toString());
                             }
                         });
-                        things.log("Hello,", type_of_response);
                     }
                 });
             }
@@ -600,7 +603,7 @@ function uglyfunction(message, type_of_response) {
                 if (Date.now() - silencer > config.silence_time_ms) {
                     learning.bot_response_poster(client, message, true);
                     delayer_learning = Date.now();
-                    things.log("Random message,", type_of_response);
+                    things.log("Random message", type_of_response, message.author.username.toString());
                 } else {
                     things.log(things.translate("cmd_silencer_msg_log"));
                 }
